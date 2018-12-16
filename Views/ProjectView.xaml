@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="Sculptor.ProjectView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Sculptor"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+    <Grid>
+        <telerik:RadGridView Name="ProjectGrid" ItemsSource="{Binding Projects}" 
+                             GridLinesVisibility="None" ShowGroupPanel="False" 
+                             AutoGenerateColumns="False" 
+                             RowIndicatorVisibility="Collapsed"  
+                             CanUserFreezeColumns="False" 
+                             IsFilteringAllowed="False" 
+                             ColumnWidth="*"
+                             IsReadOnly="true">
+            
+            <i:Interaction.Behaviors>
+                <local:GridViewSelectBehavior SelectedItems="{Binding SelectedItems}" />
+            </i:Interaction.Behaviors>
+            <telerik:EventToCommandBehavior.EventBindings>
+                <telerik:EventBinding Command="{Binding SelectProjectCommand}" EventName="MouseDoubleClick" />
+            </telerik:EventToCommandBehavior.EventBindings>
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ProjectName}" 
+                   Header="Project Name" Width="200"/>
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding ContractNo}"
+                   Header="Contract Number" Width="200" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding CustomerName}" 
+                   Header="Customer" Width="200" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding LastOpened}" 
+                   Header="Last Opened" Width="200" />
+                <telerik:GridViewDataColumn DataMemberBinding="{Binding LastOpenedBy}" 
+                   Header="Last Opened By" Width="200" />
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+
+    </Grid>
+</UserControl>

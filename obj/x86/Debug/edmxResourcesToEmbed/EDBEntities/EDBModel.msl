@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="EDBModelStoreContainer" CdmEntityContainer="EDBConnection">
+    <EntitySetMapping Name="tblObjects">
+      <EntityTypeMapping TypeName="EDBModel.tblObject">
+        <MappingFragment StoreEntitySet="tblObjects">
+          <ScalarProperty Name="Status_ID" ColumnName="Status_ID" />
+          <ScalarProperty Name="Remark" ColumnName="Remark" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Parent_ID" ColumnName="Parent_ID" />
+          <ScalarProperty Name="Project_ID" ColumnName="Project_ID" />
+          <ScalarProperty Name="ObjectName" ColumnName="ObjectName" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ShortDesc" ColumnName="ShortDesc" />
+          <ScalarProperty Name="ObjectType_ID" ColumnName="ObjectType_ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblProjects">
+      <EntityTypeMapping TypeName="EDBModel.tblProject">
+        <MappingFragment StoreEntitySet="tblProjects">
+          <ScalarProperty Name="LastOpened" ColumnName="LastOpened" />
+          <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+          <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblObjectTypes">
+      <EntityTypeMapping TypeName="EDBModel.tblObjectType">
+        <MappingFragment StoreEntitySet="tblObjectTypes">
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="ObjectType" ColumnName="ObjectType" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblClasses">
+      <EntityTypeMapping TypeName="EDBModel.tblClass">
+        <MappingFragment StoreEntitySet="tblClasses">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ClassName" ColumnName="ClassName" />
+          <ScalarProperty Name="Parent_ID" ColumnName="Parent_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblNativeDataTypes">
+      <EntityTypeMapping TypeName="EDBModel.tblNativeDataType">
+        <MappingFragment StoreEntitySet="tblNativeDataTypes">
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblProperties">
+      <EntityTypeMapping TypeName="EDBModel.tblProperty">
+        <MappingFragment StoreEntitySet="tblProperties">
+          <ScalarProperty Name="Attributes" ColumnName="Attributes" />
+          <ScalarProperty Name="Aspect" ColumnName="Aspect" />
+          <ScalarProperty Name="PropertyType_ID" ColumnName="PropertyType_ID" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Parent_ID" ColumnName="Parent_ID" />
+          <ScalarProperty Name="Project_ID" ColumnName="Project_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblPropertyTypes">
+      <EntityTypeMapping TypeName="EDBModel.tblPropertyType">
+        <MappingFragment StoreEntitySet="tblPropertyTypes">
+          <ScalarProperty Name="NativePropertyType_ID" ColumnName="NativePropertyType_ID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Parent_ID" ColumnName="Parent_ID" />
+          <ScalarProperty Name="Project_ID" ColumnName="Project_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="EDBModel.sysdiagram">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="definition" ColumnName="definition" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblAspects">
+      <EntityTypeMapping TypeName="EDBModel.tblAspect">
+        <MappingFragment StoreEntitySet="tblAspects">
+          <ScalarProperty Name="Note" ColumnName="Note" />
+          <ScalarProperty Name="TrendTag" ColumnName="TrendTag" />
+          <ScalarProperty Name="AlarmTag" ColumnName="AlarmTag" />
+          <ScalarProperty Name="SCADATag" ColumnName="SCADATag" />
+          <ScalarProperty Name="PLCTag" ColumnName="PLCTag" />
+          <ScalarProperty Name="ExtIO" ColumnName="ExtIO" />
+          <ScalarProperty Name="HardIO" ColumnName="HardIO" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Aspect" ColumnName="Aspect" />
+          <ScalarProperty Name="Project_ID" ColumnName="Project_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblAttributes">
+      <EntityTypeMapping TypeName="EDBModel.tblAttribute">
+        <MappingFragment StoreEntitySet="tblAttributes">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

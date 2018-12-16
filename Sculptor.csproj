@@ -1,0 +1,442 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F79502D0-542B-4B8A-A8E5-203EA30D05D7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sculptor</RootNamespace>
+    <AssemblyName>Sculptor</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>EHub.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Prism.Wpf, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\Prism.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Wpf.6.3.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.GridView, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Controls.GridView.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Input, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Controls.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.Navigation, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Controls.Navigation.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.RibbonView, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Controls.RibbonView.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Controls.RichTextBoxUI, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Controls.RichTextBoxUI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Data, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Documents.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Core, Version=2018.3.1010.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Documents.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Flow, Version=2018.3.1010.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Documents.Flow.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.FormatProviders.OpenXml, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Documents.FormatProviders.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.FormatProviders.Rtf, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Documents.FormatProviders.Rtf.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.FormatProviders.Xaml, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Documents.FormatProviders.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Proofing.Dictionaries.En-US, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Documents.Proofing.Dictionaries.En-US.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.PersistenceFramework, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.PersistenceFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Themes.Office2016">
+      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries.NoXaml\WPF45\Telerik.Windows.Themes.Office2016.dll</HintPath>
+    </Reference>
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="UIAutomationTypes" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="DataModels\AspectModel.cs" />
+    <Compile Include="DataModels\AttributeModel.cs" />
+    <Compile Include="DataModels\PropertyTypeModel.cs" />
+    <Compile Include="DataModels\TemplateTypeModel.cs" />
+    <Compile Include="DataModels\TemplateRequirementModel.cs" />
+    <Compile Include="DataModels\TemplateAssociationModel.cs" />
+    <Compile Include="DataModels\ObjectModel.cs" />
+    <Compile Include="DataModels\ObjectRequirementModel.cs" />
+    <Compile Include="DataModels\RequirementTypeModel.cs" />
+    <Compile Include="DataModels\ObjectTypeModel.cs" />
+    <Compile Include="DataModels\ProjectModel.cs" />
+    <Compile Include="DataModels\ObjectAssociationModel.cs" />
+    <Compile Include="DataModels\TemplateModel.cs" />
+    <Compile Include="DataModels\PropertyModel.cs" />
+    <Compile Include="DataModels\RequirementModel.cs" />
+    <Compile Include="EDBEntityDataModel\EDBEntityDataModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EDBEntityDataModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\EDBEntityDataModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\EDBEntityDataModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EDBEntityDataModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\sysdiagram.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblObjectAssociation.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblObjectRequirement.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblRequirement.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblRequirementType.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblTemplate.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblTemplateAssociation.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblTemplateRequirement.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblTemplateType.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Globals.cs" />
+    <Compile Include="Interfaces\IRequestFocus.cs" />
+    <Compile Include="Support\GridViewRowBringInFocusBehavior.cs" />
+    <Compile Include="Support\GridViewRowSelectBehavior.cs" />
+    <Compile Include="EDBEntityDataModel\tblAspect.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblAttribute.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblNativeDataType.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblObject.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblObjectType.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblProject.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblProperty.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblPropertyType.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Support\RootObject.cs" />
+    <Compile Include="ViewModels\AttributeViewModel.cs" />
+    <Compile Include="ViewModels\TemplateRequirementViewModel.cs" />
+    <Compile Include="ViewModels\TemplateAssociationsViewModel.cs" />
+    <Compile Include="ViewModels\ObjectAssociationsViewModel.cs" />
+    <Compile Include="ViewModels\TemplateViewModel.cs" />
+    <Compile Include="ViewModels\ObjectRequirementViewModel.cs" />
+    <Compile Include="ViewModels\RequirementViewModel.cs" />
+    <Compile Include="Views\AddObjectTypeDialog.xaml.cs">
+      <DependentUpon>AddObjectTypeDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ProjectView.xaml.cs">
+      <DependentUpon>ProjectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PropertyView.xaml.cs">
+      <DependentUpon>PropertyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Support\ViewModelLocator.cs" />
+    <Compile Include="Support\TreeListViewSelectBehavior.cs" />
+    <Compile Include="Support\ObservableCollectionWithItemChanged.cs" />
+    <Compile Include="Support\RelayCommand.cs" />
+    <Compile Include="Support\TreeListViewDragDropBehavior.cs" />
+    <Compile Include="Support\TypeConverters.cs" />
+    <Compile Include="Views\RequirementView.xaml.cs">
+      <DependentUpon>RequirementView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\AspectViewModel.cs" />
+    <Compile Include="ViewModels\PropertyViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\ObjectViewModel.cs" />
+    <Page Include="Views\AddObjectTypeDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AttributeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AttributeView.xaml.cs">
+      <DependentUpon>AttributeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\ObjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\TemplateView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ProjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PropertyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RequirementView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Views\ObjectView.xaml.cs">
+      <DependentUpon>ObjectView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\TemplateView.xaml.cs">
+      <DependentUpon>TemplateView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Licenses.licx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EntityDeploy Include="EDBEntityDataModel\EDBEntityDataModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>EDBEntityDataModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="EDBEntityDataModel\EDBEntityDataModel.edmx.diagram">
+      <DependentUpon>EDBEntityDataModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Add.bmp" />
+    <Resource Include="Resources\Images\AppBlock.bmp" />
+    <Resource Include="Resources\Images\Attribute.bmp" />
+    <Resource Include="Resources\Images\Class.bmp" />
+    <Resource Include="Resources\Images\Class.ico" />
+    <Resource Include="Resources\Images\copy.ico" />
+    <Resource Include="Resources\Images\Copy.png" />
+    <Resource Include="Resources\Images\Create.png" />
+    <Resource Include="Resources\Images\Cut.BMP" />
+    <Resource Include="Resources\Images\Cut.png" />
+    <Resource Include="Resources\Images\delete.bmp" />
+    <Resource Include="Resources\Images\delete.ico" />
+    <Resource Include="Resources\Images\Delete.png" />
+    <Resource Include="Resources\Images\ExternalAttrib.bmp" />
+    <Resource Include="Resources\Images\FunctionBlock.bmp" />
+    <Resource Include="Resources\Images\Gateway.bmp" />
+    <Resource Include="Resources\Images\GatewayGroup.bmp" />
+    <Resource Include="Resources\Images\gen.bmp" />
+    <Resource Include="Resources\Images\Genie.bmp" />
+    <Resource Include="Resources\Images\Group.bmp" />
+    <Resource Include="Resources\Images\HMI.bmp" />
+    <Resource Include="Resources\Images\HMIGroup.bmp" />
+    <Resource Include="Resources\Images\IO.bmp" />
+    <Resource Include="Resources\Images\IO.ico" />
+    <Resource Include="Resources\Images\IOC.bmp" />
+    <Resource Include="Resources\Images\IOC.ico" />
+    <Resource Include="Resources\Images\move.ico" />
+    <Resource Include="Resources\Images\NewCardHS.bmp" />
+    <Resource Include="Resources\Images\Object.bmp" />
+    <Resource Include="Resources\Images\Object.ico" />
+    <Resource Include="Resources\Images\Operation.bmp" />
+    <Resource Include="Resources\Images\Parameter.bmp" />
+    <Resource Include="Resources\Images\Paste.BMP" />
+    <Resource Include="Resources\Images\Paste.png" />
+    <Resource Include="Resources\Images\PLC.bmp" />
+    <Resource Include="Resources\Images\PLCGroup.bmp" />
+    <Resource Include="Resources\Images\Procedure.bmp" />
+    <Resource Include="Resources\Images\Remove.png" />
+    <Resource Include="Resources\Images\RIO.bmp" />
+    <Resource Include="Resources\Images\Save.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\DataSources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Area32.png" />
+    <Resource Include="Resources\Images\Enterprise32.png" />
+    <Resource Include="Resources\Images\ProcessCell32.png" />
+    <Resource Include="Resources\Images\Site32.png" />
+    <Resource Include="Resources\Images\Unit32.png" />
+    <Resource Include="EHub.ico" />
+    <Resource Include="Resources\Images\Equipment32.png" />
+    <Resource Include="Resources\Images\ControlModule32.png" />
+    <Resource Include="Sculptor.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EDBEntityDataModel\EDBEntityDataModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EDBEntityDataModel.edmx</DependentUpon>
+      <LastGenOutput>EDBEntityDataModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="EDBEntityDataModel\EDBEntityDataModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>EDBEntityDataModel.edmx</DependentUpon>
+      <LastGenOutput>EDBEntityDataModel.cs</LastGenOutput>
+    </Content>
+    <Resource Include="Resources\Images\template.png" />
+    <Resource Include="Resources\Images\GroupProperty32.png" />
+    <Resource Include="Resources\Images\GroupTemplate32.png" />
+    <Resource Include="Resources\Images\Template32.png" />
+    <Resource Include="Resources\Images\Question32.png" />
+    <Resource Include="Resources\Images\property.png" />
+    <Resource Include="Resources\Images\Attribute32.png" />
+    <Resource Include="Resources\Images\Aspect32.png" />
+    <Resource Include="Resources\Images\Requirements32.png" />
+    <Resource Include="Resources\Images\Objects32.png" />
+    <Resource Include="Resources\Images\RequirementSpecification32.png" />
+    <Resource Include="Resources\Images\Regulation32.png" />
+    <Resource Include="Resources\Images\RequirementChange32.png" />
+    <Resource Include="Resources\Images\RequirementClarification32.png" />
+    <Resource Include="Resources\Images\Property32.png" />
+    <Resource Include="Resources\Images\Class32.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

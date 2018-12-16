@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="EDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="tblNativeDataType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblObject">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Guid" Nullable="false" />
+    <Property Name="Parent_ID" Type="Guid" />
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="ObjectName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="ObjectType_ID" Type="Int32" />
+    <Property Name="Remark" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Status_ID" Type="Int32" />
+    <Property Name="ShortDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsExpanded" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tblProject">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ContractNo" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+    <Property Name="ProjectName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="LastOpened" Type="DateTime" Precision="3" />
+    <Property Name="Logo" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="LastOpenedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityContainer Name="EDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="tblNativeDataTypes" EntityType="Self.tblNativeDataType" />
+    <EntitySet Name="tblObjects" EntityType="Self.tblObject" />
+    <EntitySet Name="tblProjects" EntityType="Self.tblProject" />
+    <EntitySet Name="sysdiagrams" EntityType="EDBModel.sysdiagram" />
+    <EntitySet Name="tblProperties" EntityType="EDBModel.tblProperty" />
+    <EntitySet Name="tblRequirementTypes" EntityType="EDBModel.tblRequirementType" />
+    <EntitySet Name="tblRequirements" EntityType="EDBModel.tblRequirement" />
+    <EntitySet Name="tblObjectRequirements" EntityType="EDBModel.tblObjectRequirement" />
+    <EntitySet Name="tblObjectAssociations" EntityType="EDBModel.tblObjectAssociation" />
+    <EntitySet Name="tblAspects" EntityType="EDBModel.tblAspect" />
+    <EntitySet Name="tblAttributes" EntityType="EDBModel.tblAttribute" />
+    <EntitySet Name="tblTemplateAssociations" EntityType="EDBModel.tblTemplateAssociation" />
+    <EntitySet Name="tblTemplateRequirements" EntityType="EDBModel.tblTemplateRequirement" />
+    <EntitySet Name="tblTemplates" EntityType="EDBModel.tblTemplate" />
+    <EntitySet Name="tblObjectTypes" EntityType="EDBModel.tblObjectType" />
+    <EntitySet Name="tblPropertyTypes" EntityType="EDBModel.tblPropertyType" />
+    <EntitySet Name="tblTemplateTypes" EntityType="EDBModel.tblTemplateType" />
+  </EntityContainer>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tblProperty">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Guid" Nullable="false" />
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="Parent_ID" Type="Guid" />
+    <Property Name="PropertyName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Value" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="PropertyType_ID" Type="Int32" />
+    <Property Name="Aspect" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Attribute1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Attribute2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Attribute3" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblRequirementType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" />
+    <Property Name="RequirementType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tblRequirement">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Guid" Nullable="false" />
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="ArticleNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ArticleHeader" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="RequirementType_ID" Type="Int32" />
+    <Property Name="Created" Type="DateTime" Precision="3" />
+    <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastChanged" Type="DateTime" Precision="3" />
+    <Property Name="LastChangedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Version" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Parent_ID" Type="Guid" />
+  </EntityType>
+  <EntityType Name="tblObjectRequirement">
+    <Key>
+      <PropertyRef Name="Object_ID" />
+      <PropertyRef Name="Requirement_ID" />
+    </Key>
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="Object_ID" Type="Guid" Nullable="false" />
+    <Property Name="Requirement_ID" Type="Guid" Nullable="false" />
+    <Property Name="RequirementType" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+    <Property Name="PreFATOk" Type="Boolean" />
+    <Property Name="FATOk" Type="Boolean" />
+    <Property Name="SATOk" Type="Boolean" />
+    <Property Name="FATDate" Type="DateTime" Precision="3" />
+    <Property Name="SATDate" Type="DateTime" Precision="3" />
+    <Property Name="PreFATBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FATBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SATBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblObjectAssociation">
+    <Key>
+      <PropertyRef Name="Object_ID" />
+      <PropertyRef Name="Association_ID" />
+    </Key>
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="Object_ID" Type="Guid" Nullable="false" />
+    <Property Name="Association_ID" Type="Guid" Nullable="false" />
+    <Property Name="Value" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="AssociationType" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblAspect">
+    <Key>
+      <PropertyRef Name="Project_ID" />
+      <PropertyRef Name="AspectName" />
+    </Key>
+    <Property Name="ID" Type="Guid" Nullable="false" />
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="AspectName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="HardIO" Type="Boolean" />
+    <Property Name="ExtIO" Type="Boolean" />
+    <Property Name="PLCTag" Type="Boolean" />
+    <Property Name="SCADATag" Type="Boolean" />
+    <Property Name="AlarmTag" Type="Boolean" />
+    <Property Name="TrendTag" Type="Boolean" />
+    <Property Name="Note" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblAttribute">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="Attribute" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="ID" Type="Guid" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblTemplateAssociation">
+    <Key>
+      <PropertyRef Name="Template_ID" />
+      <PropertyRef Name="Association_ID" />
+    </Key>
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="Template_ID" Type="Guid" Nullable="false" />
+    <Property Name="Association_ID" Type="Guid" Nullable="false" />
+    <Property Name="Value" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="AssociationType" Type="String" Nullable="false" MaxLength="16" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblTemplateRequirement">
+    <Key>
+      <PropertyRef Name="Template_ID" />
+      <PropertyRef Name="Requirement_ID" />
+    </Key>
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="Template_ID" Type="Guid" Nullable="false" />
+    <Property Name="Requirement_ID" Type="Guid" Nullable="false" />
+    <Property Name="RequirementType" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+    <Property Name="PreFATOk" Type="Boolean" />
+    <Property Name="FATOk" Type="Boolean" />
+    <Property Name="SATOk" Type="Boolean" />
+    <Property Name="FATDate" Type="DateTime" Precision="3" />
+    <Property Name="SATDate" Type="DateTime" Precision="3" />
+    <Property Name="PreFATBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FATBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SATBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblTemplate">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Guid" Nullable="false" />
+    <Property Name="Parent_ID" Type="Guid" />
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="TemplateName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="TemplateType_ID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblObjectType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="ObjectType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tblPropertyType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="PropertyType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tblTemplateType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
+    <Property Name="TemplateType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+</Schema>

@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="EDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="tblAspects">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="Project_ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Project_ID" Type="int" Nullable="false" />
+    <Property Name="Aspect" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="varchar" MaxLength="255" />
+    <Property Name="HardIO" Type="bit" />
+    <Property Name="ExtIO" Type="bit" />
+    <Property Name="PLCTag" Type="bit" />
+    <Property Name="SCADATag" Type="bit" />
+    <Property Name="AlarmTag" Type="bit" />
+    <Property Name="TrendTag" Type="bit" />
+    <Property Name="Note" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="tblAttributes">
+    <Key>
+      <PropertyRef Name="Name" />
+    </Key>
+    <Property Name="Name" Type="varchar" MaxLength="8" Nullable="false" />
+    <Property Name="Description" Type="nchar" MaxLength="128" />
+  </EntityType>
+  <EntityType Name="tblClasses">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Parent_ID" Type="uniqueidentifier" />
+    <Property Name="ClassName" Type="varchar" MaxLength="50" />
+    <Property Name="Description" Type="varchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="tblNativeDataTypes">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nchar" MaxLength="10" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblObjects">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Parent_ID" Type="uniqueidentifier" />
+    <Property Name="Project_ID" Type="int" Nullable="false" />
+    <Property Name="ObjectName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="varchar" MaxLength="255" />
+    <Property Name="ObjectType_ID" Type="int" />
+    <Property Name="Remark" Type="varchar" MaxLength="255" />
+    <Property Name="Status_ID" Type="int" />
+    <Property Name="ShortDesc" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="tblObjectTypes">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ObjectType" Type="varchar" MaxLength="50" />
+    <Property Name="Image" Type="image" />
+  </EntityType>
+  <EntityType Name="tblProjects">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ContractNo" Type="nvarchar" MaxLength="16" />
+    <Property Name="ProjectName" Type="nvarchar" MaxLength="128" />
+    <Property Name="CustomerName" Type="nvarchar" MaxLength="128" />
+    <Property Name="LastOpened" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblProperties">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Project_ID" Type="int" Nullable="false" />
+    <Property Name="Parent_ID" Type="bigint" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="varchar" MaxLength="255" />
+    <Property Name="Value" Type="nchar" MaxLength="10" />
+    <Property Name="PropertyType_ID" Type="int" />
+    <Property Name="Aspect" Type="varchar" MaxLength="10" />
+    <Property Name="Attributes" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="tblPropertyTypes">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Project_ID" Type="int" Nullable="false" />
+    <Property Name="Parent_ID" Type="int" />
+    <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Description" Type="varchar" MaxLength="255" />
+    <Property Name="NativePropertyType_ID" Type="int" />
+  </EntityType>
+  <EntityContainer Name="EDBModelStoreContainer">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblAspects" EntityType="Self.tblAspects" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblAttributes" EntityType="Self.tblAttributes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblClasses" EntityType="Self.tblClasses" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblNativeDataTypes" EntityType="Self.tblNativeDataTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblObjects" EntityType="Self.tblObjects" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblObjectTypes" EntityType="Self.tblObjectTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblProjects" EntityType="Self.tblProjects" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblProperties" EntityType="Self.tblProperties" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblPropertyTypes" EntityType="Self.tblPropertyTypes" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>
