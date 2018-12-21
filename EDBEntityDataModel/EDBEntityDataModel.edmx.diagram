@@ -5,22 +5,20 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="e6b4021eb6364ddab7758021fade7417" Name="Diagram1">
-        <EntityTypeShape EntityType="EDBModel.tblNativeDataType" Width="1.5" PointX="3.875" PointY="9.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EDBModel.tblObject" Width="1.5" PointX="0.625" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="EDBModel.tblProject" Width="1.5" PointX="0.625" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="EDBModel.tblProperty" Width="1.5" PointX="3.875" PointY="3.25" />
-        <EntityTypeShape EntityType="EDBModel.tblRequirementType" Width="1.5" PointX="10.375" PointY="7" />
-        <EntityTypeShape EntityType="EDBModel.tblRequirement" Width="1.5" PointX="10.375" PointY="3.25" />
-        <EntityTypeShape EntityType="EDBModel.tblObjectRequirement" Width="1.5" PointX="12" PointY="3.25" />
-        <EntityTypeShape EntityType="EDBModel.tblObjectAssociation" Width="1.5" PointX="8.75" PointY="3.25" />
-        <EntityTypeShape EntityType="EDBModel.tblAspect" Width="1.5" PointX="7.125" PointY="3.25" />
-        <EntityTypeShape EntityType="EDBModel.tblAttribute" Width="1.5" PointX="5.5" PointY="3.25" />
-        <EntityTypeShape EntityType="EDBModel.tblTemplateAssociation" Width="1.5" PointX="15.25" PointY="3.25" />
-        <EntityTypeShape EntityType="EDBModel.tblTemplateRequirement" Width="1.5" PointX="13.625" PointY="3.25" />
-        <EntityTypeShape EntityType="EDBModel.tblTemplate" Width="1.5" PointX="2.25" PointY="3.25" />
-        <EntityTypeShape EntityType="EDBModel.tblObjectType" Width="1.5" PointX="0.625" PointY="6.875" />
-        <EntityTypeShape EntityType="EDBModel.tblPropertyType" Width="1.5" PointX="3.875" PointY="6.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="EDBModel.tblTemplateType" Width="1.5" PointX="2.25" PointY="6.875" />
+        <EntityTypeShape EntityType="EDBModel.tblAspect" Width="1.5" PointX="5.375" PointY="0.5" />
+        <EntityTypeShape EntityType="EDBModel.tblAttribute" Width="1.5" PointX="7" PointY="0.5" />
+        <EntityTypeShape EntityType="EDBModel.tblNativeDataType" Width="1.5" PointX="14" PointY="0.5" />
+        <EntityTypeShape EntityType="EDBModel.tblObjectAssociation" Width="1.5" PointX="12.5" PointY="3.5" />
+        <EntityTypeShape EntityType="EDBModel.tblObjectRequirement" Width="1.5" PointX="10.875" PointY="3.5" />
+        <EntityTypeShape EntityType="EDBModel.tblObject" Width="1.5" PointX="0.5" PointY="0.5" />
+        <EntityTypeShape EntityType="EDBModel.tblObjectType" Width="1.5" PointX="0.5" PointY="3.625" />
+        <EntityTypeShape EntityType="EDBModel.tblProject" Width="1.5" PointX="15.625" PointY="0.5" />
+        <EntityTypeShape EntityType="EDBModel.tblProperty" Width="1.5" PointX="3.75" PointY="0.5" />
+        <EntityTypeShape EntityType="EDBModel.tblRequirement" Width="1.5" PointX="8.625" PointY="0.5" />
+        <EntityTypeShape EntityType="EDBModel.tblTemplateRequirement" Width="1.5" PointX="10.875" PointY="6.875" />
+        <EntityTypeShape EntityType="EDBModel.tblTemplate" Width="1.5" PointX="2.125" PointY="0.5" />
+        <EntityTypeShape EntityType="EDBModel.tblType" Width="1.5" PointX="12.375" PointY="0.5" />
+        <EntityTypeShape EntityType="EDBModel.tblTemplateAssociation" Width="1.5" PointX="12.5" PointY="6.875" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -32,7 +32,41 @@ namespace Sculptor
 
         public static bool IsLoaded()
         {
-            return objectVM != null;
+            return objectVM != null && objectVM.Objects != null;
+        }
+    }
+
+    public static class ObjectTypeViewModelLocator
+    {
+        private static ObjectTypeViewModel objectTypeVM = null;
+        public static ObjectTypeViewModel GetObjectTypeVM()
+        {
+            if (objectTypeVM == null)
+                objectTypeVM = new ObjectTypeViewModel();
+
+            return objectTypeVM;
+        }
+
+        public static bool IsLoaded()
+        {
+            return objectTypeVM != null;
+        }
+    }
+
+    public static class TypeViewModelLocator
+    {
+        private static TypeViewModel typeVM = null;
+        public static TypeViewModel GetTypeVM()
+        {
+            if (typeVM == null)
+                typeVM = new TypeViewModel();
+
+            return typeVM;
+        }
+
+        public static bool IsLoaded()
+        {
+            return typeVM != null;
         }
     }
 
@@ -104,6 +138,23 @@ namespace Sculptor
         }
     }
 
+    public static class RequirementViewModelLocator
+    {
+        private static RequirementViewModel requirementVM = null;
+        public static RequirementViewModel GetRequirementVM()
+        {
+            if (requirementVM == null)
+                requirementVM = new RequirementViewModel();
+
+            return requirementVM;
+        }
+
+        public static bool IsLoaded()
+        {
+            return requirementVM != null && requirementVM.Requirements != null;
+        }
+    }
+
     public static class ObjectAssociationViewModelLocator
     {
         private static ObjectAssociationViewModel objectAssociationVM = null;
@@ -172,20 +223,4 @@ namespace Sculptor
         }
     }
 
-    public static class RequirementViewModelLocator
-    {
-        private static RequirementViewModel requirementVM = null;
-        public static RequirementViewModel GetRequirementVM()
-        {
-            if (requirementVM == null)
-                requirementVM = new RequirementViewModel();
-
-            return requirementVM;
-        }
-
-        public static bool IsLoaded()
-        {
-            return requirementVM != null;
-        }
-    }
 }

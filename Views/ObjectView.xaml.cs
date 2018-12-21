@@ -25,11 +25,13 @@ namespace Sculptor
         {
             // Link View Models to the Trees and popups
             DataContext = ObjectViewModelLocator.GetObjectVM();
+            ObjectTypePopup.DataContext = TypeViewModelLocator.GetTypeVM();
             TemplateTreeListView.DataContext = TemplateViewModelLocator.GetTemplateVM();
-            TemplateTypePopup.DataContext = TemplateTreeListView.DataContext;
+            TemplateTypePopup.DataContext = TypeViewModelLocator.GetTypeVM();
             PropertyTreeListView.DataContext = PropertyViewModelLocator.GetPropertyVM();
-            PropertyTypePopup.DataContext = PropertyTreeListView.DataContext;
+            PropertyTypePopup.DataContext = TypeViewModelLocator.GetTypeVM();
             RequirementTreeListView.DataContext = RequirementViewModelLocator.GetRequirementVM();
+            RequirementTypePopup.DataContext = TypeViewModelLocator.GetTypeVM();
             ObjectAssociationTreeListView.DataContext = ObjectAssociationViewModelLocator.GetObjectAssociationVM();
             ObjectRequirementTreeListView.DataContext = ObjectRequirementViewModelLocator.GetObjectRequirementVM();
 

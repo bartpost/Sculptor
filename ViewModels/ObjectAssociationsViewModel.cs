@@ -16,7 +16,7 @@ namespace Sculptor
 {
     public class ObjectAssociationViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private ObservableCollectionWithItemChanged<ObjectAssociationModel> objectAssociations = new ObservableCollectionWithItemChanged<ObjectAssociationModel>();
+        private ObservableCollectionWithItemChanged<ObjectAssociationModel> objectAssociations;
         private ObservableCollectionWithItemChanged<ObjectAssociationModel> backgroundObjectAssociations = new ObservableCollectionWithItemChanged<ObjectAssociationModel>();
         private ObjectAssociationModel selectedItem;
         private ObservableCollectionWithItemChanged<ObjectAssociationModel> selectedItems;
@@ -238,6 +238,7 @@ namespace Sculptor
                                 {
                                     objectAssociationItem.Name = templateItem.TemplateName;
                                     objectAssociationItem.Description = templateItem.Description;
+                                    objectAssociationItem.AssociationType_ID = templateItem.TemplateType_ID;
                                     foreach (var childItem in templateItem.ChildTemplates)
                                     {
                                         ObjectAssociationModel item = new ObjectAssociationModel
@@ -248,6 +249,7 @@ namespace Sculptor
                                             Name = childItem.TemplateName,
                                             Description = childItem.Description,
                                             AssociationType = "Template",
+                                            AssociationType_ID = childItem.TemplateType_ID,
                                             ChildAssociations = new ObservableCollectionWithItemChanged<ObjectAssociationModel>()
                                         };
                                         objectAssociationItem.ChildAssociations.Add(item);
@@ -264,6 +266,7 @@ namespace Sculptor
                                 {
                                     objectAssociationItem.Name = propertyItem.PropertyName;
                                     objectAssociationItem.Description = propertyItem.Description;
+                                    objectAssociationItem.AssociationType_ID = propertyItem.PropertyType_ID;
                                     foreach (var childItem in propertyItem.ChildProperties)
                                     {
                                         ObjectAssociationModel item = new ObjectAssociationModel
@@ -274,6 +277,7 @@ namespace Sculptor
                                             Name = childItem.PropertyName,
                                             Description = childItem.Description,
                                             AssociationType = "Property",
+                                            AssociationType_ID = childItem.PropertyType_ID,
                                             ChildAssociations = new ObservableCollectionWithItemChanged<ObjectAssociationModel>()
                                         };
                                         objectAssociationItem.ChildAssociations.Add(item);
@@ -446,6 +450,7 @@ namespace Sculptor
                                 objectAssociationItem.Association_ID = templateItem.ID;
                                 objectAssociationItem.Name = templateItem.TemplateName;
                                 objectAssociationItem.Description = templateItem.Description;
+                                objectAssociationItem.AssociationType_ID = templateItem.TemplateType_ID;
 
                                 foreach (var childItem in templateItem.ChildTemplates)
                                 {
@@ -460,6 +465,7 @@ namespace Sculptor
                                         Association_ID = childItem.ID,
                                         Name = childItem.TemplateName,
                                         Description = childItem.Description,
+                                        AssociationType_ID = childItem.TemplateType_ID,
                                         Value = "",
                                         ChildAssociations = new ObservableCollectionWithItemChanged<ObjectAssociationModel>()
                                     };
@@ -486,6 +492,7 @@ namespace Sculptor
                                 objectAssociationItem.Association_ID = propertyItem.ID;
                                 objectAssociationItem.Name = propertyItem.PropertyName;
                                 objectAssociationItem.Description = propertyItem.Description;
+                                objectAssociationItem.AssociationType_ID = propertyItem.PropertyType_ID;
 
                                 foreach (var childItem in propertyItem.ChildProperties)
                                 {
@@ -498,9 +505,9 @@ namespace Sculptor
                                         Project_ID = Globals.Project_ID,
                                         Object_ID = objectItem.ID,
                                         Association_ID = childItem.ID,
-
                                         Name = childItem.PropertyName,
                                         Description = childItem.Description,
+                                        AssociationType_ID = childItem.PropertyType_ID,
                                         Value = "",
                                         ChildAssociations = new ObservableCollectionWithItemChanged<ObjectAssociationModel>()
                                     };
@@ -517,7 +524,6 @@ namespace Sculptor
             {
                 RadWindow.Alert(ex.Message);
             }
-            //}
         }
 
         public void ObjectFilter(object sender, FilterEventArgs e)

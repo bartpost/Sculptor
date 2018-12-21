@@ -12,7 +12,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <local:PropertyType_IDToImage x:Key="propertyType_IDToImage" />
+        <local:Type_IDToImage x:Key="type_IDToImage" />
         <local:AspectViewModel x:Key="aspectViewModel" />
         <local:AttributeViewModel x:Key="attributeViewModel" />
 

@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\Tools\VS\Sculptor\Sculptor\App.xaml
-7-2105655923
+10-945793975
 2723186862
-681388643340
-93-2006879466
-Views\AttributeView.xaml;MainWindow.xaml;Views\ObjectView.xaml;Views\TemplateView.xaml;Views\ProjectView.xaml;Views\PropertyView.xaml;Views\RequirementView.xaml;
+721120880109
+94-1326761422
+Views\TypeEditDialog.xaml;Views\ObjectTypeView.xaml;Views\AttributeView.xaml;MainWindow.xaml;Views\ObjectView.xaml;Views\TemplateView.xaml;Views\ProjectView.xaml;Views\PropertyView.xaml;Views\RequirementView.xaml;Views\TypeSelectionDialog.xaml;
 
 False
 

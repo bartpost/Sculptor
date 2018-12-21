@@ -82,4 +82,10 @@ D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Telerik.Windows.PersistenceFramework.dll
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Telerik.Windows.PersistenceFramework.xml
 D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TemplateView.g.cs
 D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TemplateView.baml
+D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\ObjectTypeView.g.cs
+D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\ObjectTypeView.baml
+D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypeEditDialog.g.cs
+D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypeSelectionDialog.g.cs
+D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypeEditDialog.baml
+D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypeSelectionDialog.baml
 D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Sculptor.csprojAssemblyReference.cache

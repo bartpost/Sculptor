@@ -135,7 +135,7 @@
             
             <telerik:RadRibbonView.QuickAccessToolBar>
                 <telerik:QuickAccessToolBar>
-                    <telerik:RadRibbonButton Text="Save" SmallImage="../Resources/Images/Save.bmp"
+                    <telerik:RadRibbonButton Text="Save" 
 							Size="Small" telerik:KeyTipService.AccessText="1" />
                 </telerik:QuickAccessToolBar>
             </telerik:RadRibbonView.QuickAccessToolBar> 

@@ -14,6 +14,7 @@ namespace Sculptor
         {
             InitializeComponent();
             DataContext = TemplateViewModelLocator.GetTemplateVM();
+            TemplateTypePopup.DataContext = TypeViewModelLocator.GetTypeVM();
             PropertyTreeListView.DataContext = PropertyViewModelLocator.GetPropertyVM();
             RequirementTreeListView.DataContext = RequirementViewModelLocator.GetRequirementVM();
             TemplateAssociationTreeListView.DataContext = TemplateAssociationViewModelLocator.GetTemplateAssociationVM();

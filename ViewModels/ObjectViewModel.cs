@@ -1,6 +1,8 @@
 ﻿using Sculptor.EDBEntityDataModel;
+using Sculptor.ViewModels;
 using Sculptor.DataModels;
 using Sculptor.Interfaces;
+using Sculptor.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -9,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.TreeListView;
+using System.Windows;
 
 namespace Sculptor.ViewModels
 {
@@ -24,15 +27,12 @@ namespace Sculptor.ViewModels
         private bool isChanged;
         private bool isBusy=true;
         private bool isObjectTypePopupOpen;
-        private bool isAddObjectTypePopupOpen;
         private ICommand refreshCommand;
         private ICommand saveCommand;
         private ICommand addSiblingCommand;
         private ICommand addChildCommand;
         private ICommand deleteCommand;
-        private ICommand changeObjectTypeCommand;
-        private ICommand selectObjectTypeCommand;
-        private ICommand addObjectTypeCommand;
+        private ICommand changeTypeCommand;
         private ICommand cutCommand;
         private ICommand copyCommand;
         private ICommand pasteCommand;
@@ -170,38 +170,6 @@ namespace Sculptor.ViewModels
             }
         }
 
-        public bool IsObjectTypePopupOpen
-        {
-            get
-            {
-                return this.isObjectTypePopupOpen;
-            }
-            set
-            {
-                if (value != this.isObjectTypePopupOpen)
-                {
-                    this.isObjectTypePopupOpen = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public bool IsAddObjectTypePopupOpen
-        {
-            get
-            {
-                return this.isObjectTypePopupOpen;
-            }
-            set
-            {
-                if (value != this.isObjectTypePopupOpen)
-                {
-                    this.isObjectTypePopupOpen = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public string Error => throw new NotImplementedException();
 
         public string this[string columnName] => throw new NotImplementedException();
@@ -279,45 +247,17 @@ namespace Sculptor.ViewModels
             }
         }
 
-        public ICommand ChangeObjectTypeCommand
+        public ICommand ChangeTypeCommand
         {
             get
             {
-                if (changeObjectTypeCommand == null)
+                if (changeTypeCommand == null)
                 {
-                    changeObjectTypeCommand = new RelayCommand(
-                        p => this.CanChangeObjectType(),
-                        p => this.ChangeObjectType(p));
+                    changeTypeCommand = new RelayCommand(
+                        p => this.CanChangeType(),
+                        p => this.ChangeType(p));
                 }
-                return changeObjectTypeCommand;
-            }
-        }
-
-        public ICommand SelectObjectTypeCommand
-        {
-            get
-            {
-                if (selectObjectTypeCommand == null)
-                {
-                    selectObjectTypeCommand = new RelayCommand(
-                        p => this.CanSelectObjectType(),
-                        p => this.SelectObjectType(p));
-                }
-                return selectObjectTypeCommand;
-            }
-        }
-
-        public ICommand AddObjectTypeCommand
-        {
-            get
-            {
-                if (addObjectTypeCommand == null)
-                {
-                    addObjectTypeCommand = new RelayCommand(
-                        p => this.CanAddObjectType(),
-                        p => this.AddObjectType(p));
-                }
-                return addObjectTypeCommand;
+                return changeTypeCommand;
             }
         }
 
@@ -381,7 +321,9 @@ namespace Sculptor.ViewModels
         private void OnLoadInBackground(object sender, DoWorkEventArgs e)
         {
             this.IsBusy = true;
-            LoadObjectTypes();
+            // Load Object Types;
+            TypeViewModelLocator.GetTypeVM();
+            // Load Objects
             Load(null);
         }
 
@@ -842,16 +784,6 @@ namespace Sculptor.ViewModels
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="objectItem"></param>
-        /// <param name="S88Type"></param>
-        public void SetObjectType(ObjectModel objectItem, string S88Type)
-        {
-            objectItem.ObjectType_ID = GetObjectType_ID(S88Type);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="ObjectType"></param>
         /// <returns></returns>
         private int GetObjectType_ID(string objectType)
@@ -860,44 +792,32 @@ namespace Sculptor.ViewModels
             return objectTypeItem.ID;
         }
 
-        private bool CanChangeObjectType()
+        private bool CanChangeType()
         {
             return true;
         }
 
-        private void ChangeObjectType(object p)
+        private void ChangeType(object p)
         {
-            IsObjectTypePopupOpen = true;
+            string group = (p as string);
+            var typeSelectionDialog = new TypeSelectionDialog();
+            typeSelectionDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            switch (group)
+            {
+                case "Object":
+                    //typeSelectionDialog.ShowDialog();
+                    TypeViewModelLocator.GetTypeVM().IsObjectTypePopupOpen = true;
+                    break;
+                case "Template":
+                    TypeViewModelLocator.GetTypeVM().IsTemplateTypePopupOpen = true;
+                    break;
+                case "Property":
+                    TypeViewModelLocator.GetTypeVM().IsPropertyTypePopupOpen = true;
+                    break;
+            }
         }
 
-        private bool CanSelectObjectType()
-        {
-            return true;
-        }
-
-        private void SelectObjectType(object p)
-        {
-            if (p != null)
-                foreach (var item in selectedItems)
-                    item.ObjectType_ID = (p as ObjectTypeModel).ID;
-            IsObjectTypePopupOpen = false;
-        }
-
-        private bool CanAddObjectType()
-        {
-            return true;
-        }
-
-        private void AddObjectType(object p)
-        {
-            IsObjectTypePopupOpen = false;
-            if (Convert.ToInt16(p) == 1)
-                IsAddObjectTypePopupOpen = true;
-            if (Convert.ToInt16(p) == 2)
-                IsAddObjectTypePopupOpen = false;
-
-        }
+        #endregion
     }
-    #endregion
-    
+
 }

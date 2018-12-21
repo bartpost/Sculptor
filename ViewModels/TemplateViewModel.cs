@@ -14,22 +14,19 @@ namespace Sculptor
 {
     public class TemplateViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private ObservableCollectionWithItemChanged<TemplateModel> templates;// = new ObservableCollectionWithItemChanged<TemplateModel>();
+        private ObservableCollectionWithItemChanged<TemplateModel> templates;
         private ObservableCollectionWithItemChanged<TemplateModel> backgroundTemplates = new ObservableCollectionWithItemChanged<TemplateModel>();
         private ObservableCollection<TemplateTypeModel> templateTypes = new ObservableCollection<TemplateTypeModel>();
         private TemplateModel selectedItem;
         private ObservableCollectionWithItemChanged<TemplateModel> selectedItems;
         private ObservableCollectionWithItemChanged<TemplateModel> copiedItems;
         private bool isChanged;
-        private bool isTemplateTypePopupOpen;
-        private bool isAddTemplateTypePopupOpen;
         private ICommand refreshCommand;
         private ICommand saveCommand;
         private ICommand addSiblingCommand;
         private ICommand addChildCommand;
         private ICommand deleteCommand;
-        private ICommand changeTemplateTypeCommand;
-        private ICommand selectTemplateTypeCommand;
+        private ICommand changeTypeCommand;
         private ICommand cutCommand;
         private ICommand copyCommand;
         private ICommand pasteCommand;
@@ -150,21 +147,6 @@ namespace Sculptor
             }
         }
 
-        public bool IsTemplateTypePopupOpen
-        {
-            get
-            {
-                return this.isTemplateTypePopupOpen;
-            }
-            set
-            {
-                if (value != this.isTemplateTypePopupOpen)
-                {
-                    this.isTemplateTypePopupOpen = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
         #endregion
 
         #region Commands
@@ -239,31 +221,17 @@ namespace Sculptor
             }
         }
 
-        public ICommand ChangeTemplateTypeCommand
+        public ICommand ChangeTypeCommand
         {
             get
             {
-                if (changeTemplateTypeCommand == null)
+                if (changeTypeCommand == null)
                 {
-                    changeTemplateTypeCommand = new RelayCommand(
-                        p => this.CanChangeTemplateType(),
-                        p => this.ChangeTemplateType(p));
+                    changeTypeCommand = new RelayCommand(
+                        p => this.CanChangeType(),
+                        p => this.ChangeType(p));
                 }
-                return changeTemplateTypeCommand;
-            }
-        }
-
-        public ICommand SelectTemplateTypeCommand
-        {
-            get
-            {
-                if (selectTemplateTypeCommand == null)
-                {
-                    selectTemplateTypeCommand = new RelayCommand(
-                        p => this.CanSelectTemplateType(),
-                        p => this.SelectTemplateType(p));
-                }
-                return selectTemplateTypeCommand;
+                return changeTypeCommand;
             }
         }
 
@@ -319,7 +287,7 @@ namespace Sculptor
 
         private void OnLoadInBackground(object sender, DoWorkEventArgs e)
         {
-            LoadTemplateTypes();
+            TypeViewModelLocator.GetTypeVM();
             Load(null);
         }
 
@@ -329,7 +297,7 @@ namespace Sculptor
 
             //Dispose events
             backgroundWorker.DoWork -= this.OnLoadInBackground;
-            backgroundWorker.RunWorkerCompleted -= OnLoadInBackgroundCompleted;
+            backgroundWorker.RunWorkerCompleted -= this.OnLoadInBackgroundCompleted;
 
             Templates = BackgroundTemplates;
         }
@@ -378,25 +346,6 @@ namespace Sculptor
                 return childTemplates;
         }
 
-        private void LoadTemplateTypes()
-        {
-            TemplateTypes.Clear();
-            using (EDBEntities eDB = new EDBEntities())
-            {
-                foreach (tblTemplateType Rec in (from o in eDB.tblTemplateTypes where o.Project_ID == Globals.Project_ID select o))
-                {
-                    TemplateTypeModel templateTypeItem = new TemplateTypeModel
-                    {
-                        ID = Rec.ID,
-                        TemplateType = Rec.TemplateType,
-                        Description = Rec.Description,
-                        Image = Rec.Image
-                    };
-                    TemplateTypes.Add(templateTypeItem);
-                }
-            }
-        }
-
         private bool CanAddSibling()
         {
             return true;
@@ -416,8 +365,10 @@ namespace Sculptor
                 IsChanged = false,
                 IsNew = true,
                 IsDeleted = false,
+                TemplateType_ID = TypeViewModelLocator.GetTypeVM().GetTypeGroupID("Template"),
                 ChildTemplates = new ObservableCollectionWithItemChanged<TemplateModel>()
             };
+
 
             if (SelectedItem == null)
             {
@@ -435,6 +386,7 @@ namespace Sculptor
                 templateItem.Parent_ID = SelectedItem.Parent_ID;
                 parentItem.ChildTemplates.Insert(parentItem.ChildTemplates.IndexOf(SelectedItem) + 1, templateItem);
             }
+
         }
 
         private bool CanAddChild()
@@ -456,6 +408,7 @@ namespace Sculptor
                 IsChanged = false,
                 IsNew = true,
                 IsDeleted = false,
+                TemplateType_ID = TypeViewModelLocator.GetTypeVM().GetTypeGroupID("Template"),
                 ChildTemplates = new ObservableCollectionWithItemChanged<TemplateModel>()
             };
             if (SelectedItem != null)
@@ -478,12 +431,13 @@ namespace Sculptor
             SelectedItem.IsChanged = false;
             SelectedItem.IsNew = false;
             SelectedItem.IsDeleted = true;
-            foreach (var childItem in SelectedItem.ChildTemplates)
-            {
-                childItem.IsChanged = false;
-                childItem.IsNew = false;
-                childItem.IsDeleted = true;
-            }
+            if (SelectedItem.ChildTemplates != null)
+                foreach (var childItem in SelectedItem.ChildTemplates)
+                {
+                    childItem.IsChanged = false;
+                    childItem.IsNew = false;
+                    childItem.IsDeleted = true;
+                }
         }
 
         private bool CanSave()
@@ -748,28 +702,16 @@ namespace Sculptor
             return null;
         }
 
-        private bool CanChangeTemplateType()
+        private bool CanChangeType()
         {
             return true;
         }
 
-        private void ChangeTemplateType(object p)
+        private void ChangeType(object p)
         {
-            IsTemplateTypePopupOpen = true;
+            TypeViewModelLocator.GetTypeVM().IsTemplateTypePopupOpen = true;
         }
 
-        private bool CanSelectTemplateType()
-        {
-            return true;
-        }
-
-        private void SelectTemplateType(object p)
-        {
-            if (p != null)
-                foreach (var item in selectedItems)
-                    item.TemplateType_ID = (p as TemplateTypeModel).ID;
-            IsTemplateTypePopupOpen = false;
-        }
     }
     #endregion
 

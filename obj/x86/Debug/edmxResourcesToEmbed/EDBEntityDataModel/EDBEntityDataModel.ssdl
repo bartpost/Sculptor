@@ -96,6 +96,7 @@
     <Property Name="ObjectType" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="Description" Type="varchar" MaxLength="255" />
     <Property Name="Image" Type="image" />
+    <Property Name="ShowOrder" Type="int" />
   </EntityType>
   <EntityType Name="tblProjects">
     <Key>
@@ -125,16 +126,6 @@
     <Property Name="Attribute2" Type="varchar" MaxLength="10" />
     <Property Name="Attribute3" Type="varchar" MaxLength="10" />
   </EntityType>
-  <EntityType Name="tblPropertyTypes">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Project_ID" Type="int" Nullable="false" />
-    <Property Name="PropertyType" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="Description" Type="varchar" MaxLength="255" />
-    <Property Name="Image" Type="image" />
-  </EntityType>
   <EntityType Name="tblRequirements">
     <Key>
       <PropertyRef Name="ID" />
@@ -151,14 +142,6 @@
     <Property Name="LastChangedBy" Type="varchar" MaxLength="50" />
     <Property Name="Version" Type="varchar" MaxLength="10" />
     <Property Name="Parent_ID" Type="uniqueidentifier" />
-  </EntityType>
-  <EntityType Name="tblRequirementTypes">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
-    <Property Name="RequirementType" Type="varchar" MaxLength="50" />
-    <Property Name="Image" Type="varbinary(max)" />
   </EntityType>
   <EntityType Name="tblTemplateAssociations">
     <Key>
@@ -200,15 +183,17 @@
     <Property Name="Description" Type="varchar" MaxLength="255" />
     <Property Name="TemplateType_ID" Type="int" />
   </EntityType>
-  <EntityType Name="tblTemplateTypes">
+  <EntityType Name="tblTypes">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Project_ID" Type="int" Nullable="false" />
-    <Property Name="TemplateType" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Type" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="TypeGroup" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="Description" Type="varchar" MaxLength="255" />
     <Property Name="Image" Type="image" />
+    <Property Name="ShowOrder" Type="int" />
   </EntityType>
   <EntityContainer Name="EDBModelStoreContainer">
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
@@ -221,12 +206,10 @@
     <EntitySet Name="tblObjectTypes" EntityType="Self.tblObjectTypes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblProjects" EntityType="Self.tblProjects" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblProperties" EntityType="Self.tblProperties" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="tblPropertyTypes" EntityType="Self.tblPropertyTypes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblRequirements" EntityType="Self.tblRequirements" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="tblRequirementTypes" EntityType="Self.tblRequirementTypes" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblTemplateAssociations" EntityType="Self.tblTemplateAssociations" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblTemplateRequirements" EntityType="Self.tblTemplateRequirements" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblTemplates" EntityType="Self.tblTemplates" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="tblTemplateTypes" EntityType="Self.tblTemplateTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblTypes" EntityType="Self.tblTypes" Schema="dbo" store:Type="Tables" />
   </EntityContainer>
 </Schema>

@@ -13,7 +13,7 @@
 
     <UserControl.Resources>
         <!--Converter that returns an image dependent on the object type-->
-        <local:RequirementType_IDToImage x:Key="requirementType_IDToImage" />
+        <local:Type_IDToImage x:Key="type_IDToImage" />
 
         <Style x:Key="ItemContainerStyle" TargetType="{x:Type telerik:GridViewRow}">
             <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
@@ -257,7 +257,7 @@
                                                     Stretch="Fill"
                                                     Width="16"
                                                     Height="16"
-                                                    Source="{Binding RequirementType_ID, Converter={StaticResource requirementType_IDToImage}}">
+                                                    Source="{Binding RequirementType_ID, Converter={StaticResource type_IDToImage}}">
                                             </Image>
                                             <TextBlock Text="{Binding ArticleNo}"/>
                                         </StackPanel>
@@ -522,6 +522,51 @@
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Width="0"/>
             <GridSplitter Grid.Column="2" HorizontalAlignment="Left" Width="0"/>
+
+            <Popup x:Name="TemplateTypePopup" Placement="MousePoint"  IsOpen="{Binding IsTemplateTypePopupOpen}" FocusManager.IsFocusScope="True">
+                <StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="400">
+                        <telerik:RadListBox Name="templateTypeListBox" ItemsSource="{Binding TemplateTypes}" MaxHeight="200">
+                            <telerik:EventToCommandBehavior.EventBindings>
+                                <telerik:EventBinding Command="{Binding ChangeTypeCommand}" 
+                                                      CommandParameter="{Binding ElementName=templateTypeListBox, Path=SelectedItem}"
+                                                      EventName="MouseLeftButtonDown" 
+                                                      RaiseOnHandledEvents="True" 
+                                                      />
+                            </telerik:EventToCommandBehavior.EventBindings>
+                            <telerik:RadListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image Source="{Binding Image}" 
+                                               Grid.Row="0"
+                                               Margin="0,0,10,0"
+                                               RenderOptions.BitmapScalingMode="Fant"
+                                               Stretch="Fill"
+                                               Width="16"
+                                               Height="16"/>
+                                        <TextBlock Grid.Row="1" Text="{Binding Type}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </telerik:RadListBox.ItemTemplate>
+                        </telerik:RadListBox>
+                    </ScrollViewer>
+                    <Border Background="White" BorderBrush="Gray" BorderThickness="1" Margin="0,-1,0,0">
+                        <StackPanel>
+                            <Button Content="Edit Object Types" 
+                                BorderThickness="0"
+                                Margin="1,1,1,1"
+                                Height="30"
+                                Command="{Binding EditTypeCommand}" CommandParameter="Template" />
+                            <!-- Cancel if command doesn't have a parameter -->
+                            <Button Content="Cancel" 
+                                BorderThickness="0"
+                                Margin="1,1,1,1"
+                                Height="30"
+                                Command="{Binding CancelTypeCommand}" CommandParameter="Template"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Popup>
 
         </Grid>
     </telerik:RadBusyIndicator>

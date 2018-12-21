@@ -182,7 +182,7 @@ namespace Sculptor
 
         private void OnLoadInBackground(object sender, DoWorkEventArgs e)
         {
-            Load(null);
+           Load(null);
         }
 
         private void OnLoadInBackgroundCompleted(object sender, RunWorkerCompletedEventArgs e)

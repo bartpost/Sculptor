@@ -12,21 +12,18 @@ namespace Sculptor
 {
     public class PropertyViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private ObservableCollectionWithItemChanged<PropertyModel> properties; // = new ObservableCollectionWithItemChanged<PropertyModel>();
+        private ObservableCollectionWithItemChanged<PropertyModel> properties;
         private ObservableCollectionWithItemChanged<PropertyModel> backgroundProperties = new ObservableCollectionWithItemChanged<PropertyModel>();
         private ObservableCollection<PropertyTypeModel> propertyTypes = new ObservableCollection<PropertyTypeModel>();
         private PropertyModel selectedItem;
         private ObservableCollectionWithItemChanged<PropertyModel> selectedItems;
         private bool isChanged;
-        private bool isPropertyTypePopupOpen;
         private ICommand refreshCommand;
         private ICommand saveCommand;
         private ICommand addSiblingCommand;
         private ICommand addChildCommand;
         private ICommand deleteCommand;
-        private ICommand changePropertyTypeCommand;
-        private ICommand selectPropertyTypeCommand;
-
+        private ICommand changeTypeCommand;
 
         #region Constructor
         public PropertyViewModel()
@@ -123,22 +120,6 @@ namespace Sculptor
             }
         }
 
-        public bool IsPropertyTypePopupOpen
-        {
-            get
-            {
-                return this.isPropertyTypePopupOpen;
-            }
-            set
-            {
-                if (value != this.isPropertyTypePopupOpen)
-                {
-                    this.isPropertyTypePopupOpen = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public AspectViewModel Aspects = new AspectViewModel();
         #endregion
 
@@ -214,33 +195,20 @@ namespace Sculptor
             }
         }
 
-        public ICommand ChangePropertyTypeCommand
+        public ICommand ChangeTypeCommand
         {
             get
             {
-                if (changePropertyTypeCommand == null)
+                if (changeTypeCommand == null)
                 {
-                    changePropertyTypeCommand = new RelayCommand(
-                        p => this.CanChangePropertyType(),
-                        p => this.ChangePropertyType(p));
+                    changeTypeCommand = new RelayCommand(
+                        p => this.CanChangeType(),
+                        p => this.ChangeType(p));
                 }
-                return changePropertyTypeCommand;
+                return changeTypeCommand;
             }
         }
 
-        public ICommand SelectPropertyTypeCommand
-        {
-            get
-            {
-                if (selectPropertyTypeCommand == null)
-                {
-                    selectPropertyTypeCommand = new RelayCommand(
-                        p => this.CanSelectPropertyType(),
-                        p => this.SelectPropertyType(p));
-                }
-                return selectPropertyTypeCommand;
-            }
-        }
         #endregion
 
         #region Events
@@ -252,7 +220,7 @@ namespace Sculptor
 
         private void OnLoadInBackground(object sender, DoWorkEventArgs e)
         {
-            LoadPropertyTypes();
+            TypeViewModelLocator.GetTypeVM();
             Load(null);
         }
 
@@ -316,25 +284,6 @@ namespace Sculptor
             return childProperties;
         }
 
-        private void LoadPropertyTypes()
-        {
-            PropertyTypes.Clear();
-            using (EDBEntities eDB = new EDBEntities())
-            {
-                foreach (tblPropertyType Rec in (from o in eDB.tblPropertyTypes where o.Project_ID == Globals.Project_ID select o))
-                {
-                    PropertyTypeModel propertyTypeItem = new PropertyTypeModel
-                    {
-                        ID = Rec.ID,
-                        PropertyType = Rec.PropertyType,
-                        Description = Rec.Description,
-                        Image = Rec.Image
-                    };
-                    PropertyTypes.Add(propertyTypeItem);
-                }
-            }
-        }
-
         private bool CanAddSibling()
         {
             return true;
@@ -351,10 +300,10 @@ namespace Sculptor
                 Project_ID = Globals.Project_ID,
                 PropertyName = "New Property",
                 Description = "New Property Description",
-                PropertyType_ID = 5,
                 IsChanged = false,
                 IsNew = true,
                 IsDeleted = false,
+                PropertyType_ID = TypeViewModelLocator.GetTypeVM().GetTypeGroupID("Property"),
                 ChildProperties = new ObservableCollectionWithItemChanged<PropertyModel>()
             };
 
@@ -392,10 +341,10 @@ namespace Sculptor
                 Project_ID = Globals.Project_ID,
                 PropertyName = "New Property",
                 Description = "New Property Description",
-                PropertyType_ID = 5,
                 IsChanged = false,
                 IsNew = true,
                 IsDeleted = false,
+                PropertyType_ID = TypeViewModelLocator.GetTypeVM().GetTypeGroupID("Property"),
                 ChildProperties = new ObservableCollectionWithItemChanged<PropertyModel>()
             };
             if (SelectedItem != null)
@@ -651,28 +600,16 @@ namespace Sculptor
             return 1;
         }
 
-        private bool CanChangePropertyType()
+        private bool CanChangeType()
         {
             return true;
         }
 
-        private void ChangePropertyType(object p)
+        private void ChangeType(object p)
         {
-            IsPropertyTypePopupOpen = true;
+            TypeViewModelLocator.GetTypeVM().IsPropertyTypePopupOpen = true;
         }
 
-        private bool CanSelectPropertyType()
-        {
-            return true;
-        }
-
-        private void SelectPropertyType(object p)
-        {
-            if (p != null)
-                foreach (var item in selectedItems)
-                    item.PropertyType_ID = (p as PropertyTypeModel).ID;
-            IsPropertyTypePopupOpen = false;
-        }
     }
     #endregion
  }

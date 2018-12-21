@@ -11,7 +11,7 @@
 
     <UserControl.Resources>
         <!--Converter that returns an image dependent on the object type-->
-        <local:RequirementType_IDToImage x:Key="requirementType_IDToImage" />
+        <local:Type_IDToImage x:Key="type_IDToImage" />
 
         <telerik:RadContextMenu x:Key="requirementTypeContextMenu" Loaded="ContextMenu_Loaded" >
             <telerik:RadMenuItem Header="Specification" Command="{Binding Path=ChangeRequirementTypeCommand}" CommandParameter="1">
@@ -90,7 +90,7 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Name="requirementTypeImage"
-                                                Source="{Binding RequirementType_ID, Converter={StaticResource requirementType_IDToImage}}" 
+                                                Source="{Binding RequirementType_ID, Converter={StaticResource type_IDToImage}}" 
                                                 Margin="0,0,10,0"
                                                 RenderOptions.BitmapScalingMode="Fant"
                                                 Stretch="Fill"

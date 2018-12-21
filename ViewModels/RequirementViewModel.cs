@@ -6,38 +6,44 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.TreeListView;
+using Telerik.Windows.Documents.FormatProviders.Xaml;
+using Telerik.Windows.Documents.Model;
 
 namespace Sculptor.ViewModels
 {
     public class RequirementViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private ObservableCollectionWithItemChanged<RequirementModel> requirements = new ObservableCollectionWithItemChanged<RequirementModel>();
+        private ObservableCollectionWithItemChanged<RequirementModel> requirements;
         private ObservableCollectionWithItemChanged<RequirementModel> backgroundRequirements = new ObservableCollectionWithItemChanged<RequirementModel>();
         private RequirementModel selectedItem;
         private ObservableCollectionWithItemChanged<RequirementModel> selectedItems;
         private ObservableCollectionWithItemChanged<RequirementTypeModel> requirementTypes;
         private bool isChanged;
         private bool isBusy;
-        private bool hasLoaded = false;
         private ICommand refreshCommand;
         private ICommand saveCommand;
         private ICommand addSiblingCommand;
         private ICommand addChildCommand;
         private ICommand deleteCommand;
-        private ICommand changeRequirementTypeCommand;
+        private ICommand changeTypeCommand;
+        private ICommand showArticleCommand;
 
         #region Constructor
         public RequirementViewModel()
         {
-            IsBusy = true;
-            // Load the objects in the background
+            // Load the requirements in the background
             var backgroundWorker = new BackgroundWorker();
             backgroundWorker.DoWork += this.OnLoadInBackground;
-            backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
+            backgroundWorker.RunWorkerCompleted += this.OnLoadInBackgroundCompleted;
             backgroundWorker.RunWorkerAsync();
+
+            //Load(null);
+            //Requirements = BackgroundRequirements;
         }
         #endregion
 
@@ -69,7 +75,7 @@ namespace Sculptor.ViewModels
             {
                 if (value != backgroundRequirements)
                 {
-                    requirements = value;
+                    backgroundRequirements = value;
                     OnPropertyChanged();
                 }
             }
@@ -149,21 +155,6 @@ namespace Sculptor.ViewModels
             }
         }
 
-        public bool HasLoaded
-        {
-            get
-            {
-                return hasLoaded;
-            }
-            set
-            {
-                if (value != hasLoaded)
-                {
-                    hasLoaded = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
         #endregion
 
         #region Commands
@@ -237,17 +228,31 @@ namespace Sculptor.ViewModels
             }
         }
 
-        public ICommand ChangeRequirementTypeCommand
+        public ICommand ChangeTypeCommand
         {
             get
             {
-                if (changeRequirementTypeCommand == null)
+                if (changeTypeCommand == null)
                 {
-                    changeRequirementTypeCommand = new RelayCommand(
-                        p => this.CanChangeRequirementType(),
-                        p => this.ChangeRequirementType(p));
+                    changeTypeCommand = new RelayCommand(
+                        p => this.CanChangeType(),
+                        p => this.ChangeType(p));
                 }
-                return changeRequirementTypeCommand;
+                return changeTypeCommand;
+            }
+        }
+
+        public ICommand ShowArticleCommand
+        {
+            get
+            {
+                if (showArticleCommand == null)
+                {
+                    showArticleCommand = new RelayCommand(
+                        p => this.CanShowArticle(),
+                        p => this.ShowArticle());
+                }
+                return showArticleCommand;
             }
         }
         #endregion
@@ -261,6 +266,7 @@ namespace Sculptor.ViewModels
 
         private void OnLoadInBackground(object sender, DoWorkEventArgs e)
         {
+            TypeViewModelLocator.GetTypeVM();
             Load(null);
         }
 
@@ -270,12 +276,11 @@ namespace Sculptor.ViewModels
 
             //Dispose events
             backgroundWorker.DoWork -= this.OnLoadInBackground;
-            backgroundWorker.RunWorkerCompleted -= OnLoadInBackgroundCompleted;
+            backgroundWorker.RunWorkerCompleted -= this.OnLoadInBackgroundCompleted;
 
             Requirements = BackgroundRequirements;
 
             IsBusy = false;
-            HasLoaded = true;
         }
         #endregion
 
@@ -318,19 +323,6 @@ namespace Sculptor.ViewModels
             return childRequirements;
         }
 
-        private void LoadRequirementTypes()
-        {
-            RequirementTypes.Clear();
-            using (EDBEntities eDB = new EDBEntities())
-            {
-                foreach (tblRequirementType Rec in (from o in eDB.tblRequirementTypes select o))
-                {
-                    RequirementTypeModel requirementTypeItem = new RequirementTypeModel { ID = Rec.ID, RequirementType = Rec.RequirementType };
-                    RequirementTypes.Add(requirementTypeItem);
-                }
-            }
-        }
-
         private bool CanRefresh()
         {
             return true;
@@ -341,7 +333,7 @@ namespace Sculptor.ViewModels
             // For some reason we have to unselect the selected row before we clear the ItemSource
             SelectedItem = null;
 
-            Requirements.Clear();
+            BackgroundRequirements.Clear();
             Load(null);
         }
 
@@ -421,11 +413,12 @@ namespace Sculptor.ViewModels
                 {
                     ID = Guid.NewGuid(),
                     Project_ID = Globals.Project_ID,
+                    ArticleNo = "xxx",
                     ArticleHeader = "New Article",
                     Version = "",
-                    RequirementType_ID = 1,
                     IsChanged = false,
                     IsNew = true,
+                    RequirementType_ID = TypeViewModelLocator.GetTypeVM().GetTypeGroupID("Requirement"),
                     ChildRequirements = new ObservableCollectionWithItemChanged<RequirementModel>()
                 };
 
@@ -448,6 +441,7 @@ namespace Sculptor.ViewModels
                     requirementItem.Parent_ID = SelectedItem.Parent_ID;
                     parentItem.ChildRequirements.Insert(parentItem.ChildRequirements.IndexOf(SelectedItem) + 1, requirementItem);
                 }
+
                 IsChanged = true;
             }
         }
@@ -463,11 +457,12 @@ namespace Sculptor.ViewModels
             {
                 ID = Guid.NewGuid(),
                 Project_ID = Globals.Project_ID,
+                ArticleNo = "xxx",
                 ArticleHeader = "New Requirement",
                 Version = "",
-                RequirementType_ID = 1,
                 IsChanged = false,
                 IsNew = true,
+                RequirementType_ID = TypeViewModelLocator.GetTypeVM().GetTypeGroupID("Requirement"),
                 ChildRequirements = new ObservableCollectionWithItemChanged<RequirementModel>()
             };
             if (SelectedItem != null)
@@ -587,14 +582,47 @@ namespace Sculptor.ViewModels
             return requirementTypeItem.ID;
         }
 
-        private bool CanChangeRequirementType()
+        private bool CanChangeType()
         {
             return true;
         }
 
-        private void ChangeRequirementType(object p)
+        private void ChangeType(object p)
         {
-            selectedItems[0].RequirementType_ID = Convert.ToInt32(p.ToString());
+            TypeViewModelLocator.GetTypeVM().IsRequirementTypePopupOpen = true;
+        }
+
+
+        private bool CanShowArticle()
+        {
+            return true;
+        }
+
+        private void ShowArticle()
+        {
+            StackPanel sp = new StackPanel();
+            RadRichTextBox rtb = new RadRichTextBox();
+
+            var reqItem = RequirementViewModelLocator.GetRequirementVM().GetRequirement(SelectedItem.ID, null);
+            XamlFormatProvider provider = new XamlFormatProvider();
+            RadDocument document;
+            if (reqItem.Content != null)
+                document = provider.Import(reqItem.Content);
+            else
+                document = new RadDocument();
+            rtb.Document = document;
+            rtb.Document.LayoutMode = DocumentLayoutMode.Flow;
+            sp.Children.Add(rtb);
+
+            var window = new RadWindow
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                Header = SelectedItem.ArticleHeader,
+                Content = sp,
+                Width = 700,
+                Height = 500,
+            };
+            window.Show();
         }
         #endregion
     }

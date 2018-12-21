@@ -20,13 +20,13 @@ namespace Sculptor.ViewModels
 {
     public class ObjectRequirementViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private ObservableCollection<ObjectRequirementModel> objectRequirements = new ObservableCollection<ObjectRequirementModel>();
+        private ObservableCollection<ObjectRequirementModel> objectRequirements;
         private ObservableCollection<ObjectRequirementModel> backgroundObjectRequirements = new ObservableCollection<ObjectRequirementModel>();
         private CollectionViewSource filteredObjectRequirements;
         private ObjectRequirementModel selectedItem;
         private ObservableCollection<ObjectRequirementModel> selectedItems;
         private bool isChanged;
-        private ICommand showCommand;
+        private ICommand showArticleCommand;
         private ICommand refreshCommand;
         private ICommand saveCommand;
         private ICommand deleteCommand;
@@ -34,7 +34,7 @@ namespace Sculptor.ViewModels
         #region Constructor
         public ObjectRequirementViewModel()
         {
-            // Load the objects in the background
+            //Load the properties in the background
             var backgroundWorker = new BackgroundWorker();
             backgroundWorker.DoWork += this.OnLoadInBackground;
             backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
@@ -131,17 +131,17 @@ namespace Sculptor.ViewModels
         #endregion
 
         #region Commands
-        public ICommand ShowCommand
+        public ICommand ShowArticleCommand
         {
             get
             {
-                if (showCommand == null)
+                if (showArticleCommand == null)
                 {
-                    showCommand = new RelayCommand(
-                        p => this.CanShow(),
-                        p => this.Show());
+                    showArticleCommand = new RelayCommand(
+                        p => this.CanShowArticle(),
+                        p => this.ShowArticle());
                 }
-                return showCommand;
+                return showArticleCommand;
             }
         }
 
@@ -197,7 +197,8 @@ namespace Sculptor.ViewModels
 
         private void OnLoadInBackground(object sender, DoWorkEventArgs e)
         {
-            Load();
+           TypeViewModelLocator.GetTypeVM();
+           Load();
         }
 
         private void OnLoadInBackgroundCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -206,7 +207,7 @@ namespace Sculptor.ViewModels
 
             //Dispose events
             backgroundWorker.DoWork -= this.OnLoadInBackground;
-            backgroundWorker.RunWorkerCompleted -= OnLoadInBackgroundCompleted;
+            backgroundWorker.RunWorkerCompleted -= this.OnLoadInBackgroundCompleted;
 
             ObjectRequirements = BackgroundObjectRequirements;
 
@@ -226,7 +227,7 @@ namespace Sculptor.ViewModels
         private void Load()
         {
             // Check if the classes and properties have ben loaded
-            while (!RequirementViewModelLocator.GetRequirementVM().HasLoaded);
+            while (!RequirementViewModelLocator.IsLoaded());
 
             using (EDBEntities eDB = new EDBEntities())
             {
@@ -253,36 +254,41 @@ namespace Sculptor.ViewModels
                     };
 
                     var requirementItem = RequirementViewModelLocator.GetRequirementVM().GetRequirement(objectRequirementItem.Requirement_ID, null);
-                    objectRequirementItem.ArticleNo = requirementItem.ArticleNo;
-                    objectRequirementItem.ArticleHeader = requirementItem.ArticleHeader;
-                    objectRequirementItem.RequirementType_ID = requirementItem.RequirementType_ID;
-           
-                    foreach (var childItem in requirementItem.ChildRequirements)
-                    {
-                        ObjectRequirementModel item = new ObjectRequirementModel
-                        {
-                            Project_ID = childItem.Project_ID,
-                            Object_ID = objectRequirementItem.Object_ID,
-                            Requirement_ID = childItem.ID,
-                            ArticleNo = childItem.ArticleNo,
-                            ArticleHeader = childItem.ArticleHeader,
-                            RequirementType = "Requirement",
-                            ChildRequirements = new ObservableCollection<ObjectRequirementModel>()
-                        };
-                        objectRequirementItem.ChildRequirements.Add(item);
-                    }
 
-                    BackgroundObjectRequirements.Add(objectRequirementItem);
+                    if (requirementItem != null)
+                    {
+                        objectRequirementItem.ArticleNo = requirementItem.ArticleNo;
+                        objectRequirementItem.ArticleHeader = requirementItem.ArticleHeader;
+                        objectRequirementItem.RequirementType_ID = requirementItem.RequirementType_ID;
+
+                        foreach (var childItem in requirementItem.ChildRequirements)
+                        {
+                            ObjectRequirementModel item = new ObjectRequirementModel
+                            {
+                                Project_ID = childItem.Project_ID,
+                                Object_ID = objectRequirementItem.Object_ID,
+                                Requirement_ID = childItem.ID,
+                                ArticleNo = childItem.ArticleNo,
+                                ArticleHeader = childItem.ArticleHeader,
+                                RequirementType = "Requirement",
+                                ChildRequirements = new ObservableCollection<ObjectRequirementModel>(),
+                                RequirementType_ID = childItem.RequirementType_ID
+                            };
+                            objectRequirementItem.ChildRequirements.Add(item);
+                        }
+
+                        BackgroundObjectRequirements.Add(objectRequirementItem);
+                    }
                 }
             }
         }
 
-        private bool CanShow()
+        private bool CanShowArticle()
         {
             return true;
         }
 
-        private void Show()
+        private void ShowArticle()
         {
             StackPanel sp = new StackPanel();
             RadRichTextBox rtb = new RadRichTextBox();
@@ -300,7 +306,7 @@ namespace Sculptor.ViewModels
 
             var window = new RadWindow
             {
-                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 Header = SelectedItem.ArticleHeader,
                 Content = sp,
                 Width = 700,
@@ -398,6 +404,7 @@ namespace Sculptor.ViewModels
                         if (Rec != null)
                             eDB.tblObjectRequirements.Remove(Rec);
                     }
+                    // Recursive call
                 }
             }
         }
@@ -450,6 +457,7 @@ namespace Sculptor.ViewModels
                                 Project_ID = Globals.Project_ID,
                                 Object_ID = objectRequirementItem.Object_ID,
                                 Requirement_ID = childItem.ID,
+                                RequirementType_ID = childItem.RequirementType_ID,
                                 //objectFunctionalityChildItem.FunctionParent_ID = childItem.Parent_ID;
                                 ArticleNo = childItem.ArticleNo,
                                 ArticleHeader = childItem.ArticleHeader,

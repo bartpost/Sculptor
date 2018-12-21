@@ -18,8 +18,8 @@ namespace Sculptor.EDBEntityDataModel
         public string ContractNo { get; set; }
         public string ProjectName { get; set; }
         public string CustomerName { get; set; }
-        public Nullable<System.DateTime> LastOpened { get; set; }
         public byte[] Logo { get; set; }
+        public Nullable<System.DateTime> LastOpened { get; set; }
         public string LastOpenedBy { get; set; }
     }
 }

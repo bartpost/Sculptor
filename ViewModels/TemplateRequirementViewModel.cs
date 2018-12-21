@@ -226,7 +226,7 @@ namespace Sculptor.ViewModels
         private void Load()
         {
             // Check if the classes and properties have ben loaded
-            while (!RequirementViewModelLocator.GetRequirementVM().HasLoaded);
+            while (!RequirementViewModelLocator.IsLoaded());
 
             using (EDBEntities eDB = new EDBEntities())
             {

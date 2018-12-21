@@ -19,5 +19,6 @@ namespace Sculptor.EDBEntityDataModel
         public string ObjectType { get; set; }
         public string Description { get; set; }
         public byte[] Image { get; set; }
+        public Nullable<int> ShowOrder { get; set; }
     }
 }

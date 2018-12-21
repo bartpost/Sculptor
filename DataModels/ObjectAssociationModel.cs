@@ -18,6 +18,7 @@ namespace Sculptor
         private bool isChanged;
         private bool isDeleted;
         private string associationType;
+        private int associationType_ID;
         private ObservableCollectionWithItemChanged<ObjectAssociationModel> childAssociations;
 
 
@@ -150,6 +151,19 @@ namespace Sculptor
             set
             {
                 this.associationType = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public int AssociationType_ID
+        {
+            get
+            {
+                return this.associationType_ID;
+            }
+            set
+            {
+                this.associationType_ID = value;
                 OnPropertyChanged();
             }
         }
