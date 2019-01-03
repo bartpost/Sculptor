@@ -662,6 +662,11 @@ namespace Sculptor.ViewModels
                             item.PropertyType_ID = type.ID;
                         IsPropertyTypePopupOpen = false;
                         break;
+                    case "Requirement":
+                        foreach (var item in RequirementViewModelLocator.GetRequirementVM().SelectedItems)
+                            item.RequirementType_ID = type.ID;
+                        IsRequirementTypePopupOpen = false;
+                        break;
                 }
 
             }
@@ -685,6 +690,9 @@ namespace Sculptor.ViewModels
                     break;
                 case "Property":
                     IsPropertyTypePopupOpen = false;
+                    break;
+                case "Requirement":
+                    IsRequirementTypePopupOpen = false;
                     break;
             }
 

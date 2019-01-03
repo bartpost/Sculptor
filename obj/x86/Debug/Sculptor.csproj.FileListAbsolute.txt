@@ -10,7 +10,6 @@ D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Sculptor.exe
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Sculptor.pdb
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\EntityFramework.dll
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\EntityFramework.SqlServer.dll
-D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Microsoft.Practices.ServiceLocation.dll
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Prism.dll
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Prism.Wpf.dll
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\System.Windows.Interactivity.dll
@@ -22,8 +21,6 @@ D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Telerik.Windows.Controls.RibbonView.dll
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Telerik.Windows.Data.dll
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\EntityFramework.xml
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\EntityFramework.SqlServer.xml
-D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Microsoft.Practices.ServiceLocation.pdb
-D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Microsoft.Practices.ServiceLocation.xml
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Prism.xml
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Prism.Wpf.xml
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Telerik.Windows.Controls.xml
@@ -89,3 +86,6 @@ D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypeSelectionDialog.g.cs
 D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypeEditDialog.baml
 D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypeSelectionDialog.baml
 D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Sculptor.csprojAssemblyReference.cache
+D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypePopup.g.cs
+D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypePopup.baml
+D:\Tools\VS\Sculptor\Sculptor\bin\Debug\CommonServiceLocator.dll

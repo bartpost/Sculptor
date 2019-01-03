@@ -244,7 +244,7 @@
             
                 <!--Requirements-->
                 <telerik:RadTabItem MinWidth="80" Header="Requirements">
-                    <telerik:RadTreeListView Name="ObjectRequirementTreeListView"
+                    <telerik:RadTreeListView x:Name="ObjectRequirementTreeListView"
                                              ItemsSource="{Binding FilteredObjectRequirements.View}"
                                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                                              SelectionMode="Single"   
@@ -369,7 +369,7 @@
                         </telerik:RadTreeListView.Columns>
                         <telerik:RadContextMenu.ContextMenu>
                             <telerik:RadContextMenu x:Name="ObjectRequirementTreeContextMenu" >
-                                <telerik:RadMenuItem Header="Show" Command="{Binding ShowArticleCommand}"/>
+                                <telerik:RadMenuItem Header="Show" Command="{Binding ShowArticleCommand}" CommandParameter="{Binding ElementName=ObjectRequirementTreeListView}"/>
                                 <telerik:RadMenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
                                 <telerik:RadMenuItem IsSeparator="True"/>
                                 <telerik:RadMenuItem Header="Refresh" Command="{Binding RefreshCommand}"/>
@@ -577,10 +577,9 @@
                                                     Width="Auto">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
-                                        <!-- Stackpanel with Image and text. The Image is wrapped in a button to select PropertyType -->
+                                        <!-- Stackpanel with Image and text. The Image is wrapped in a button to select RequirementType -->
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Name="propertyTypeButton"
-                                                    Command="{Binding Path=DataContext.ChangeTypeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=telerik:RadTreeListView}}"
+                                            <Button Command="{Binding Path=DataContext.ChangeTypeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=telerik:RadTreeListView}}"
                                                     CommandParameter="Requirement">
                                                 <Button.Template>
                                                     <ControlTemplate TargetType="Button">
@@ -675,7 +674,7 @@
                                     BorderThickness="0"
                                     Margin="1,1,1,1"
                                     Height="30"
-                                    Command="{Binding EditTypeCommand}" CommandParameter="Object" />
+                                    Command="{Binding EditTypeCommand}" CommandParameter="{Binding Path=User ,RelativeSource={RelativeSource Self}}" />
                             <!-- Cancel if command doesn't have a parameter -->
                             <Button Content="Cancel" 
                                     BorderThickness="0"
@@ -786,7 +785,7 @@
                         <telerik:RadListBox Name="requirementTypeListBox" ItemsSource="{Binding RequirementTypes}" >
                             <telerik:EventToCommandBehavior.EventBindings>
                                 <telerik:EventBinding Command="{Binding ChangeTypeCommand}" 
-                                                  CommandParameter="{Binding ElementName=typeListBox, Path=SelectedItem}"
+                                                  CommandParameter="{Binding ElementName=requirementTypeListBox, Path=SelectedItem}"
                                                   EventName="MouseLeftButtonDown" 
                                                   RaiseOnHandledEvents="True" 
                                                   />

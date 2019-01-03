@@ -589,7 +589,9 @@ namespace Sculptor.ViewModels
 
         private void ChangeType(object p)
         {
-            TypeViewModelLocator.GetTypeVM().IsRequirementTypePopupOpen = true;
+            //TypeViewModelLocator.GetTypeVM().IsRequirementTypePopupOpen = true;
+            PopupWindow window = new PopupWindow();
+            
         }
 
 

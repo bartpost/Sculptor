@@ -583,9 +583,9 @@ namespace Sculptor
         /// </summary>
         /// <param name="propertyItem"></param>
         /// <param name="S88Type"></param>
-        public void SetPropertyType(PropertyModel propertyItem, string S88Type)
+        public void SetPropertyType(PropertyModel propertyItem, string propertyType)
         {
-            propertyItem.PropertyType_ID = GetPropertyType_ID(S88Type);
+            propertyItem.PropertyType_ID = GetPropertyType_ID(propertyType);
         }
 
         /// <summary>
@@ -595,9 +595,9 @@ namespace Sculptor
         /// <returns></returns>
         private int GetPropertyType_ID(string propertyType)
         {
-            //PropertyTypeModel propertyTypeItem = PropertyTypes.PropertyTypes.Single(x => x.ObjectType == propertyType);
-            //return propertyTypeItem.ID;
-            return 1;
+            TypeModel propertyTypeItem = TypeViewModelLocator.GetTypeVM().Types.Single(x => x.TypeGroup == propertyType);
+            return propertyTypeItem.ID;
+            //return 1;
         }
 
         private bool CanChangeType()

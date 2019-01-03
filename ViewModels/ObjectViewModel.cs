@@ -27,7 +27,7 @@ namespace Sculptor.ViewModels
         private bool isChanged;
         private bool isBusy=true;
         private bool isObjectTypePopupOpen;
-        private ICommand refreshCommand;
+
         private ICommand saveCommand;
         private ICommand addSiblingCommand;
         private ICommand addChildCommand;
@@ -177,6 +177,7 @@ namespace Sculptor.ViewModels
 
         #region Commands
 
+        private ICommand refreshCommand;
         public ICommand RefreshCommand
         {
             get
@@ -813,6 +814,9 @@ namespace Sculptor.ViewModels
                     break;
                 case "Property":
                     TypeViewModelLocator.GetTypeVM().IsPropertyTypePopupOpen = true;
+                    break;
+                case "requirement":
+                    TypeViewModelLocator.GetTypeVM().IsRequirementTypePopupOpen = true;
                     break;
             }
         }

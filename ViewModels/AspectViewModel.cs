@@ -10,17 +10,6 @@ namespace Sculptor
 {
     public class AspectViewModel
     {
-        private ObservableCollectionWithItemChanged<AspectModel> aspects = new ObservableCollectionWithItemChanged<AspectModel>();
-        private ObservableCollectionWithItemChanged<AspectModel> backgroundAspects = new ObservableCollectionWithItemChanged<AspectModel>();
-        private AspectModel selectedItem;
-        private ObservableCollectionWithItemChanged<AspectModel> selectedItems;
-        private bool isChanged;
-        private bool isBusy;
-        private ICommand refreshCommand;
-        private ICommand saveCommand;
-        private ICommand addCommand;
-        private ICommand deleteCommand;
-
         #region Constructor
         public AspectViewModel()
         {
@@ -32,8 +21,9 @@ namespace Sculptor
             Load();
         }
         #endregion
-        
+
         #region Properties
+        private ObservableCollectionWithItemChanged<AspectModel> aspects = new ObservableCollectionWithItemChanged<AspectModel>();
         public ObservableCollectionWithItemChanged<AspectModel> Aspects
         {
             get
@@ -47,6 +37,7 @@ namespace Sculptor
             }
         }
 
+        private ObservableCollectionWithItemChanged<AspectModel> backgroundAspects = new ObservableCollectionWithItemChanged<AspectModel>();
         public ObservableCollectionWithItemChanged<AspectModel> BackgroundAspects
         {
             get
@@ -60,6 +51,7 @@ namespace Sculptor
             }
         }
 
+        private AspectModel selectedItem;
         public AspectModel SelectedItem
         {
             get
@@ -76,6 +68,7 @@ namespace Sculptor
             }
         }
 
+        private ObservableCollectionWithItemChanged<AspectModel> selectedItems;
         public ObservableCollectionWithItemChanged<AspectModel> SelectedItems
         {
             get
@@ -88,6 +81,7 @@ namespace Sculptor
             }
         }
 
+        private bool isChanged;
         public bool IsChanged
         {
             get
@@ -103,6 +97,7 @@ namespace Sculptor
             }
         }
 
+        private bool isBusy;
         public bool IsBusy
         {
             get
@@ -121,58 +116,46 @@ namespace Sculptor
 
         #region Commands
 
+        private ICommand refreshCommand;
         public ICommand RefreshCommand
         {
             get
             {
                 if (refreshCommand == null)
-                {
-                    refreshCommand = new RelayCommand(
-                        p => this.CanRefresh(),
-                        p => this.Refresh());
-                }
+                    refreshCommand = new RelayCommand(p => this.CanRefresh(), p => this.Refresh());
                 return refreshCommand;
             }
         }
 
+        private ICommand saveCommand;
         public ICommand SaveCommand
         {
             get
             {
                 if (saveCommand == null)
-                {
-                    saveCommand = new RelayCommand(
-                        p => this.CanSave(),
-                        p => this.Save());
-                }
+                    saveCommand = new RelayCommand(p=> this.CanSave(), p => this.Save());
                 return saveCommand;
             }
         }
 
+        private ICommand addCommand;
         public ICommand AddCommand
         {
             get
             {
                 if (addCommand == null)
-                {
-                    addCommand = new RelayCommand(
-                        p => this.CanAdd(),
-                        p => this.Add());
-                }
+                    addCommand = new RelayCommand(p => this.CanAdd(), p => this.Add());
                 return addCommand;
             }
         }
 
+        private ICommand deleteCommand;
         public ICommand DeleteCommand
         {
             get
             {
                 if (deleteCommand == null)
-                {
-                    deleteCommand = new RelayCommand(
-                        p => this.CanDelete(),
-                        p => this.Delete());
-                }
+                    deleteCommand = new RelayCommand(p => this.CanDelete(), p => this.Delete());
                 return deleteCommand;
             }
         }

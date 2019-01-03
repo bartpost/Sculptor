@@ -13,37 +13,6 @@
         <!--Converter that returns an image dependent on the object type-->
         <local:Type_IDToImage x:Key="type_IDToImage" />
 
-        <telerik:RadContextMenu x:Key="requirementTypeContextMenu" Loaded="ContextMenu_Loaded" >
-            <telerik:RadMenuItem Header="Specification" Command="{Binding Path=ChangeRequirementTypeCommand}" CommandParameter="1">
-                <telerik:RadMenuItem.IconTemplate>
-                    <DataTemplate>
-                        <Image Source="..\Resources\Images\RequirementSpecification32.png"/>
-                    </DataTemplate>
-                </telerik:RadMenuItem.IconTemplate>
-            </telerik:RadMenuItem>
-            <telerik:RadMenuItem Header="Clarification" Command="{Binding Path=ChangeRequirementTypeCommand}" CommandParameter="2">
-                <telerik:RadMenuItem.IconTemplate>
-                    <DataTemplate>
-                        <Image Source="..\Resources\Images\RequirementClarification32.png"/>
-                    </DataTemplate>
-                </telerik:RadMenuItem.IconTemplate>
-            </telerik:RadMenuItem>
-            <telerik:RadMenuItem Header="Change" Command="{Binding Path=ChangeRequirementTypeCommand}" CommandParameter="3">
-                <telerik:RadMenuItem.IconTemplate>
-                    <DataTemplate>
-                        <Image Source="..\Resources\Images\RequirementChange32.png"/>
-                    </DataTemplate>
-                </telerik:RadMenuItem.IconTemplate>
-            </telerik:RadMenuItem>
-            <telerik:RadMenuItem Header="Regulation" Command="{Binding Path=ChangeRequirementTypeCommand}" CommandParameter="4">
-                <telerik:RadMenuItem.IconTemplate>
-                    <DataTemplate>
-                        <Image Source="..\Resources\Images\Regulation32.png"/>
-                    </DataTemplate>
-                </telerik:RadMenuItem.IconTemplate>
-            </telerik:RadMenuItem>
-        </telerik:RadContextMenu>
-
         <telerik:IconSources x:Key="IconSources" 
                              LightBasePath="pack://application:,,,/Telerik.Windows.Controls.RichTextBoxUI;component/Images/MSOffice/" 
                              DarkBasePath="pack://application:,,,/Telerik.Windows.Controls.RichTextBoxUI;component/Images/MSOffice/Dark/"
@@ -84,21 +53,26 @@
 
                             <!-- First column -->
                             <telerik:GridViewDataColumn DataMemberBinding="{Binding ArticleNo}" 
-                                                    Header="Article No" 
+                                                    Header="Reference" 
                                                     Width="Auto">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
+                                        <!-- Stackpanel with Image and text. The Image is wrapped in a button to select RequirementType -->
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Name="requirementTypeImage"
-                                                Source="{Binding RequirementType_ID, Converter={StaticResource type_IDToImage}}" 
-                                                Margin="0,0,10,0"
-                                                RenderOptions.BitmapScalingMode="Fant"
-                                                Stretch="Fill"
-                                                Width="16"
-                                                Height="16"
-                                                telerik:RadContextMenu.ContextMenu="{StaticResource requirementTypeContextMenu}"/>
-                                            <TextBlock Text="{Binding ArticleNo}"/>
-
+                                            <Button Command="{Binding Path=DataContext.ChangeTypeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=telerik:RadTreeListView}}"
+                                                    CommandParameter="Requirement">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Image Source="{Binding RequirementType_ID, Converter={StaticResource type_IDToImage}}" 
+                                                       Margin="0,0,10,0"
+                                                       RenderOptions.BitmapScalingMode="Fant"
+                                                       Stretch="Fill"
+                                                       Width="16"
+                                                       Height="16"/>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            <TextBlock Text="{Binding ArticleNo, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding ArticleHeader}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>

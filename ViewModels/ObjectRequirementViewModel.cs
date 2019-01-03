@@ -11,7 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
-using Telerik.Windows.Controls.Navigation;
+using Telerik.Windows.Media;
 using Telerik.Windows.Controls.TreeListView;
 using Telerik.Windows.Documents.FormatProviders.Xaml;
 using Telerik.Windows.Documents.Model;
@@ -139,7 +139,7 @@ namespace Sculptor.ViewModels
                 {
                     showArticleCommand = new RelayCommand(
                         p => this.CanShowArticle(),
-                        p => this.ShowArticle());
+                        p => this.ShowArticle(p));
                 }
                 return showArticleCommand;
             }
@@ -288,7 +288,7 @@ namespace Sculptor.ViewModels
             return true;
         }
 
-        private void ShowArticle()
+        private void ShowArticle(Object element)
         {
             StackPanel sp = new StackPanel();
             RadRichTextBox rtb = new RadRichTextBox();
@@ -304,14 +304,19 @@ namespace Sculptor.ViewModels
             rtb.Document.LayoutMode = DocumentLayoutMode.Flow;
             sp.Children.Add(rtb);
 
+
             var window = new RadWindow
             {
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+
                 Header = SelectedItem.ArticleHeader,
                 Content = sp,
                 Width = 700,
                 Height = 500,
             };
+            window.WindowStartupLocation = WindowStartupLocation.Manual;
+            Point mousePos = Mouse.GetPosition((IInputElement)element);
+            window.Left = mousePos.X;
+            window.Top = mousePos.Y;
             window.Show();
         }
 
