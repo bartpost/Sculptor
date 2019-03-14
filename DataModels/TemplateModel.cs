@@ -1,27 +1,24 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Data;
+using TD = Telerik.Windows.Data;
 
 namespace Sculptor
 {
+    [Serializable]
     public class TemplateModel : ViewModelBase, INotifyPropertyChanged
     {
-        private Guid id;
-        private Nullable<Guid> parent_id;
-        private int project_id;
-        private string templateName;
-        private string description;
-        private int templatetype_ID;
-        private bool isNew;
-        private bool isChanged;
-        private bool isDeleted;
-        private ObservableCollectionWithItemChanged<TemplateModel> childTemplates;
 
+        #region Properties
         public TemplateModel()
         {
         }
 
+        private Guid id;
+        [XmlElement("ID")]
         public Guid ID
         {
             get
@@ -34,6 +31,8 @@ namespace Sculptor
             }
         }
 
+        private Nullable<Guid> parent_id;
+        [XmlIgnore]
         public Nullable<Guid> Parent_ID
         {
             get
@@ -47,6 +46,8 @@ namespace Sculptor
             }
         }
 
+        private int project_id;
+        [XmlIgnore]
         public int Project_ID
         {
             get
@@ -60,6 +61,8 @@ namespace Sculptor
             }
         }
 
+        private string templateName;
+        [XmlIgnore]
         public string TemplateName
         {
             get
@@ -76,6 +79,8 @@ namespace Sculptor
             }
         }
 
+        private string description;
+        [XmlIgnore]
         public string Description
         {
             get
@@ -92,6 +97,8 @@ namespace Sculptor
             }
         }
 
+        private int templatetype_ID;
+        [XmlIgnore]
         public int TemplateType_ID
         {
             get
@@ -108,7 +115,8 @@ namespace Sculptor
             }
         }
 
-        public ObservableCollectionWithItemChanged<TemplateModel> ChildTemplates
+        private TD.ObservableItemCollection<TemplateModel> childTemplates;
+        public TD.ObservableItemCollection<TemplateModel> ChildTemplates
         {
             get
             {
@@ -121,6 +129,26 @@ namespace Sculptor
             }
         }
 
+        private bool isExpanded;
+        [XmlElement("IsExpanded")]
+        public bool IsExpanded
+        {
+            get
+            {
+                return this.isExpanded;
+            }
+            set
+            {
+                if (value != this.isExpanded)
+                {
+                    this.isExpanded = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool isNew;
+        [XmlIgnore]
         public bool IsNew
         {
             get
@@ -136,6 +164,8 @@ namespace Sculptor
             }
         }
 
+        private bool isChanged;
+        [XmlIgnore]
         public bool IsChanged
         {
             get
@@ -151,6 +181,8 @@ namespace Sculptor
             }
         }
 
+        private bool isDeleted;
+        [XmlIgnore]
         public bool IsDeleted
         {
             get
@@ -166,12 +198,15 @@ namespace Sculptor
                 }
             }
         }
+        #endregion
 
+        #region Events
         public new event PropertyChangedEventHandler PropertyChanged;
         private new void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             if (!isNew && !IsDeleted) isChanged = true;
         }
+        #endregion
     }
 }

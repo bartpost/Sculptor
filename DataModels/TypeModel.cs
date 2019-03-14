@@ -7,24 +7,12 @@ namespace Sculptor
 {
     public class TypeModel : ViewModelBase, INotifyPropertyChanged
     {
-        int id;
-        int project_ID;
-        string type;
-        string description;
-        byte[] image;
-        string typeGroup;
-        int showOrder;
-        bool isChanged;
-        bool isNew;
-        bool isDeleted;
 
         #region Properties
+        int id;
         public int ID
         {
-            get
-            {
-                return this.id;
-            }
+            get { return this.id; }
             set
             {
                 if (value != this.id)
@@ -34,12 +22,10 @@ namespace Sculptor
             }
         }
 
+        int project_ID;
         public int Project_ID
         {
-            get
-            {
-                return this.project_ID;
-            }
+            get { return this.project_ID; }
             set
             {
                 if (value != this.project_ID)
@@ -49,12 +35,10 @@ namespace Sculptor
             }
         }
 
+        string type;
         public string Type
         {
-            get
-            {
-                return this.type;
-            }
+            get { return this.type; }
             set
             {
                 if (value != this.type)
@@ -65,12 +49,10 @@ namespace Sculptor
             }
         }
 
+        string description;
         public string Description
         {
-            get
-            {
-                return this.description;
-            }
+            get { return this.description; }
             set
             {
                 if (value != this.description)
@@ -81,12 +63,10 @@ namespace Sculptor
             }
         }
 
+        byte[] image;
         public byte[] Image
         {
-            get
-            {
-                return this.image;
-            }
+            get { return this.image; }
             set
             {
                 if (value != this.image)
@@ -97,12 +77,10 @@ namespace Sculptor
             }
         }
 
+        string typeGroup;
         public string TypeGroup
         {
-            get
-            {
-                return this.typeGroup;
-            }
+            get { return this.typeGroup; }
             set
             {
                 if (value != this.typeGroup)
@@ -113,13 +91,10 @@ namespace Sculptor
             }
         }
 
-
+        int showOrder;
         public int ShowOrder
         {
-            get
-            {
-                return this.showOrder;
-            }
+            get { return this.showOrder; }
             set
             {
                 if (value != this.showOrder)
@@ -129,13 +104,11 @@ namespace Sculptor
                 }
             }
         }
-
+        // ToDo: If item is changed before the item is saved, an exception will be raised
+        bool isChanged;
         public bool IsChanged
         {
-            get
-            {
-                return this.isChanged;
-            }
+            get { return this.isChanged; }
             set
             {
                 if (value != this.isChanged)
@@ -145,12 +118,10 @@ namespace Sculptor
             }
         }
 
+        bool isNew;
         public bool IsNew
         {
-            get
-            {
-                return this.isNew;
-            }
+            get { return this.isNew; }
             set
             {
                 if (value != this.isNew)
@@ -160,18 +131,15 @@ namespace Sculptor
             }
         }
 
+        bool isDeleted;
         public bool IsDeleted
         {
-            get
-            {
-                return this.isDeleted;
-            }
+            get { return this.isDeleted; }
             set
             {
                 if (value != this.isDeleted)
                 {
                     this.isDeleted = value;
-                    OnPropertyChanged();
                 }
             }
         }

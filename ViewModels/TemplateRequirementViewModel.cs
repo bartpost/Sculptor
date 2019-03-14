@@ -20,30 +20,24 @@ namespace Sculptor.ViewModels
 {
     public class TemplateRequirementViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private ObservableCollection<TemplateRequirementModel> templateRequirements = new ObservableCollection<TemplateRequirementModel>();
-        private ObservableCollection<TemplateRequirementModel> backgroundTemplateRequirements = new ObservableCollection<TemplateRequirementModel>();
-        private CollectionViewSource filteredTemplateRequirements;
-        private TemplateRequirementModel selectedItem;
-        private ObservableCollection<TemplateRequirementModel> selectedItems;
-        private bool isChanged;
-        private ICommand showCommand;
-        private ICommand refreshCommand;
-        private ICommand saveCommand;
-        private ICommand deleteCommand;
 
         #region Constructor
         public TemplateRequirementViewModel()
         {
             // Load the objects in the background
-            var backgroundWorker = new BackgroundWorker();
-            backgroundWorker.DoWork += this.OnLoadInBackground;
-            backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
-            backgroundWorker.RunWorkerAsync();
+            //var backgroundWorker = new BackgroundWorker();
+            //backgroundWorker.DoWork += this.OnLoadInBackground;
+            //backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
+            //backgroundWorker.RunWorkerAsync();
+            Load();
+            FilteredTemplateRequirements = new CollectionViewSource { Source = TemplateRequirements };
+            FilteredTemplateRequirements.Filter += ObjectFilter;
         }
         #endregion
 
         #region Properties
 
+        private ObservableCollection<TemplateRequirementModel> templateRequirements = new ObservableCollection<TemplateRequirementModel>();
         public ObservableCollection<TemplateRequirementModel> TemplateRequirements
         {
             get
@@ -57,6 +51,7 @@ namespace Sculptor.ViewModels
             }
         }
 
+        private ObservableCollection<TemplateRequirementModel> backgroundTemplateRequirements = new ObservableCollection<TemplateRequirementModel>();
         public ObservableCollection<TemplateRequirementModel> BackgroundTemplateRequirements
         {
             get
@@ -70,6 +65,7 @@ namespace Sculptor.ViewModels
             }
         }
 
+        private CollectionViewSource filteredTemplateRequirements;
         public CollectionViewSource FilteredTemplateRequirements
         {
             get
@@ -86,18 +82,20 @@ namespace Sculptor.ViewModels
             }
         }
 
+        private TemplateRequirementModel selectedItem;
         public ObservableCollection<TemplateRequirementModel> SelectedItems
         {
             get
             {
                 if (selectedItems == null)
                 {
-                    selectedItems = new ObservableCollectionWithItemChanged<TemplateRequirementModel>();
+                    selectedItems = new ObservableItemCollection<TemplateRequirementModel>();
                 }
                 return selectedItems;
             }
         }
 
+        private ObservableCollection<TemplateRequirementModel> selectedItems;
         public TemplateRequirementModel SelectedItem
         {
             get
@@ -114,6 +112,7 @@ namespace Sculptor.ViewModels
             }
         }
 
+        private bool isChanged;
         public bool IsChanged
         {
             get
@@ -131,58 +130,47 @@ namespace Sculptor.ViewModels
         #endregion
 
         #region Commands
+
+        private ICommand showCommand;
         public ICommand ShowCommand
         {
             get
             {
                 if (showCommand == null)
-                {
-                    showCommand = new RelayCommand(
-                        p => this.CanShow(),
-                        p => this.Show());
-                }
+                    showCommand = new RelayCommand(p => this.CanShow(), p => this.Show());
                 return showCommand;
             }
         }
 
+        private ICommand refreshCommand;
         public ICommand RefreshCommand
         {
             get
             {
                 if (refreshCommand == null)
-                {
-                    refreshCommand = new RelayCommand(
-                        p => this.CanRefresh(),
-                        p => this.Refresh());
-                }
+                    refreshCommand = new RelayCommand(p => true, p => this.Refresh());
                 return refreshCommand;
             }
         }
 
+        private ICommand saveCommand;
         public ICommand SaveCommand
         {
             get
             {
                 if (saveCommand == null)
-                {
-                    saveCommand = new RelayCommand(
-                        p => this.CanSave(),
-                        p => this.Save());
-                }
+                    saveCommand = new RelayCommand(p => true, p => this.Save());
                 return saveCommand;
             }
         }
 
+        private ICommand deleteCommand;
         public ICommand DeleteCommand
         {
             get
             {
                 if (deleteCommand == null)
-                {
-                    deleteCommand = new RelayCommand(
-                        p => this.CanDelete(),
-                        p => this.Delete());
-                }
+                    deleteCommand = new RelayCommand(p => true, p => this.Delete());
                 return deleteCommand;
             }
         }
@@ -213,10 +201,7 @@ namespace Sculptor.ViewModels
             // Create a collection that holds the functionalities of the selected object and add the filter event handler
             // Note: the FilteredObjectFunctionalities collection is updated every time a new object is selected in the object tree 
             // (triggered in the setter of the SelectedItem property)
-            FilteredTemplateRequirements = new CollectionViewSource
-            {
-                Source = TemplateRequirements
-            };
+            FilteredTemplateRequirements = new CollectionViewSource { Source = TemplateRequirements };
             FilteredTemplateRequirements.Filter += ObjectFilter;
         }
         #endregion
@@ -226,7 +211,6 @@ namespace Sculptor.ViewModels
         private void Load()
         {
             // Check if the classes and properties have ben loaded
-            while (!RequirementViewModelLocator.IsLoaded());
 
             using (EDBEntities eDB = new EDBEntities())
             {
@@ -253,26 +237,31 @@ namespace Sculptor.ViewModels
                     };
 
                     var requirementItem = RequirementViewModelLocator.GetRequirementVM().GetRequirement(templateRequirementItem.Requirement_ID, null);
-                    templateRequirementItem.ArticleNo = requirementItem.ArticleNo;
-                    templateRequirementItem.ArticleHeader = requirementItem.ArticleHeader;
-                    templateRequirementItem.RequirementType_ID = requirementItem.RequirementType_ID;
-           
-                    foreach (var childItem in requirementItem.ChildRequirements)
-                    {
-                        TemplateRequirementModel item = new TemplateRequirementModel
-                        {
-                            Project_ID = childItem.Project_ID,
-                            Template_ID = templateRequirementItem.Template_ID,
-                            Requirement_ID = childItem.ID,
-                            ArticleNo = childItem.ArticleNo,
-                            ArticleHeader = childItem.ArticleHeader,
-                            RequirementType = "Requirement",
-                            ChildRequirements = new ObservableCollection<TemplateRequirementModel>()
-                        };
-                        templateRequirementItem.ChildRequirements.Add(item);
-                    }
 
-                    BackgroundTemplateRequirements.Add(templateRequirementItem);
+                    if (requirementItem != null)
+                    {
+                        templateRequirementItem.ArticleNo = requirementItem.ArticleNo;
+                        templateRequirementItem.ArticleHeader = requirementItem.ArticleHeader;
+                        templateRequirementItem.RequirementType_ID = requirementItem.RequirementType_ID;
+
+                        foreach (var childItem in requirementItem.ChildRequirements)
+                        {
+                            TemplateRequirementModel item = new TemplateRequirementModel
+                            {
+                                Project_ID = childItem.Project_ID,
+                                Template_ID = templateRequirementItem.Template_ID,
+                                Requirement_ID = childItem.ID,
+                                ArticleNo = childItem.ArticleNo,
+                                ArticleHeader = childItem.ArticleHeader,
+                                RequirementType = "Requirement",
+                                RequirementType_ID = childItem.RequirementType_ID,
+                                ChildRequirements = new ObservableCollection<TemplateRequirementModel>()
+                            };
+                            templateRequirementItem.ChildRequirements.Add(item);
+                        }
+
+                        TemplateRequirements.Add(templateRequirementItem);
+                    }
                 }
             }
         }
@@ -309,40 +298,29 @@ namespace Sculptor.ViewModels
             window.Show();
         }
 
-        private bool CanDelete()
-        {
-            return true;
-        }
-
         private void Delete()
         {
-            if (SelectedItem != null)
-            {
-                SelectedItem.IsChanged = false;
-                SelectedItem.IsNew = false;
-                SelectedItem.IsDeleted = true;
-                if (SelectedItem.ChildRequirements != null)
-                    foreach (var childItem in SelectedItem.ChildRequirements)
-                    {
-                        childItem.IsChanged = false;
-                        childItem.IsNew = false;
-                        childItem.IsDeleted = true;
-                    }
-
-                // Because the FilteredObjectRequirements collection doesn't refresh on PropertyChanged, we have to refresh the collection
-                FilteredTemplateRequirements.View.Refresh();
-            }
-        }
-
-        private bool CanSave()
-        {
-            return true;
+            // ToDo: Deleting items in the collection only works using the Del key for now. 
+            // Implement delete method to also provide option using context menu
         }
 
         public void Save()
         {
-
             EDBEntities eDB = new EDBEntities();
+
+            // To determine which items have been deleted in the collection, get all requirements of the project stored in the database table first
+            var tblTemplateRequirements = eDB.tblTemplateRequirements.Where(p => p.Project_ID == Globals.Project_ID);
+
+            // Check if each requirement of the table exists in the requirements collection
+            // if not, delete the requirement in the table
+            foreach (var templateRequirementRec in tblTemplateRequirements)
+            {
+                var templateRequirementItem = GetTemplateRequirement(templateRequirementRec.Template_ID, templateRequirementRec.Requirement_ID);
+                if (templateRequirementItem == null) // requirement not found in collection
+                    eDB.tblTemplateRequirements.Remove(templateRequirementRec);
+            }
+
+            // Add and update requirements recursively
             SaveLevel(TemplateRequirements, eDB);
             try
             {
@@ -350,61 +328,61 @@ namespace Sculptor.ViewModels
             }
             catch (Exception ex)
             {
-                RadWindow.Alert("Fault while saving template requirements: " + ex.Message);
+                RadWindow.Alert(new DialogParameters()
+                {
+                    Header = "Error",
+                    Content = "Fault while saving template requirements: \n" + ex.Message
+                });
             }
             IsChanged = false;
         }
 
         private void SaveLevel(ObservableCollection<TemplateRequirementModel> treeLevel, EDBEntities eDB)
         {
-            if (treeLevel != null)
+            try
             {
-                foreach (var templateRequirementItem in treeLevel)
+                if (treeLevel != null)
                 {
-                    if (templateRequirementItem.IsNew)
+                    foreach (var templateRequirementItem in treeLevel)
                     {
-                        tblTemplateRequirement NewRec = new tblTemplateRequirement();
-                        var Rec = eDB.tblTemplateRequirements.Add(NewRec);
-                        Rec.Template_ID = templateRequirementItem.Template_ID;
-                        Rec.Requirement_ID = templateRequirementItem.Requirement_ID;
-                        Rec.PreFATOk = templateRequirementItem.PreFATOk;
-                        Rec.FATOk = templateRequirementItem.FATOk;
-                        Rec.FATBy = templateRequirementItem.FATBy;
-                        Rec.FATDate = templateRequirementItem.FATDate;
-                        Rec.SATOk = templateRequirementItem.SATOk;
-                        Rec.SATBy = templateRequirementItem.SATBy;
-                        Rec.SATDate = templateRequirementItem.SATDate;
-                        Rec.Project_ID = Globals.Project_ID;
-                        //Rec.RequirementType_ID = objectRequirementItem.RequirementType_ID;
-                        templateRequirementItem.IsNew = false;
-                        RequirementViewModel requirementVM = RequirementViewModelLocator.GetRequirementVM();
-                        RequirementModel requirementItem = requirementVM.GetRequirement(templateRequirementItem.Requirement_ID);
-                    }
-                    if (templateRequirementItem.IsChanged)
-                    {
-                        tblTemplateRequirement Rec = eDB.tblTemplateRequirements.Where(o => o.Template_ID == templateRequirementItem.Template_ID && o.Requirement_ID == templateRequirementItem.Requirement_ID).FirstOrDefault();
-                        Rec.PreFATOk = templateRequirementItem.PreFATOk;
-                        Rec.FATOk = templateRequirementItem.FATOk;
-                        Rec.FATBy = templateRequirementItem.FATBy;
-                        Rec.FATDate = templateRequirementItem.FATDate;
-                        Rec.SATOk = templateRequirementItem.SATOk;
-                        Rec.SATBy = templateRequirementItem.SATBy;
-                        Rec.SATDate = templateRequirementItem.SATDate;
-                        templateRequirementItem.IsChanged = false;
-                    }
-                    if (templateRequirementItem.IsDeleted)
-                    {
-                        tblTemplateRequirement Rec = eDB.tblTemplateRequirements.Where(o => (o.Template_ID == templateRequirementItem.Template_ID && o.Requirement_ID == templateRequirementItem.Requirement_ID)).FirstOrDefault();
-                        if (Rec != null)
-                            eDB.tblTemplateRequirements.Remove(Rec);
+                        if (templateRequirementItem.IsNew)
+                        {
+                            tblTemplateRequirement NewRec = new tblTemplateRequirement();
+                            var Rec = eDB.tblTemplateRequirements.Add(NewRec);
+                            Rec.Template_ID = templateRequirementItem.Template_ID;
+                            Rec.Requirement_ID = templateRequirementItem.Requirement_ID;
+                            Rec.PreFATOk = templateRequirementItem.PreFATOk;
+                            Rec.FATOk = templateRequirementItem.FATOk;
+                            Rec.FATBy = templateRequirementItem.FATBy;
+                            Rec.FATDate = templateRequirementItem.FATDate;
+                            Rec.SATOk = templateRequirementItem.SATOk;
+                            Rec.SATBy = templateRequirementItem.SATBy;
+                            Rec.SATDate = templateRequirementItem.SATDate;
+                            Rec.Project_ID = Globals.Project_ID;
+                            //Rec.RequirementType_ID = objectRequirementItem.RequirementType_ID;
+                            templateRequirementItem.IsNew = false;
+                            RequirementViewModel requirementVM = RequirementViewModelLocator.GetRequirementVM();
+                            RequirementModel requirementItem = requirementVM.GetRequirement(templateRequirementItem.Requirement_ID);
+                        }
+                        if (templateRequirementItem.IsChanged)
+                        {
+                            tblTemplateRequirement Rec = eDB.tblTemplateRequirements.Where(o => o.Template_ID == templateRequirementItem.Template_ID && o.Requirement_ID == templateRequirementItem.Requirement_ID).FirstOrDefault();
+                            Rec.PreFATOk = templateRequirementItem.PreFATOk;
+                            Rec.FATOk = templateRequirementItem.FATOk;
+                            Rec.FATBy = templateRequirementItem.FATBy;
+                            Rec.FATDate = templateRequirementItem.FATDate;
+                            Rec.SATOk = templateRequirementItem.SATOk;
+                            Rec.SATBy = templateRequirementItem.SATBy;
+                            Rec.SATDate = templateRequirementItem.SATDate;
+                            templateRequirementItem.IsChanged = false;
+                        }
                     }
                 }
             }
-        }
-
-        private bool CanRefresh()
-        {
-            return true;
+            catch (Exception ex)
+            {
+                RadWindow.Alert("Fault while saving to database: " + ex.Message);
+            }
         }
 
         public void Refresh()
@@ -416,8 +394,6 @@ namespace Sculptor.ViewModels
 
         public void AssociateWithTemplate(TreeListViewRow destination)
         {
-            //if (destination != null)
-            //{
             try
             {
                 // Associate all selected templates
@@ -450,6 +426,7 @@ namespace Sculptor.ViewModels
                                 Project_ID = Globals.Project_ID,
                                 Template_ID = templateRequirementItem.Template_ID,
                                 Requirement_ID = childItem.ID,
+                                RequirementType_ID = childItem.RequirementType_ID,
                                 //objectFunctionalityChildItem.FunctionParent_ID = childItem.Parent_ID;
                                 ArticleNo = childItem.ArticleNo,
                                 ArticleHeader = childItem.ArticleHeader,
@@ -475,6 +452,15 @@ namespace Sculptor.ViewModels
                 e.Accepted = (e.Item as TemplateRequirementModel).Template_ID == TemplateViewModelLocator.GetTemplateVM().SelectedItem.ID &&
                              (e.Item as TemplateRequirementModel).IsDeleted == false;
 
+        }
+
+        private TemplateRequirementModel GetTemplateRequirement(Guid? template_ID, Guid? requirement_ID)
+        {
+            foreach (var templateRequirementItem in TemplateRequirements)
+            {
+                if (templateRequirementItem.Template_ID == template_ID && templateRequirementItem.Requirement_ID == requirement_ID) return templateRequirementItem;
+            }
+            return null;
         }
         #endregion
     }

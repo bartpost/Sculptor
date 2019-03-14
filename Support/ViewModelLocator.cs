@@ -30,26 +30,38 @@ namespace Sculptor
             return objectVM;
         }
 
+        public static void DisposeObjectVM()
+        {
+            objectVM.Dispose();
+            objectVM = null;
+        }
+
         public static bool IsLoaded()
         {
-            return objectVM != null && objectVM.Objects != null;
+            return objectVM.IsLoaded;
         }
     }
 
-    public static class ObjectTypeViewModelLocator
+    public static class ControlObjectViewModelLocator
     {
-        private static ObjectTypeViewModel objectTypeVM = null;
-        public static ObjectTypeViewModel GetObjectTypeVM()
+        private static ControlObjectViewModel controlObjectVM = null;
+        public static ControlObjectViewModel GetControlObjectVM()
         {
-            if (objectTypeVM == null)
-                objectTypeVM = new ObjectTypeViewModel();
+            if (controlObjectVM == null)
+                controlObjectVM = new ControlObjectViewModel();
 
-            return objectTypeVM;
+            return controlObjectVM;
+        }
+
+        public static void DisposeObjectVM()
+        {
+            controlObjectVM.Dispose();
+            controlObjectVM = null;
         }
 
         public static bool IsLoaded()
         {
-            return objectTypeVM != null;
+            return controlObjectVM.IsLoaded;
         }
     }
 
@@ -66,7 +78,7 @@ namespace Sculptor
 
         public static bool IsLoaded()
         {
-            return typeVM != null;
+            return false;
         }
     }
 
@@ -83,7 +95,7 @@ namespace Sculptor
 
         public static bool IsLoaded()
         {
-            return templateVM.Templates != null;
+            return templateVM.IsLoaded;
         }
     }
 
@@ -100,7 +112,24 @@ namespace Sculptor
 
         public static bool IsLoaded()
         {
-            return propertyVM.Properties != null;
+            return propertyVM.IsLoaded;
+        }
+    }
+
+    public static class HardIOViewModelLocator
+    {
+        private static HardIOViewModel hardIOVM = null;
+        public static HardIOViewModel GetHardIOVM()
+        {
+            if (hardIOVM == null)
+                hardIOVM = new HardIOViewModel();
+
+            return hardIOVM;
+        }
+
+        public static bool IsLoaded()
+        {
+            return hardIOVM.IsLoaded;
         }
     }
 
@@ -117,7 +146,7 @@ namespace Sculptor
 
         public static bool IsLoaded()
         {
-            return aspectVM != null;
+            return aspectVM.IsLoaaded;
         }
     }
 
@@ -134,7 +163,7 @@ namespace Sculptor
 
         public static bool IsLoaded()
         {
-            return attributeVM != null;
+            return attributeVM.IsLoaded;
         }
     }
 
@@ -151,7 +180,7 @@ namespace Sculptor
 
         public static bool IsLoaded()
         {
-            return requirementVM != null && requirementVM.Requirements != null;
+            return requirementVM.IsLoaded;
         }
     }
 

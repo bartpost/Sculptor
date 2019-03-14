@@ -1,10 +1,4 @@
-﻿using Sculptor.ViewModels;
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
-using System.Windows.Controls;
-using Telerik.Windows.Controls;
+﻿using System.Windows;
 
 namespace Sculptor
 {
@@ -14,6 +8,7 @@ namespace Sculptor
     public partial class MainWindow : Window
     {
         private ObjectView objectViewControl;
+        private ControlObjectView controlObjectViewControl;
         private TemplateView templateViewControl;
         private PropertyView propertyViewControl;
         private RequirementView requirementViewControl;
@@ -29,6 +24,12 @@ namespace Sculptor
         {
             if (objectViewControl == null) objectViewControl = new ObjectView();
             MainFrame.NavigationService.Navigate(objectViewControl);
+        }
+
+        private void EditControlObjectTree_Click(object sender, RoutedEventArgs e)
+        {
+            if (controlObjectViewControl == null) controlObjectViewControl = new ControlObjectView();
+            MainFrame.NavigationService.Navigate(controlObjectViewControl);
         }
 
         private void EditTemplateTree_Click(object sender, RoutedEventArgs e)

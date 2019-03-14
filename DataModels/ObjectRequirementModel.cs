@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Security.Principal;
 using Telerik.Windows.Controls;
+using TD = Telerik.Windows.Data;
 
 namespace Sculptor.DataModels
 {
@@ -29,7 +30,7 @@ namespace Sculptor.DataModels
         private bool isNew;
         private bool isChanged;
         private bool isDeleted;
-        private ObservableCollection<ObjectRequirementModel> childRequirements;
+        private TD.ObservableItemCollection<ObjectRequirementModel> childRequirements;
 
         public ObjectRequirementModel()
         {
@@ -127,7 +128,7 @@ namespace Sculptor.DataModels
             }
         }
 
-        public ObservableCollection<ObjectRequirementModel> ChildRequirements
+        public TD.ObservableItemCollection<ObjectRequirementModel> ChildRequirements
         {
             get
             {

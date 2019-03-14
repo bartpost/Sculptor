@@ -1,0 +1,63 @@
+﻿<Window x:Class="Sculptor.Views.TypeSelectionPopup"
+        x:Name="TypePopup"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:local="clr-namespace:Sculptor"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        mc:Ignorable="d"
+        Title="Window1" Height="0" Width="0"
+        WindowStyle="None"
+        AllowsTransparency="true"
+        Loaded="Dialog_Loaded">
+
+    <i:Interaction.Behaviors>
+        <local:CloseWindowBehavior CloseTrigger="{Binding CloseTrigger}" />
+    </i:Interaction.Behaviors>
+    
+    <StackPanel >
+        <Popup Name="Popup" Placement="Mouse" IsOpen="true">
+            <StackPanel>
+                <telerik:RadListBox Name="typeListBox" local:FilterList.By="{Binding Filter}" ItemsSource="{Binding Types}" MaxHeight="400">
+                    <telerik:EventToCommandBehavior.EventBindings>
+                        <telerik:EventBinding Command="{Binding SelectTypeCommand}" 
+                                              CommandParameter="{Binding ElementName=typeListBox, Path=SelectedItem}"
+                                              EventName="SelectionChanged" 
+                                              RaiseOnHandledEvents="True"/>
+                    </telerik:EventToCommandBehavior.EventBindings>
+                    <telerik:RadListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Image}" 
+                                            Grid.Row="0"
+                                            Margin="0,0,10,0"
+                                            RenderOptions.BitmapScalingMode="Fant"
+                                            Stretch="Fill"
+                                            Width="16"
+                                            Height="16"/>
+                                <TextBlock Name="tb" Grid.Row="1" Text="{Binding Type}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </telerik:RadListBox.ItemTemplate>
+                </telerik:RadListBox>
+                <Border Background="White" BorderBrush="Gray" BorderThickness="1" Margin="0,-1,0,0">
+                    <StackPanel>
+                        <Button Content="Edit Object Types" 
+                                    BorderThickness="0"
+                                    Margin="1,1,1,1"
+                                    Height="30"
+                                    Command="{Binding EditTypeCommand}"/>
+                        <Button Content="Cancel" 
+                                    BorderThickness="0"
+                                    Margin="1,1,1,1"
+                                    Height="30"
+                                    Command="{Binding CancelTypeCommand}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Popup>
+    </StackPanel>
+</Window>
+

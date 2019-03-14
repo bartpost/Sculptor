@@ -25,36 +25,11 @@ namespace Sculptor
         {
             // Link View Models to the Trees and popups
             DataContext = ObjectViewModelLocator.GetObjectVM();
-            ObjectTypePopup.DataContext = TypeViewModelLocator.GetTypeVM();
             TemplateTreeListView.DataContext = TemplateViewModelLocator.GetTemplateVM();
-            TemplateTypePopup.DataContext = TypeViewModelLocator.GetTypeVM();
             PropertyTreeListView.DataContext = PropertyViewModelLocator.GetPropertyVM();
-            PropertyTypePopup.DataContext = TypeViewModelLocator.GetTypeVM();
             RequirementTreeListView.DataContext = RequirementViewModelLocator.GetRequirementVM();
-            RequirementTypePopup.DataContext = TypeViewModelLocator.GetTypeVM();
             ObjectAssociationTreeListView.DataContext = ObjectAssociationViewModelLocator.GetObjectAssociationVM();
             ObjectRequirementTreeListView.DataContext = ObjectRequirementViewModelLocator.GetObjectRequirementVM();
-
-
-            // Filter deleted lines of Object Tree
-            IColumnFilterDescriptor DeletedObjectFilter = this.ObjectTreeListView.Columns["IsDeleted"].ColumnFilterDescriptor;
-            DeletedObjectFilter.FieldFilter.Filter1.Operator = FilterOperator.IsEqualTo;
-            DeletedObjectFilter.FieldFilter.Filter1.Value = "False";
-
-            // Filter deleted lines of Class Tree
-            IColumnFilterDescriptor DeletedClassFilter = this.TemplateTreeListView.Columns["IsDeleted"].ColumnFilterDescriptor;
-            DeletedClassFilter.FieldFilter.Filter1.Operator = FilterOperator.IsEqualTo;
-            DeletedClassFilter.FieldFilter.Filter1.Value = "False";
-
-            // Filter deleted lines of Property Tree
-            IColumnFilterDescriptor DeletedPropertyFilter = this.PropertyTreeListView.Columns["IsDeleted"].ColumnFilterDescriptor;
-            DeletedPropertyFilter.FieldFilter.Filter1.Operator = FilterOperator.IsEqualTo;
-            DeletedPropertyFilter.FieldFilter.Filter1.Value = "False";
-
-            // Filter deleted lines of Requirement Tree
-            IColumnFilterDescriptor DeletedRequirementFilter = this.RequirementTreeListView.Columns["IsDeleted"].ColumnFilterDescriptor;
-            DeletedRequirementFilter.FieldFilter.Filter1.Operator = FilterOperator.IsEqualTo;
-            DeletedRequirementFilter.FieldFilter.Filter1.Value = "False";
         }
     }
 

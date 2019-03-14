@@ -5,11 +5,11 @@
     xmlns:local="clr-namespace:Sculptor"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase" x:Class="Sculptor.MainWindow"
     Height="1000" Width="2000" Icon="Sculptor.ico" WindowStartupLocation="CenterScreen"
-    Title="{Binding Path=MainTitle, RelativeSource={RelativeSource Mode=Self}}"
+    Title="{Binding Path=MainTitle}"
     >
 
     <Window.Resources>
-        <!--Type converter to convert the binary type of the table field into a image-->
+        <!--Type converter to convert the binary t ype of the table field into a image-->
         <local:BinaryToImage x:Key="binaryToImage"/>
         
         <!--Define template for panel forward and panel backward-->
@@ -145,10 +145,19 @@
                     <telerik:RadRibbonButton x:Name="EditObjectTreeButton" 
                                              Content ="Objects" 
                                              Size="Large" 
-                                             SmallImage ="../Resources/Images/Objects32.png" 
-                                             LargeImage ="../Resources/Images/Objects32.png" 
+                                             SmallImage ="../Resources/Images/Objects.png" 
+                                             LargeImage ="../Resources/Images/Objects.png" 
                                              IsAutoSize="True" 
                                              Click="EditObjectTree_Click"
+                                             IsEnabled="True"/>
+
+                    <telerik:RadRibbonButton x:Name="EditControlObjectTreeButton" 
+                                             Content ="Control Object" 
+                                             Size="Large" 
+                                             SmallImage ="../Resources/Images/ControlObjects.png" 
+                                             LargeImage ="../Resources/Images/ControlObjects.png" 
+                                             IsAutoSize="True" 
+                                             Click="EditControlObjectTree_Click"
                                              IsEnabled="True"/>
 
                     <telerik:RadRibbonButton x:Name="EditTemplateButton" 

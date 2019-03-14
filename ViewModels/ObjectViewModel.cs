@@ -1,10 +1,8 @@
 ﻿using Sculptor.EDBEntityDataModel;
-using Sculptor.ViewModels;
 using Sculptor.DataModels;
 using Sculptor.Interfaces;
 using Sculptor.Views;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -12,46 +10,34 @@ using System.Windows.Input;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.TreeListView;
 using System.Windows;
+using System.IO;
+using System.Xml.Serialization;
+using TD = Telerik.Windows.Data;
+using System.Windows.Data;
 
 namespace Sculptor.ViewModels
 {
     public class ObjectViewModel : ViewModelBase, INotifyPropertyChanged, IRequestFocus
     {
-        #region private declarations
-        private ObservableCollectionWithItemChanged<ObjectModel> objects = new ObservableCollectionWithItemChanged<ObjectModel>();
-        private ObservableCollectionWithItemChanged<ObjectModel> backgroundObjects = new ObservableCollectionWithItemChanged<ObjectModel>();
-        private ObservableCollection<ObjectTypeModel> objectTypes = new ObservableCollection<ObjectTypeModel>();
-        private ObjectModel selectedItem;
-        private ObservableCollectionWithItemChanged<ObjectModel> selectedItems;
-        private ObservableCollectionWithItemChanged<ObjectModel> copiedItems;
-        private bool isChanged;
-        private bool isBusy=true;
-        private bool isObjectTypePopupOpen;
-
-        private ICommand saveCommand;
-        private ICommand addSiblingCommand;
-        private ICommand addChildCommand;
-        private ICommand deleteCommand;
-        private ICommand changeTypeCommand;
-        private ICommand cutCommand;
-        private ICommand copyCommand;
-        private ICommand pasteCommand;
-        #endregion
-
         #region Constructor
         public ObjectViewModel()
         {
             // Load the objects in the background
-            var backgroundWorker = new BackgroundWorker();
-            backgroundWorker.DoWork += this.OnLoadInBackground;
-            backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
-            backgroundWorker.RunWorkerAsync();
+            //var backgroundWorker = new BackgroundWorker();
+            //backgroundWorker.DoWork += this.OnLoadInBackground;
+            //backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
+            //backgroundWorker.RunWorkerAsync();
+            Objects.SuspendNotifications();
+            Load(null);
+            LoadTreeState();
+            Objects.ResumeNotifications();
         }
         #endregion
 
         #region Properties
 
-        public ObservableCollectionWithItemChanged<ObjectModel> Objects
+        private TD.ObservableItemCollection<ObjectModel> objects = new TD.ObservableItemCollection<ObjectModel>();
+        public TD.ObservableItemCollection<ObjectModel> Objects
         {
             get
             {
@@ -64,56 +50,47 @@ namespace Sculptor.ViewModels
             }
         }
 
-        public ObservableCollectionWithItemChanged<ObjectModel> BackgroundObjects
-        {
-            get
-            {
-                return backgroundObjects;
-            }
-            set
-            {
-                backgroundObjects = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollectionWithItemChanged<ObjectModel> SelectedItems
+        private TD.ObservableItemCollection<ObjectModel> selectedItems;
+        public TD.ObservableItemCollection<ObjectModel> SelectedItems
         {
             get
             {
                 if (selectedItems == null)
                 {
-                    selectedItems = new ObservableCollectionWithItemChanged<ObjectModel>();
+                    selectedItems = new TD.ObservableItemCollection<ObjectModel>();
                 }
                 return selectedItems;
             }
         }
 
-        public ObservableCollectionWithItemChanged<ObjectModel> CopiedItems
+        private TD.ObservableItemCollection<ObjectModel> copiedItems;
+        public TD.ObservableItemCollection<ObjectModel> CopiedItems
         {
             get
             {
                 if (copiedItems == null)
                 {
-                    copiedItems = new ObservableCollectionWithItemChanged<ObjectModel>();
+                    copiedItems = new TD.ObservableItemCollection<ObjectModel>();
                 }
                 return copiedItems;
             }
         }
 
-        public ObservableCollection<ObjectTypeModel> ObjectTypes
+        private CollectionViewSource filteredObjects;
+        public CollectionViewSource FilteredObjects
         {
-            get
+            get { return filteredObjects; }
+            set
             {
-                if (objectTypes == null)
+                if (value != filteredObjects)
                 {
-                    objectTypes = new ObservableCollection<ObjectTypeModel>();
+                    filteredObjects = value;
+                    OnPropertyChanged();
                 }
-                return objectTypes;
             }
-
         }
 
+        private ObjectModel selectedItem;
         public ObjectModel SelectedItem
         {
             get
@@ -138,6 +115,7 @@ namespace Sculptor.ViewModels
             }
         }
 
+        private bool isChanged;
         public bool IsChanged
         {
             get
@@ -154,6 +132,21 @@ namespace Sculptor.ViewModels
             }
         }
 
+        private bool isLoaded = false;
+        public bool IsLoaded
+        {
+            get { return this.isLoaded; }
+            set
+            {
+                if (value != this.isLoaded)
+                {
+                    this.isLoaded = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool isBusy;
         public bool IsBusy
         {
             get
@@ -183,124 +176,118 @@ namespace Sculptor.ViewModels
             get
             {
                 if (refreshCommand == null)
-                {
-                    refreshCommand = new RelayCommand(
-                        p => this.CanRefresh(),
-                        p => this.Refresh());
-                }
+                    refreshCommand = new RelayCommand(p => true, p => this.Refresh());
                 return refreshCommand;
             }
         }
 
+        private ICommand saveCommand;
         public ICommand SaveCommand
         {
             get
             {
                 if (saveCommand == null)
-                {
-                    saveCommand = new RelayCommand(
-                        p => this.CanSave(),
-                        p => this.Save());
-                }
+                    saveCommand = new RelayCommand(p => true, p => this.Save());
                 return saveCommand;
             }
         }
 
+        private ICommand addSiblingCommand;
         public ICommand AddSiblingCommand
         {
             get
             {
                 if (addSiblingCommand == null)
-                {
-                    addSiblingCommand = new RelayCommand(
-                        p => this.CanAddSibling(),
-                        p => this.AddSibling());
-                }
+                    addSiblingCommand = new RelayCommand(p => true, p => this.AddSibling());
                 return addSiblingCommand;
             }
         }
 
+        private ICommand addChildCommand;
         public ICommand AddChildCommand
         {
             get
             {
                 if (addChildCommand == null)
-                {
-                    addChildCommand = new RelayCommand(
-                        p => this.CanAddChild(),
-                        p => this.AddChild());
-                }
+                    addChildCommand = new RelayCommand(p => true, p  => this.AddChild());
                 return addChildCommand;
             }
         }
 
+        private ICommand deleteCommand;
         public ICommand DeleteCommand
         {
             get
             {
                 if (deleteCommand == null)
-                {
-                    deleteCommand = new RelayCommand(
-                        p => this.CanDelete(),
-                        p => this.Delete());
-                }
+                    deleteCommand = new RelayCommand(p => true, p => this.Delete());
                 return deleteCommand;
             }
         }
 
+        private ICommand changeTypeCommand;
         public ICommand ChangeTypeCommand
         {
             get
             {
                 if (changeTypeCommand == null)
-                {
-                    changeTypeCommand = new RelayCommand(
-                        p => this.CanChangeType(),
-                        p => this.ChangeType(p));
-                }
+                    changeTypeCommand = new RelayCommand(p => true, p => this.ChangeType(p));
                 return changeTypeCommand;
             }
         }
 
+        private ICommand cutCommand;
         public ICommand CutCommand
         {
             get
             {
                 if (cutCommand == null)
-                {
-                    cutCommand = new RelayCommand(
-                        p => this.CanCut(),
-                        p => this.Cut());
-                }
+                    cutCommand = new RelayCommand(p => this.CanCut(), p => this.Cut());
                 return cutCommand;
             }
         }
 
+        private ICommand copyCommand;
         public ICommand CopyCommand
         {
             get
             {
                 if (copyCommand == null)
-                {
-                    copyCommand = new RelayCommand(
-                        p => this.CanCopy(),
-                        p => this.Copy());
-                }
+                    copyCommand = new RelayCommand(p => this.CanCopy(), p => this.Copy());
                 return copyCommand;
             }
         }
 
+        private ICommand pasteCommand;
         public ICommand PasteCommand
         {
             get
             {
                 if (pasteCommand == null)
-                {
-                    pasteCommand = new RelayCommand(
-                        p => this.CanPaste(),
-                        p => this.Paste());
-                }
+                    pasteCommand = new RelayCommand(p => this.CanPaste(), p => this.Paste());
                 return pasteCommand;
+            }
+        }
+
+        private ICommand loadTreeStateCommand;
+        public ICommand LoadTreeStateCommand
+        {
+            get
+            {
+                if (loadTreeStateCommand == null)
+                    loadTreeStateCommand = new RelayCommand(p => true, p => this.LoadTreeState());
+                return loadTreeStateCommand;
+            }
+        }
+
+        private ICommand saveTreeStateCommand;
+        public ICommand SaveTreeStateCommand
+        {
+            get
+            {
+                if (saveTreeStateCommand == null)
+                    saveTreeStateCommand = new RelayCommand(p => true, p => this.SaveTreeState());
+                return saveTreeStateCommand;
             }
         }
 
@@ -322,6 +309,8 @@ namespace Sculptor.ViewModels
         private void OnLoadInBackground(object sender, DoWorkEventArgs e)
         {
             this.IsBusy = true;
+            Objects.SuspendNotifications();
+
             // Load Object Types;
             TypeViewModelLocator.GetTypeVM();
             // Load Objects
@@ -336,9 +325,15 @@ namespace Sculptor.ViewModels
             backgroundWorker.DoWork -= this.OnLoadInBackground;
             backgroundWorker.RunWorkerCompleted -= OnLoadInBackgroundCompleted;
 
-            this.IsBusy = false;
+            // CollectionView to filter the TreeListView
+            // Note: Data is manipulated in the Objects collection
+            //FilteredObjects = new CollectionViewSource { Source = Objects };
+            //FilteredObjects.Filter += ObjectFilter;
 
-            Objects = BackgroundObjects;
+            Objects.ResumeNotifications();
+            //LoadTreeState();
+            IsLoaded = true;
+            this.IsBusy = false;
         }
 
         #endregion
@@ -351,32 +346,15 @@ namespace Sculptor.ViewModels
         /// <param name="Project_ID"></param>
         /// <param name="Parent_ID"></param>
         /// <returns>Observable collection of VMObjects</returns>
-        private ObservableCollectionWithItemChanged<ObjectModel> Load(Guid? Parent_ID)
+        private TD.ObservableItemCollection<ObjectModel> Load(Guid? Parent_ID)
         {
-            ObservableCollectionWithItemChanged<ObjectModel> childObjects = new ObservableCollectionWithItemChanged<ObjectModel>();
-            ObservableCollectionWithItemChanged<ObjectModel> personalLayout = new ObservableCollectionWithItemChanged<ObjectModel>();
-
-            // Future local XML file for IsExpanded property
-            //ObservableCollectionWithItemChanged<ObjectModel> pl;
-            //bool expanded = false;
-
-            //string localXMLPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ObjectView.xml");
-            //var serializer = new XmlSerializer(personalLayout.GetType(), new XmlRootAttribute("PersonalLayout"));
-            //if (File.Exists(localXMLPath))
-            //{
-            //    var stream = new FileStream(localXMLPath, FileMode.Open);
-            //    pl = serializer.Deserialize(stream) as ObservableCollectionWithItemChanged<ObjectModel>;
-            //}
-            //else
-            //    pl = new ObservableCollectionWithItemChanged<ObjectModel>();
+            TD.ObservableItemCollection<ObjectModel> childObjects = new TD.ObservableItemCollection<ObjectModel>();
+           // TD.ObservableItemCollection<ObjectModel> personalLayout = new TD.ObservableItemCollection<ObjectModel>();
 
             using (EDBEntities eDB = new EDBEntities())
             {
                 foreach (tblObject Rec in (from o in eDB.tblObjects where (o.Project_ID == Globals.Project_ID && o.Parent_ID == Parent_ID) orderby o.ObjectName select o))
                 {
-                    //var xmlRec = pl.SingleOrDefault(x => x.ID == Rec.ID);
-                    //if ((xmlRec) != null) expanded = xmlRec.IsExpanded;
-
                     ObjectModel objectItem = new ObjectModel
                     {
                         ID = Rec.ID,
@@ -386,7 +364,6 @@ namespace Sculptor.ViewModels
                         Description = Rec.Description,
                         ObjectType_ID = (int)Rec.ObjectType_ID,
                         IsChanged = false,
-                        IsExpanded = Rec.IsExpanded.GetValueOrDefault()
                     };
 
                     // Load objects with a parent_ID equal to the ID of this object
@@ -395,37 +372,13 @@ namespace Sculptor.ViewModels
                     // If the parent ID is null, this is a root object and needs to be added to the collection that is the itemsource of the object tree
                     // Else it is a child object which needs to be added to the childobjectlist
                     if (Rec.Parent_ID == null)
-                        BackgroundObjects.Add(objectItem);
+                        Objects.Add(objectItem);
                     else
                         childObjects.Add(objectItem);
                 }
             }
             IsChanged = false;
             return childObjects;
-        }
-
-        private void LoadObjectTypes()
-        {
-            ObjectTypes.Clear();
-            using (EDBEntities eDB = new EDBEntities())
-            {
-                foreach (tblObjectType Rec in (from o in eDB.tblObjectTypes where o.Project_ID == Globals.Project_ID select o))
-                {
-                    ObjectTypeModel objectTypeItem = new ObjectTypeModel
-                    {
-                        ID = Rec.ID,
-                        ObjectType = Rec.ObjectType,
-                        Description = Rec.Description,
-                        Image = Rec.Image
-                    };
-                    ObjectTypes.Add(objectTypeItem);
-                }
-            }
-        }
-
-        private bool CanAddSibling()
-        {
-            return true;
         }
 
         public void AddSibling()
@@ -437,10 +390,10 @@ namespace Sculptor.ViewModels
                 Project_ID = Globals.Project_ID,
                 ObjectName = "New Object",
                 Description = "New Object Description",
-                ObjectType_ID = 5,
                 IsChanged = false,
                 IsNew = true,
-                ChildObjects = new ObservableCollectionWithItemChanged<ObjectModel>()
+                ObjectType_ID = TypeViewModelLocator.GetTypeVM().GetTypeGroupID("Object"),
+                ChildObjects = new TD.ObservableItemCollection<ObjectModel>()
             };
 
             // If no item has been selected, put the object in the root of the tree
@@ -453,6 +406,7 @@ namespace Sculptor.ViewModels
             else if (SelectedItem.Parent_ID == null)
             {
                 objectItem.Parent_ID = null;
+                objectItem.ObjectType_ID = SelectedItem.ObjectType_ID;
                 Objects.Insert(Objects.IndexOf(SelectedItem) + 1, objectItem);
             }
             // Otherwise get the parent object and add the new object as a child
@@ -460,15 +414,11 @@ namespace Sculptor.ViewModels
             {
                 ObjectModel parentItem = GetObject(SelectedItem.Parent_ID);
                 objectItem.Parent_ID = SelectedItem.Parent_ID;
+                objectItem.ObjectType_ID = SelectedItem.ObjectType_ID;
                 parentItem.ChildObjects.Insert(parentItem.ChildObjects.IndexOf(SelectedItem) + 1, objectItem);
             }
             IsChanged = true;
             OnFocusRequested("ObjectName");
-        }
-
-        private bool CanAddChild()
-        {
-            return SelectedItem != null;
         }
 
         public void AddChild()
@@ -479,40 +429,43 @@ namespace Sculptor.ViewModels
                 Project_ID = Globals.Project_ID,
                 ObjectName = "New Object",
                 Description = "New Object Description",
-                ObjectType_ID = 5,
                 IsChanged = false,
                 IsNew = true,
-                ChildObjects = new ObservableCollectionWithItemChanged<ObjectModel>()
+                ChildObjects = new TD.ObservableItemCollection<ObjectModel>()
             };
             if (SelectedItem != null)
             {
                 objectItem.Parent_ID = SelectedItem.ID;
+                objectItem.ObjectType_ID = SelectedItem.ObjectType_ID + 1;
                 SelectedItem.ChildObjects.Add(objectItem);
             }
             IsChanged = true;
         }
 
-        private bool CanDelete()
-        {
-            return true;
-        }
-
         private void Delete()
         {
-            SelectedItem.IsDeleted = true;
-            SelectedItem.IsChanged = false;
-            SelectedItem.IsNew = false;
-            IsChanged = true;
-        }
-
-        private bool CanSave()
-        {
-            return true;
+            // ToDo: Deleting items in the collection only works using the Del key for now. 
+            // Implement delete method to also provide option using context menu
+            
         }
 
         public void Save()
         {
             EDBEntities eDB = new EDBEntities();
+
+            // To determine which items have been deleted in the collection, get all objects of the project stored in the database table first
+            var tblObjects = eDB.tblObjects.Where(p => p.Project_ID == Globals.Project_ID);
+
+            // Check if each object of the table exists in the objects collection
+            // if not, delete the object in the table
+            foreach (var objectRec in tblObjects)
+            {
+                var objectItem = GetObject(objectRec.ID);
+                if (objectItem == null) // object not found in collection
+                    eDB.tblObjects.Remove(objectRec);
+            }
+
+            // Add and update objects recursively
             SaveLevel(Objects, eDB);
 
             try
@@ -521,68 +474,72 @@ namespace Sculptor.ViewModels
             }
             catch (Exception ex)
             {
-                RadWindow.Alert("Fault while saving object requirements: " + ex.Message);
+                RadWindow.Alert(new DialogParameters()
+                {
+                    Header = "Error",
+                    Content = "Fault while saving objects:\n" + ex.Message
+                });
             }
-
+            SaveTreeState();
             IsChanged = false;
         }
 
         /// <summary>
         /// Saves all changes to the ViewModel
         /// </summary>
-        private void SaveLevel(ObservableCollectionWithItemChanged<ObjectModel> treeLevel, EDBEntities eDB)
+        private void SaveLevel(TD.ObservableItemCollection<ObjectModel> treeLevel, EDBEntities eDB)
         {
-            if (treeLevel != null)
+            try
             {
-                foreach (var objectItem in treeLevel)
+                if (treeLevel != null)
                 {
+                    foreach (var objectItem in treeLevel)
+                    {
 
-                    if (objectItem.IsNew)
-                    {
-                        tblObject NewRec = new tblObject();
-                        var Rec = eDB.tblObjects.Add(NewRec);
-                        Rec.ID = objectItem.ID;
-                        Rec.Parent_ID = objectItem.Parent_ID;
-                        Rec.ObjectName = objectItem.ObjectName;
-                        Rec.Description = objectItem.Description;
-                        Rec.Project_ID = Globals.Project_ID;
-                        Rec.ObjectType_ID = objectItem.ObjectType_ID;
-                        Rec.IsExpanded = objectItem.IsExpanded;
-                        objectItem.IsNew = false;
+                        if (objectItem.IsNew)
+                        {
+                            tblObject NewRec = new tblObject();
+                            var Rec = eDB.tblObjects.Add(NewRec);
+                            Rec.ID = objectItem.ID;
+                            Rec.Parent_ID = objectItem.Parent_ID;
+                            Rec.ObjectName = objectItem.ObjectName;
+                            Rec.Description = objectItem.Description;
+                            Rec.Project_ID = Globals.Project_ID;
+                            Rec.ObjectType_ID = objectItem.ObjectType_ID;
+                            Rec.IsExpanded = objectItem.IsExpanded;
+                            objectItem.IsNew = false;
+                        }
+                        if (objectItem.IsChanged)
+                        {
+                            tblObject Rec = eDB.tblObjects.Where(o => o.ID == objectItem.ID).FirstOrDefault();
+                            Rec.Parent_ID = objectItem.Parent_ID;
+                            Rec.ObjectName = objectItem.ObjectName;
+                            Rec.Description = objectItem.Description;
+                            Rec.Project_ID = objectItem.Project_ID;
+                            Rec.ObjectType_ID = objectItem.ObjectType_ID;
+                            Rec.IsExpanded = objectItem.IsExpanded;
+                            objectItem.IsChanged = false;
+                        }
+                        // Recursive call
+                        if (objectItem.ChildObjects != null) SaveLevel(objectItem.ChildObjects, eDB);
                     }
-                    if (objectItem.IsChanged)
-                    {
-                        tblObject Rec = eDB.tblObjects.Where(o => o.ID == objectItem.ID).FirstOrDefault();
-                        Rec.Parent_ID = objectItem.Parent_ID;
-                        Rec.ObjectName = objectItem.ObjectName;
-                        Rec.Description = objectItem.Description;
-                        Rec.Project_ID = objectItem.Project_ID;
-                        Rec.ObjectType_ID = objectItem.ObjectType_ID;
-                        Rec.IsExpanded = objectItem.IsExpanded;
-                        objectItem.IsChanged = false;
-                    }
-                    if (objectItem.IsDeleted)
-                    {
-                        tblObject Rec = eDB.tblObjects.Where(o => o.ID == objectItem.ID).FirstOrDefault();
-                        if (Rec != null)
-                            eDB.tblObjects.Remove(Rec);
-                    }
-                    // Recursive call
-                    if (objectItem.ChildObjects != null) SaveLevel(objectItem.ChildObjects, eDB);
                 }
             }
-        }
-
-        private bool CanRefresh()
-        {
-            return true;
+            catch (Exception ex)
+            {
+                RadWindow.Alert(new DialogParameters()
+                {
+                    Header = "Error",
+                    Content = "Fault while adding/updating to database:\n" + ex.Message
+                });
+            }
         }
 
         public void Refresh()
         {
-            BackgroundObjects.Clear();
-            LoadObjectTypes();
+            Objects.Clear();
             Load(null);
+
         }
 
         private bool CanCut()
@@ -627,7 +584,7 @@ namespace Sculptor.ViewModels
                 copiedObjectItem.ObjectType_ID = objectItem.ObjectType_ID;
                 copiedObjectItem.IsChanged = false;
                 copiedObjectItem.IsNew = true;
-                copiedObjectItem.ChildObjects = new ObservableCollectionWithItemChanged<ObjectModel>();
+                copiedObjectItem.ChildObjects = new TD.ObservableItemCollection<ObjectModel>();
 
                 if (SelectedItem == null)
                 {
@@ -678,7 +635,7 @@ namespace Sculptor.ViewModels
                 {
                     // Setup a private collection with the selected items only. This is because the SelectedItems that are part of the view model collection
                     // will change as soon as we start removing and adding objects
-                    ObservableCollectionWithItemChanged<ObjectModel> selectedItems = new ObservableCollectionWithItemChanged<ObjectModel>();
+                    TD.ObservableItemCollection<ObjectModel> selectedItems = new TD.ObservableItemCollection<ObjectModel>();
                     foreach (ObjectModel item in SelectedItems)
                     {
                         selectedItems.Add(item);
@@ -733,7 +690,11 @@ namespace Sculptor.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    RadWindow.Alert(ex.Message);
+                    RadWindow.Alert(new DialogParameters()
+                    {
+                        Header = "Error",
+                        Content = "Error while moving object\n" + ex.Message
+                    });
                 }
             }
         }
@@ -744,7 +705,7 @@ namespace Sculptor.ViewModels
         /// <param name="treeLevel"></param>
         /// <param name="searchItem"></param>
         /// <returns></returns>
-        private Boolean FindObject(ObservableCollectionWithItemChanged<ObjectModel> treeLevel, string searchItem)
+        private Boolean FindObject(TD.ObservableItemCollection<ObjectModel> treeLevel, string searchItem)
         {
             if (treeLevel == null) treeLevel = Objects;
             foreach (var objectItem in treeLevel)
@@ -763,7 +724,7 @@ namespace Sculptor.ViewModels
         /// <param name="searchItemID"></param>
         /// <param name="treeLevel"></param>
         /// <returns></returns>
-        private ObjectModel GetObject(Guid? searchItemID, ObservableCollectionWithItemChanged<ObjectModel> treeLevel = null)
+        private ObjectModel GetObject(Guid? searchItemID, TD.ObservableItemCollection<ObjectModel> treeLevel = null)
         {
             // Select the root level if the treeLevel = null
             if (treeLevel == null) treeLevel = Objects;
@@ -782,42 +743,82 @@ namespace Sculptor.ViewModels
             return null;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ObjectType"></param>
-        /// <returns></returns>
-        private int GetObjectType_ID(string objectType)
-        {
-            ObjectTypeModel objectTypeItem = ObjectTypes.Single(x => x.ObjectType == objectType);
-            return objectTypeItem.ID;
-        }
-
-        private bool CanChangeType()
-        {
-            return true;
-        }
-
         private void ChangeType(object p)
         {
-            string group = (p as string);
-            var typeSelectionDialog = new TypeSelectionDialog();
-            typeSelectionDialog.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            switch (group)
+            // ToDo: Bad practice to call a view from the viewmodel. Fix using IOC
+            var typeSelectionPopup = new TypeSelectionPopup();
+            typeSelectionPopup.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            TypeViewModel typeViewModel = TypeViewModelLocator.GetTypeVM();
+            // Close the type selection box
+            typeViewModel.CloseTrigger = false;
+            typeViewModel.TypeGroup = "Object";
+            // Filter the type collection on the type group
+            typeViewModel.FilterText = typeViewModel.TypeGroup;
+            // To have one popup for all type groups (object, template, property etc) the popup is embedded in a dialog
+            typeSelectionPopup.ShowDialog();
+        }
+
+        private void LoadTreeState()
+        {
+            TD.ObservableItemCollection<ObjectModel> isExpandedCollection;
+
+            XmlSerializer x = new XmlSerializer(typeof(TD.ObservableItemCollection<ObjectModel>));
+            //ToDo: put filename in configuration
+            var xmlFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Sculptor\\" + Globals.ContractNo + "_ObjectExpandedState.xml");
+            if (File.Exists(xmlFileName))
             {
-                case "Object":
-                    //typeSelectionDialog.ShowDialog();
-                    TypeViewModelLocator.GetTypeVM().IsObjectTypePopupOpen = true;
-                    break;
-                case "Template":
-                    TypeViewModelLocator.GetTypeVM().IsTemplateTypePopupOpen = true;
-                    break;
-                case "Property":
-                    TypeViewModelLocator.GetTypeVM().IsPropertyTypePopupOpen = true;
-                    break;
-                case "requirement":
-                    TypeViewModelLocator.GetTypeVM().IsRequirementTypePopupOpen = true;
-                    break;
+                try
+                {
+                    using (var stream = new FileStream(xmlFileName, FileMode.Open))
+                    {
+                        isExpandedCollection = x.Deserialize(stream) as TD.ObservableItemCollection<ObjectModel>;
+                        LoadTreeStateRecursive(isExpandedCollection);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    RadWindow.Alert(new DialogParameters()
+                    {
+                        Header = "Error",
+                        Content = "Error while opening expansion state\n" + ex.Message
+                    });
+                }
+            }
+        }
+
+        private void LoadTreeStateRecursive(TD.ObservableItemCollection<ObjectModel> isExpandedCollectionLevel)
+        {
+            foreach (var item in isExpandedCollectionLevel)
+            {
+                var objectItem = GetObject(item.ID);
+                if (objectItem != null)
+                    objectItem.IsExpanded = item.IsExpanded;
+
+                if (objectItem.ChildObjects.Count != 0)
+                    LoadTreeStateRecursive(item.ChildObjects);
+            }
+
+        }
+
+        private void SaveTreeState()
+        {
+            XmlSerializer x = new XmlSerializer(typeof(TD.ObservableItemCollection<ObjectModel>));
+            //ToDo: put filename in configuration
+            var xmlFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Sculptor\\" + Globals.ContractNo + "_ObjectExpandedState.xml");
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(xmlFileName))
+                {
+                    x.Serialize(sw, Objects);
+                }
+            }
+            catch (Exception ex)
+            {
+                RadWindow.Alert(new DialogParameters()
+                {
+                    Header = "Error",
+                    Content = "Error while saving expansion state\n" + ex.Message
+                });
             }
         }
 

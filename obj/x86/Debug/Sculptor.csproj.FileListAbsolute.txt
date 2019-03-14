@@ -89,3 +89,5 @@ D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Sculptor.csprojAssemblyReference.cac
 D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypePopup.g.cs
 D:\Tools\VS\Sculptor\Sculptor\obj\x86\Debug\Views\TypePopup.baml
 D:\Tools\VS\Sculptor\Sculptor\bin\Debug\CommonServiceLocator.dll
+D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Ninject.dll
+D:\Tools\VS\Sculptor\Sculptor\bin\Debug\Ninject.xml

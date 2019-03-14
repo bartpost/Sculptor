@@ -5,6 +5,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
+using TD = Telerik.Windows.Data;
+
+
 
 namespace Sculptor
 {
@@ -13,7 +16,9 @@ namespace Sculptor
         #region Constructor
         public AspectViewModel()
         {
-            // Load the objects in the background
+            //ToDo: for some reason, background loading doesn't work for the Aspect view. Therefore aspects are loaded in the GUI thread for now
+
+            //Load the objects in the background
             //var backgroundWorker = new BackgroundWorker();
             //backgroundWorker.DoWork += OnLoadInBackground;
             //backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
@@ -23,8 +28,8 @@ namespace Sculptor
         #endregion
 
         #region Properties
-        private ObservableCollectionWithItemChanged<AspectModel> aspects = new ObservableCollectionWithItemChanged<AspectModel>();
-        public ObservableCollectionWithItemChanged<AspectModel> Aspects
+        private TD.ObservableItemCollection<AspectModel> aspects = new TD.ObservableItemCollection<AspectModel>();
+        public TD.ObservableItemCollection<AspectModel> Aspects
         {
             get
             { 
@@ -33,20 +38,6 @@ namespace Sculptor
             set
             {
                 aspects = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private ObservableCollectionWithItemChanged<AspectModel> backgroundAspects = new ObservableCollectionWithItemChanged<AspectModel>();
-        public ObservableCollectionWithItemChanged<AspectModel> BackgroundAspects
-        {
-            get
-            {
-                return backgroundAspects;
-            }
-            set
-            {
-                backgroundAspects = value;
                 OnPropertyChanged();
             }
         }
@@ -68,14 +59,14 @@ namespace Sculptor
             }
         }
 
-        private ObservableCollectionWithItemChanged<AspectModel> selectedItems;
-        public ObservableCollectionWithItemChanged<AspectModel> SelectedItems
+        private TD.ObservableItemCollection<AspectModel> selectedItems;
+        public TD.ObservableItemCollection<AspectModel> SelectedItems
         {
             get
             {
                 if (selectedItems == null)
                 {
-                    selectedItems = new ObservableCollectionWithItemChanged<AspectModel>();
+                    selectedItems = new TD.ObservableItemCollection<AspectModel>();
                 }
                 return selectedItems;
             }
@@ -97,6 +88,22 @@ namespace Sculptor
             }
         }
 
+        private bool isLoaded;
+        public bool IsLoaaded
+        {
+            get
+            {
+                return this.isLoaded;
+            }
+            set
+            {
+                if (value != this.isLoaded)
+                {
+                    this.isLoaded = value;
+                }
+            }
+        }
+
         private bool isBusy;
         public bool IsBusy
         {
@@ -109,6 +116,7 @@ namespace Sculptor
                 if (value != this.isBusy)
                 {
                     this.isBusy = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -170,7 +178,8 @@ namespace Sculptor
 
         private void OnLoadInBackground(object sender, DoWorkEventArgs e)
         {
-            this.IsBusy = true;
+            this.IsBusy = false;
+            //Aspects.SuspendNotifications();
             Load();
         }
 
@@ -182,9 +191,8 @@ namespace Sculptor
             backgroundWorker.DoWork -= this.OnLoadInBackground;
             backgroundWorker.RunWorkerCompleted -= OnLoadInBackgroundCompleted;
 
+            //Aspects.ResumeNotifications();
             this.IsBusy = false;
-
-            Aspects = BackgroundAspects;
         }
         #endregion
 
@@ -252,10 +260,8 @@ namespace Sculptor
 
         private void Delete()
         {
-            SelectedItem.IsDeleted = true;
-            SelectedItem.IsChanged = false;
-            SelectedItem.IsNew = false;
-            IsChanged = true;
+            foreach (var item in SelectedItems)
+                Aspects.Remove(item);
         }
 
         private bool CanSave()
@@ -278,52 +284,59 @@ namespace Sculptor
             IsChanged = false;
         }
 
-        private void SaveLevel(ObservableCollectionWithItemChanged<AspectModel> treeLevel, EDBEntities eDB)
+        private void SaveLevel(TD.ObservableItemCollection<AspectModel> treeLevel, EDBEntities eDB)
         {
-            if (treeLevel != null)
+            try
             {
-                foreach (var aspectItem in treeLevel)
+                if (treeLevel != null)
                 {
+                    foreach (var aspectItem in treeLevel)
+                    {
 
-                    if (aspectItem.IsNew)
-                    {
-                        tblAspect NewRec = new tblAspect();
-                        var Rec = eDB.tblAspects.Add(NewRec);
-                        Rec.ID = aspectItem.ID;
-                        Rec.AspectName = aspectItem.AspectName;
-                        Rec.Description = aspectItem.Description;
-                        Rec.Project_ID = Globals.Project_ID;
-                        Rec.HardIO = aspectItem.HardIO;
-                        Rec.ExtIO = aspectItem.ExtIO;
-                        Rec.PLCTag = aspectItem.PLCTag;
-                        Rec.SCADATag = aspectItem.SCADATag;
-                        Rec.AlarmTag = aspectItem.AlarmTag;
-                        Rec.TrendTag = aspectItem.TrendTag;
-                        Rec.Note = aspectItem.Note;
-                        aspectItem.IsNew = false;
+                        if (aspectItem.IsNew)
+                        {
+                            tblAspect NewRec = new tblAspect();
+                            var Rec = eDB.tblAspects.Add(NewRec);
+                            Rec.ID = aspectItem.ID;
+                            Rec.AspectName = aspectItem.AspectName;
+                            Rec.Description = aspectItem.Description;
+                            Rec.Project_ID = Globals.Project_ID;
+                            Rec.HardIO = aspectItem.HardIO;
+                            Rec.ExtIO = aspectItem.ExtIO;
+                            Rec.PLCTag = aspectItem.PLCTag;
+                            Rec.SCADATag = aspectItem.SCADATag;
+                            Rec.AlarmTag = aspectItem.AlarmTag;
+                            Rec.TrendTag = aspectItem.TrendTag;
+                            Rec.Note = aspectItem.Note;
+                            aspectItem.IsNew = false;
+                        }
+                        if (aspectItem.IsChanged)
+                        {
+                            tblAspect Rec = eDB.tblAspects.Where(o => o.ID == aspectItem.ID).FirstOrDefault();
+                            Rec.AspectName = aspectItem.AspectName;
+                            Rec.Description = aspectItem.Description;
+                            Rec.Project_ID = Globals.Project_ID;
+                            Rec.HardIO = aspectItem.HardIO;
+                            Rec.ExtIO = aspectItem.ExtIO;
+                            Rec.PLCTag = aspectItem.PLCTag;
+                            Rec.SCADATag = aspectItem.SCADATag;
+                            Rec.AlarmTag = aspectItem.AlarmTag;
+                            Rec.TrendTag = aspectItem.TrendTag;
+                            Rec.Note = aspectItem.Note;
+                            aspectItem.IsChanged = false;
+                        }
+                        if (aspectItem.IsDeleted)
+                        {
+                            tblAspect Rec = eDB.tblAspects.Where(o => o.ID == aspectItem.ID).FirstOrDefault();
+                            if (Rec != null)
+                                eDB.tblAspects.Remove(Rec);
+                        }
                     }
-                    if (aspectItem.IsChanged)
-                    {
-                        tblAspect Rec = eDB.tblAspects.Where(o => o.ID == aspectItem.ID).FirstOrDefault();
-                        Rec.AspectName = aspectItem.AspectName;
-                        Rec.Description = aspectItem.Description;
-                        Rec.Project_ID = Globals.Project_ID;
-                        Rec.HardIO = aspectItem.HardIO;
-                        Rec.ExtIO = aspectItem.ExtIO;
-                        Rec.PLCTag = aspectItem.PLCTag;
-                        Rec.SCADATag = aspectItem.SCADATag;
-                        Rec.AlarmTag = aspectItem.AlarmTag;
-                        Rec.TrendTag = aspectItem.TrendTag;
-                        Rec.Note = aspectItem.Note;
-                        aspectItem.IsChanged = false;
-                    }
-                    if (aspectItem.IsDeleted)
-                    {
-                        tblAspect Rec = eDB.tblAspects.Where(o => o.ID == aspectItem.ID).FirstOrDefault();
-                        if (Rec != null)
-                            eDB.tblAspects.Remove(Rec);
                 }
-                }
+            }
+            catch (Exception ex)
+            {
+                RadWindow.Alert("Fault while saving to database: " + ex.Message);
             }
         }
 
@@ -336,6 +349,7 @@ namespace Sculptor
         {
             Aspects.Clear();
             Load();
+            PropertyViewModelLocator.GetPropertyVM().LoadCBAspects();
         }
 
         #endregion

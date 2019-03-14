@@ -10,10 +10,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sculptor</RootNamespace>
     <AssemblyName>Sculptor</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -26,7 +28,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -50,7 +51,27 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>EHub.ico</ApplicationIcon>
+    <ApplicationIcon>Sculptor.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
@@ -61,6 +82,15 @@
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.2.2.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
     </Reference>
     <Reference Include="Prism, Version=6.3.0.0, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.3.0\lib\net45\Prism.dll</HintPath>
@@ -86,9 +116,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Telerik.Windows.Controls, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Telerik.Windows.Controls, Version=2019.1.116.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Controls.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="Telerik.Windows.Controls.GridView, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -146,8 +176,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.PersistenceFramework.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Windows.Themes.Office2016">
-      <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries.NoXaml\WPF45\Telerik.Windows.Themes.Office2016.dll</HintPath>
+    <Reference Include="Telerik.Windows.Themes.Office2016, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R1 2019\Binaries.NoXaml\WPF45\Telerik.Windows.Themes.Office2016.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="UIAutomationTypes" />
@@ -160,16 +191,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\CloseWindowBehavior.cs" />
+    <Compile Include="Behaviors\WindowPlacementBehavior.cs" />
+    <Compile Include="DataModels\HardIOModel.cs" />
     <Compile Include="DataModels\AspectModel.cs" />
     <Compile Include="DataModels\AttributeModel.cs" />
-    <Compile Include="DataModels\ObjectTypeModel - Copy.cs" />
-    <Compile Include="DataModels\PropertyTypeModel.cs" />
-    <Compile Include="DataModels\TemplateTypeModel.cs" />
+    <Compile Include="DataModels\ControlObjectModel.cs" />
     <Compile Include="DataModels\TemplateRequirementModel.cs" />
     <Compile Include="DataModels\TemplateAssociationModel.cs" />
     <Compile Include="DataModels\ObjectModel.cs" />
     <Compile Include="DataModels\ObjectRequirementModel.cs" />
-    <Compile Include="DataModels\RequirementTypeModel.cs" />
     <Compile Include="DataModels\TypeModel.cs" />
     <Compile Include="DataModels\ProjectModel.cs" />
     <Compile Include="DataModels\ObjectAssociationModel.cs" />
@@ -194,6 +225,9 @@
     <Compile Include="EDBEntityDataModel\sysdiagram.cs">
       <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="EDBEntityDataModel\tblControlObject.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EDBEntityDataModel\tblObjectAssociation.cs">
       <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
     </Compile>
@@ -201,6 +235,9 @@
       <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EDBEntityDataModel\tblRequirement.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblRequirementType.cs">
       <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EDBEntityDataModel\tblTemplate.cs">
@@ -217,8 +254,8 @@
     </Compile>
     <Compile Include="Globals.cs" />
     <Compile Include="Interfaces\IRequestFocus.cs" />
-    <Compile Include="Support\GridViewRowBringInFocusBehavior.cs" />
-    <Compile Include="Support\GridViewRowSelectBehavior.cs" />
+    <Compile Include="Behaviors\GridViewRowBringInFocusBehavior.cs" />
+    <Compile Include="Behaviors\GridViewRowSelectBehavior.cs" />
     <Compile Include="EDBEntityDataModel\tblAspect.cs">
       <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
     </Compile>
@@ -240,21 +277,25 @@
     <Compile Include="EDBEntityDataModel\tblProperty.cs">
       <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Behaviors\MouseBehavior.cs" />
+    <Compile Include="Support\Filter.cs" />
     <Compile Include="Support\RootObject.cs" />
+    <Compile Include="ViewModels\HardIOViewModel.cs" />
     <Compile Include="ViewModels\AttributeViewModel.cs" />
+    <Compile Include="ViewModels\ControlObjectViewModel.cs" />
+    <Compile Include="ViewModels\TestViewModel.cs" />
     <Compile Include="ViewModels\TypeViewModel.cs" />
-    <Compile Include="ViewModels\ObjectTypeViewModel.cs" />
     <Compile Include="ViewModels\TemplateRequirementViewModel.cs" />
     <Compile Include="ViewModels\TemplateAssociationsViewModel.cs" />
     <Compile Include="ViewModels\ObjectAssociationsViewModel.cs" />
     <Compile Include="ViewModels\TemplateViewModel.cs" />
     <Compile Include="ViewModels\ObjectRequirementViewModel.cs" />
     <Compile Include="ViewModels\RequirementViewModel.cs" />
+    <Compile Include="Views\ControlObjectView.xaml.cs">
+      <DependentUpon>ControlObjectView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TypeEditDialog.xaml.cs">
       <DependentUpon>TypeEditDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ObjectTypeView.xaml.cs">
-      <DependentUpon>ObjectTypeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProjectView.xaml.cs">
       <DependentUpon>ProjectView.xaml</DependentUpon>
@@ -263,10 +304,10 @@
       <DependentUpon>PropertyView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Support\ViewModelLocator.cs" />
-    <Compile Include="Support\TreeListViewSelectBehavior.cs" />
+    <Compile Include="Behaviors\TreeListViewSelectBehavior.cs" />
     <Compile Include="Support\ObservableCollectionWithItemChanged.cs" />
     <Compile Include="Support\RelayCommand.cs" />
-    <Compile Include="Support\TreeListViewDragDropBehavior.cs" />
+    <Compile Include="Behaviors\TreeListViewDragDropBehavior.cs" />
     <Compile Include="Support\TypeConverters.cs" />
     <Compile Include="Views\RequirementView.xaml.cs">
       <DependentUpon>RequirementView.xaml</DependentUpon>
@@ -275,19 +316,16 @@
     <Compile Include="ViewModels\PropertyViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ObjectViewModel.cs" />
-    <Compile Include="Views\TypePopup.xaml.cs">
-      <DependentUpon>TypePopup.xaml</DependentUpon>
+    <Compile Include="Views\TypeSelectionPopup.xaml.cs">
+      <DependentUpon>TypeSelectionPopup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\TypeSelectionDialog.xaml.cs">
-      <DependentUpon>TypeSelectionDialog.xaml</DependentUpon>
-    </Compile>
+    <Page Include="Views\ControlObjectView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TypeEditDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\ObjectTypeView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\AttributeView.xaml">
       <SubType>Designer</SubType>
@@ -327,11 +365,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\TypePopup.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\TypeSelectionDialog.xaml">
+    <Page Include="Views\TypeSelectionPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -380,17 +414,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Attribute.bmp" />
-    <Resource Include="Resources\Images\Class.ico" />
-    <Resource Include="Resources\Images\copy.ico" />
     <Resource Include="Resources\Images\Copy.png" />
     <Resource Include="Resources\Images\Create.png" />
     <Resource Include="Resources\Images\Cut.png" />
-    <Resource Include="Resources\Images\delete.ico" />
     <Resource Include="Resources\Images\Delete.png" />
-    <Resource Include="Resources\Images\IO.ico" />
-    <Resource Include="Resources\Images\IOC.ico" />
-    <Resource Include="Resources\Images\move.ico" />
-    <Resource Include="Resources\Images\Object.ico" />
     <Resource Include="Resources\Images\Paste.png" />
     <Resource Include="Resources\Images\Remove.png" />
   </ItemGroup>
@@ -422,6 +449,7 @@
       <DependentUpon>EDBEntityDataModel.edmx</DependentUpon>
       <LastGenOutput>EDBEntityDataModel.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\Images\ControlObjects.png" />
     <Resource Include="Resources\Images\template.png" />
     <Resource Include="Resources\Images\GroupProperty32.png" />
     <Resource Include="Resources\Images\GroupTemplate32.png" />
@@ -431,7 +459,7 @@
     <Resource Include="Resources\Images\Attribute32.png" />
     <Resource Include="Resources\Images\Aspect32.png" />
     <Resource Include="Resources\Images\Requirements32.png" />
-    <Resource Include="Resources\Images\Objects32.png" />
+    <Resource Include="Resources\Images\Objects.png" />
     <Resource Include="Resources\Images\RequirementSpecification32.png" />
     <Resource Include="Resources\Images\Regulation32.png" />
     <Resource Include="Resources\Images\RequirementChange32.png" />

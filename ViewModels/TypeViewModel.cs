@@ -8,175 +8,28 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
-using Telerik.Windows.Controls.TreeListView;
 using System.Windows;
 using Microsoft.Win32;
-using System.Windows.Media;
-using System.Drawing;
 using System.IO;
 using Sculptor.Properties;
 using System.Windows.Data;
+using TD = Telerik.Windows.Data;
 
 namespace Sculptor.ViewModels
 {
     public class TypeViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        #region private declarations
-        private ObservableCollection<TypeModel> objectTypes = new ObservableCollection<TypeModel>();
-        private ObservableCollection<TypeModel> backgroundObjectTypes = new ObservableCollection<TypeModel>();
-        private ObservableCollection<TypeModel> templateTypes = new ObservableCollection<TypeModel>();
-        private ObservableCollection<TypeModel> backgroundTemplateTypes = new ObservableCollection<TypeModel>();
-        private ObservableCollection<TypeModel> propertyTypes = new ObservableCollection<TypeModel>();
-        private ObservableCollection<TypeModel> backgroundPropertyTypes = new ObservableCollection<TypeModel>();
-        private ObservableCollection<TypeModel> requirementTypes = new ObservableCollection<TypeModel>();
-        private ObservableCollection<TypeModel> backgroundRequirementTypes = new ObservableCollection<TypeModel>();
-        private ObservableCollection<TypeModel> types = new ObservableCollection<TypeModel>();
-        private ObservableCollection<TypeModel> backgroundTypes = new ObservableCollection<TypeModel>();
-        private TypeModel selectedItem;
-        private ObservableCollectionWithItemChanged<TypeModel> selectedItems;
-        private CollectionViewSource filteredTypes;
-        private bool isChanged;
-        private bool isObjectTypePopupOpen;
-        private bool isTemplateTypePopupOpen;
-        private bool isPropertyTypePopupOpen;
-        private bool isRequirementTypePopupOpen;
-        private string typeGroup;
-        private ICommand saveCommand;
-        private ICommand addCommand;
-        private ICommand deleteCommand;
-        private ICommand changeTypeCommand;
-        private ICommand cancelTypeCommand;
-        private ICommand editTypeCommand;
-        private ICommand addTypeCommand;
-        private ICommand getImageFromFileCommand;
-        #endregion
-
         #region Constructor
         public TypeViewModel()
         {
-            // Load the objectTypes in the background
-            var backgroundWorker = new BackgroundWorker();
-            backgroundWorker.DoWork += this.OnLoadInBackground;
-            backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
-            backgroundWorker.RunWorkerAsync();
+            Load();
         }
         #endregion
 
         #region Properties
 
-        public ObservableCollection<TypeModel> ObjectTypes
-        {
-            get
-            {
-                return objectTypes;
-            }
-            set
-            {
-                objectTypes = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        public ObservableCollection<TypeModel> BackgroundObjectTypes
-        {
-            get
-            {
-                return backgroundObjectTypes;
-            }
-            set
-            {
-                backgroundObjectTypes = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        public ObservableCollection<TypeModel> TemplateTypes
-        {
-            get
-            {
-                return templateTypes;
-            }
-            set
-            {
-                templateTypes = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        public ObservableCollection<TypeModel> BackgroundTemplateTypes
-        {
-            get
-            {
-                return backgroundTemplateTypes;
-            }
-            set
-            {
-                backgroundTemplateTypes = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        public ObservableCollection<TypeModel> PropertyTypes
-        {
-            get
-            {
-                return propertyTypes;
-            }
-            set
-            {
-                propertyTypes = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        public ObservableCollection<TypeModel> BackgroundPropertyTypes
-        {
-            get
-            {
-                return backgroundPropertyTypes;
-            }
-            set
-            {
-                backgroundPropertyTypes = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        public ObservableCollection<TypeModel> RequirementTypes
-        {
-            get
-            {
-                return requirementTypes;
-            }
-            set
-            {
-                requirementTypes = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        public ObservableCollection<TypeModel> BackgroundRequirementTypes
-        {
-            get
-            {
-                return backgroundRequirementTypes;
-            }
-            set
-            {
-                backgroundRequirementTypes = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        public ObservableCollection<TypeModel> Types
+        private TD.ObservableItemCollection<TypeModel> types = new TD.ObservableItemCollection<TypeModel>();
+        public TD.ObservableItemCollection<TypeModel> Types
         {
             get
             {
@@ -190,32 +43,20 @@ namespace Sculptor.ViewModels
 
         }
 
-        public ObservableCollection<TypeModel> BackgroundTypes
-        {
-            get
-            {
-                return backgroundTypes;
-            }
-            set
-            {
-                backgroundTypes = value;
-                OnPropertyChanged();
-            }
-
-        }
-
-        public ObservableCollectionWithItemChanged<TypeModel> SelectedItems
+        private ObservableItemCollection<TypeModel> selectedItems;
+        public ObservableItemCollection<TypeModel> SelectedItems
         {
             get
             {
                 if (selectedItems == null)
                 {
-                    selectedItems = new ObservableCollectionWithItemChanged<TypeModel>();
+                    selectedItems = new ObservableItemCollection<TypeModel>();
                 }
                 return selectedItems;
             }
         }
 
+        private TypeModel selectedItem;
         public TypeModel SelectedItem
         {
             get
@@ -232,12 +73,14 @@ namespace Sculptor.ViewModels
             }
         }
 
+        private CollectionViewSource filteredTypes;
         public CollectionViewSource FilteredTypes
         {
             get { return filteredTypes; }
             set { filteredTypes = value; }
         }
 
+        private bool isChanged;
         public bool IsChanged
         {
             get
@@ -254,70 +97,24 @@ namespace Sculptor.ViewModels
             }
         }
 
-        public bool IsObjectTypePopupOpen
+        private bool closeTrigger;
+        public bool CloseTrigger
         {
             get
             {
-                return this.isObjectTypePopupOpen;
+                return this.closeTrigger;
             }
             set
             {
-                if (value != this.isObjectTypePopupOpen)
+                if (value != this.closeTrigger)
                 {
-                    this.isObjectTypePopupOpen = value;
+                    this.closeTrigger = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        public bool IsTemplateTypePopupOpen
-        {
-            get
-            {
-                return this.isTemplateTypePopupOpen;
-            }
-            set
-            {
-                if (value != this.isTemplateTypePopupOpen)
-                {
-                    this.isTemplateTypePopupOpen = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public bool IsPropertyTypePopupOpen
-        {
-            get
-            {
-                return this.isPropertyTypePopupOpen;
-            }
-            set
-            {
-                if (value != this.isPropertyTypePopupOpen)
-                {
-                    this.isPropertyTypePopupOpen = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public bool IsRequirementTypePopupOpen
-        {
-            get
-            {
-                return this.isRequirementTypePopupOpen;
-            }
-            set
-            {
-                if (value != this.isRequirementTypePopupOpen)
-                {
-                    this.isRequirementTypePopupOpen = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
+        private string typeGroup;
         public string TypeGroup
         {
             get
@@ -333,122 +130,133 @@ namespace Sculptor.ViewModels
                 }
             }
         }
+
+        private string filterText;
+        public string FilterText
+        {
+            get { return this.filterText; }
+            set
+            {
+                if (value == this.filterText) return;
+                this.filterText = value;
+                this.OnPropertyChanged();
+                this.Filter = string.IsNullOrEmpty(this.filterText) ? (Predicate<object>)null : this.IsMatch;
+            }
+        }
+
+        private Predicate<object> filter;
+        public Predicate<object> Filter
+        {
+            get { return this.filter; }
+            private set
+            {
+                this.filter = value;
+                this.OnPropertyChanged();
+            }
+        }
+
+        private ObservableCollection<string> typeGroups = new ObservableCollection<string>();
+        public ObservableCollection<string> TypeGroups
+        {
+            get { return typeGroups; }
+            set
+            {
+                typeGroups = value;
+                OnPropertyChanged();
+            }
+
+        }
+
         #endregion
 
         #region Commands
-
+        private ICommand saveCommand;
         public ICommand SaveCommand
         {
             get
             {
                 if (saveCommand == null)
-                {
-                    saveCommand = new RelayCommand(
-                        p => this.CanSave(),
-                        p => this.Save());
-                }
+                    saveCommand = new RelayCommand(p => true, p => this.Save());
                 return saveCommand;
             }
         }
 
+        private ICommand addCommand;
         public ICommand AddCommand
         {
             get
             {
                 if (addCommand == null)
-                {
-                    addCommand = new RelayCommand(
-                        p => this.CanAdd(),
-                        p => this.Add());
-                }
+                    addCommand = new RelayCommand(p => true, p => this.Add());
                 return addCommand;
             }
         }
 
+        private ICommand deleteCommand;
         public ICommand DeleteCommand
         {
             get
             {
                 if (deleteCommand == null)
-                {
-                    deleteCommand = new RelayCommand(
-                        p => this.CanDelete(),
-                        p => this.Delete());
-                }
+                    deleteCommand = new RelayCommand(p => true, p => this.Delete());
                 return deleteCommand;
             }
         }
 
-        public ICommand ChangeTypeCommand
+        private ICommand selectTypeCommand;
+        public ICommand SelectTypeCommand
         {
             get
             {
-                if (changeTypeCommand == null)
-                {
-                    changeTypeCommand = new RelayCommand(
-                        p => this.CanChangeType(),
-                        p => this.ChangeType(p));
-                }
-                return changeTypeCommand;
+                if (selectTypeCommand == null)
+                    selectTypeCommand = new RelayCommand( p => true, p => this.SelectType(p));
+                return selectTypeCommand;
             }
         }
 
+        private ICommand cancelTypeCommand;
         public ICommand CancelTypeCommand
         {
             get
             {
                 if (cancelTypeCommand == null)
-                {
-                    cancelTypeCommand = new RelayCommand(
-                        p => this.CanCancelType(),
-                        p => this.CancelType(p));
-                }
+                    cancelTypeCommand = new RelayCommand( p => true, p => this.CancelType(p));
                 return cancelTypeCommand;
             }
         }
 
+        private ICommand editTypeCommand;
         public ICommand EditTypeCommand
         {
             get
             {
                 if (editTypeCommand == null)
-                {
-                    editTypeCommand = new RelayCommand(
-                        p => this.CanEditType(),
-                        p => this.EditType(p));
-                }
+                    editTypeCommand = new RelayCommand( p => true, p => this.EditType(p));
                 return editTypeCommand;
             }
         }
 
+        private ICommand addTypeCommand;
         public ICommand AddTypeCommand
         {
             get
             {
                 if (addTypeCommand == null)
-                {
-                    addTypeCommand = new RelayCommand(
-                        p => this.CanAddType(),
-                        p => this.AddType(p));
-                }
+                    addTypeCommand = new RelayCommand( p => true, p => this.AddType(p));
                 return addTypeCommand;
             }
         }
 
+        private ICommand getImageFromFileCommand;
         public ICommand GetImageFromFileCommand
         {
             get
             {
                 if (getImageFromFileCommand == null)
-                {
-                    getImageFromFileCommand = new RelayCommand(
-                        p => this.CanGetImageFromFile(),
-                        p => this.GetImageFromFile(p));
-                }
+                    getImageFromFileCommand = new RelayCommand( p => true, p => this.GetImageFromFile(p));
                 return getImageFromFileCommand;
             }
         }
-
         #endregion
 
         #region Events
@@ -477,11 +285,6 @@ namespace Sculptor.ViewModels
             backgroundWorker.DoWork -= this.OnLoadInBackground;
             backgroundWorker.RunWorkerCompleted -= OnLoadInBackgroundCompleted;
 
-            ObjectTypes = BackgroundObjectTypes;
-            TemplateTypes = BackgroundTemplateTypes;
-            PropertyTypes = BackgroundPropertyTypes;
-            RequirementTypes = BackgroundRequirementTypes;
-            Types = BackgroundTypes;
         }
 
         #endregion
@@ -500,9 +303,6 @@ namespace Sculptor.ViewModels
             {
                 foreach (tblType Rec in (from o in eDB.tblTypes where (o.Project_ID == Globals.Project_ID) orderby o.ShowOrder select o))
                 {
-                    //var xmlRec = pl.SingleOrDefault(x => x.ID == Rec.ID);
-                    //if ((xmlRec) != null) expanded = xmlRec.IsExpanded;
-
                     TypeModel typeItem = new TypeModel
                     {
                         ID = Rec.ID,
@@ -514,31 +314,15 @@ namespace Sculptor.ViewModels
                         TypeGroup = Rec.TypeGroup,
                         IsChanged = false,
                     };
-
-                    switch (typeItem.TypeGroup)
-                    {
-                        case "Object":
-                            BackgroundObjectTypes.Add(typeItem);
-                            break;
-                        case "Template":
-                            BackgroundTemplateTypes.Add(typeItem);
-                            break;
-                        case "Property":
-                            BackgroundPropertyTypes.Add(typeItem);
-                            break;
-                        case "Requirement":
-                            BackgroundRequirementTypes.Add(typeItem);
-                            break;
-                    }
-                    BackgroundTypes.Add(typeItem);
+                    Types.Add(typeItem);
                 }
+
+                TypeGroups.Add("Object");
+                TypeGroups.Add("Property");
+                TypeGroups.Add("Template");
+                TypeGroups.Add("Requirement");
             }
             IsChanged = false;
-        }
-
-        private bool CanAdd()
-        {
-            return true;
         }
 
         public void Add()
@@ -547,36 +331,46 @@ namespace Sculptor.ViewModels
         }
 
 
-        private bool CanDelete()
-        {
-            return true;
-        }
-
         private void Delete()
         {
-            SelectedItem.IsDeleted = true;
-            SelectedItem.IsChanged = false;
-            SelectedItem.IsNew = false;
-            IsChanged = true;
-        }
-
-        private bool CanSave()
-        {
-            return true;
+            // ToDo: Deleting items in the collection only works using the Del key for now. 
+            // Implement delete method to also provide option using context menu
         }
 
         public void Save()
         {
             EDBEntities eDB = new EDBEntities();
-            // ToDo: fix this mess
-            foreach (var typeItem in ObjectTypes)
-                SaveTypeItem(eDB, typeItem);
-            foreach (var typeItem in TemplateTypes)
-                SaveTypeItem(eDB, typeItem);
-            foreach (var typeItem in PropertyTypes)
-                SaveTypeItem(eDB, typeItem);
-            foreach (var typeItem in RequirementTypes)
-                SaveTypeItem(eDB, typeItem);
+            foreach (var typeItem in Types)
+            {
+                if (typeItem.IsNew)
+                {
+                    tblType NewRec = new tblType();
+                    var Rec = eDB.tblTypes.Add(NewRec);
+                    Rec.Type = typeItem.Type;
+                    Rec.Description = typeItem.Description;
+                    Rec.Image = typeItem.Image;
+                    Rec.TypeGroup = typeItem.TypeGroup;
+                    Rec.ShowOrder = typeItem.ShowOrder;
+                    Rec.Project_ID = Globals.Project_ID;
+                    typeItem.IsNew = false;
+                    typeItem.IsChanged = false;
+                }
+                if (typeItem.IsChanged)
+                {
+                    tblType Rec = eDB.tblTypes.Where(o => o.ID == typeItem.ID).FirstOrDefault();
+                    Rec.Type = typeItem.Type;
+                    Rec.Description = typeItem.Description;
+                    Rec.Image = typeItem.Image;
+                    Rec.ShowOrder = typeItem.ShowOrder;
+                    typeItem.IsChanged = false;
+                }
+                if (typeItem.IsDeleted)
+                {
+                    tblType Rec = eDB.tblTypes.Where(o => o.ID == typeItem.ID).FirstOrDefault();
+                    if (Rec != null)
+                        eDB.tblTypes.Remove(Rec);
+                }
+            }
             try
             {
                 eDB.SaveChanges();
@@ -621,7 +415,7 @@ namespace Sculptor.ViewModels
 
         private int GetObjectType_ID(string objectType)
         {
-            TypeModel typeItem = ObjectTypes.Single(x => x.Type == objectType);
+            TypeModel typeItem = Types.Single(x => x.Type == objectType);
             return typeItem.ID;
         }
 
@@ -634,12 +428,16 @@ namespace Sculptor.ViewModels
             return null;
         }
 
-        private bool CanChangeType()
+        public TypeModel GetType(string type)
         {
-            return true;
+            foreach (var typeItem in Types)
+            {
+                if (typeItem.Type == type) return typeItem;
+            }
+            return null;
         }
 
-        private void ChangeType(object p)
+        private void SelectType(object p)
         {
             if (p != null)
             {
@@ -650,57 +448,32 @@ namespace Sculptor.ViewModels
                     case "Object":
                         foreach (var item in ObjectViewModelLocator.GetObjectVM().SelectedItems)
                             item.ObjectType_ID = type.ID;
-                        IsObjectTypePopupOpen = false;
+                        break;
+                    case "ControlObject":
+                        foreach (var item in ControlObjectViewModelLocator.GetControlObjectVM().SelectedItems)
+                            item.ControlObjectType_ID = type.ID;
                         break;
                     case "Template":
                         foreach (var item in TemplateViewModelLocator.GetTemplateVM().SelectedItems)
                             item.TemplateType_ID = type.ID;
-                        IsTemplateTypePopupOpen = false;
                         break;
                     case "Property":
                         foreach (var item in PropertyViewModelLocator.GetPropertyVM().SelectedItems)
                             item.PropertyType_ID = type.ID;
-                        IsPropertyTypePopupOpen = false;
                         break;
                     case "Requirement":
                         foreach (var item in RequirementViewModelLocator.GetRequirementVM().SelectedItems)
                             item.RequirementType_ID = type.ID;
-                        IsRequirementTypePopupOpen = false;
                         break;
                 }
+                CloseTrigger = true;
 
             }
-        }
-
-        private bool CanCancelType()
-        {
-            return true;
         }
 
         private void CancelType(object p)
         {
-            var group = (p as string);
-            switch (group)
-            {
-                case "Object":
-                    IsObjectTypePopupOpen = false;
-                    break;
-                case "Template":
-                    IsTemplateTypePopupOpen = false;
-                    break;
-                case "Property":
-                    IsPropertyTypePopupOpen = false;
-                    break;
-                case "Requirement":
-                    IsRequirementTypePopupOpen = false;
-                    break;
-            }
-
-        }
-
-        private bool CanEditType()
-        {
-            return true;
+            CloseTrigger = true;
         }
 
         private void EditType(object p)
@@ -708,36 +481,8 @@ namespace Sculptor.ViewModels
             TypeGroup = p as string;
             var typeEditDialog = new TypeEditDialog();
             typeEditDialog.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            switch (TypeGroup)
-            {
-                case "Object":
-                    IsObjectTypePopupOpen = false;
-                    typeEditDialog.TypeListView.ItemsSource = ObjectTypes;
-                    typeEditDialog.ShowDialog();
-                    break;
-                case "Template":
-                    IsTemplateTypePopupOpen = false;
-                    typeEditDialog.TypeListView.ItemsSource = TemplateTypes;
-                    typeEditDialog.ShowDialog();
-                    break;
-                case "Property":
-                    IsPropertyTypePopupOpen = false;
-                    typeEditDialog.TypeListView.ItemsSource = PropertyTypes;
-                    typeEditDialog.ShowDialog();
-                    break;
-                case "Requirement":
-                    IsRequirementTypePopupOpen = false;
-                    typeEditDialog.TypeListView.ItemsSource = RequirementTypes;
-                    typeEditDialog.ShowDialog();
-                    break;
-
-            }
-        }
-
-        private bool CanAddType()
-        {
-            return true;
+            CloseTrigger = true;
+            typeEditDialog.ShowDialog();
         }
 
         private void AddType(object p)
@@ -748,35 +493,17 @@ namespace Sculptor.ViewModels
                 Type = "New Type",
                 Description = "Type Description",
                 // Use the default image with question mark from resources 
-                Image = (byte[])Converter.ConvertBack(Resources.NewItem, typeof(byte[]), null, null)
+                Image = (byte[])Converter.ConvertBack(Resources.NewItem, typeof(byte[]), null, null),
+                TypeGroup = "Object",
+                IsNew = true
             };
             typeItem.IsNew = true;
-            switch (TypeGroup)
-            {
-                case "Object":
-                    ObjectTypes.Add(typeItem);
-                    break;
-                case "Template":
-                    TemplateTypes.Add(typeItem);
-                    break;
-                case "Property":
-                    PropertyTypes.Add(typeItem);
-                    break;
-                case "Requirement":
-                    RequirementTypes.Add(typeItem);
-                    break;
-            }
             Types.Add(typeItem);
         }
 
         public int GetTypeGroupID(string TypeGroup)
         {
-            return Types.FirstOrDefault(t => t.TypeGroup == TypeGroup).ID;
-        }
-
-        private bool CanGetImageFromFile()
-        {
-            return true;
+            return Types.LastOrDefault(t => t.TypeGroup == TypeGroup).ID;
         }
 
         private void GetImageFromFile(object p)
@@ -798,6 +525,38 @@ namespace Sculptor.ViewModels
             {
                 RadWindow.Alert(ex.Message.ToString());
             }
+        }
+
+        private bool IsMatch(object item)
+        {
+            return IsMatch((TypeModel)item, this.filterText);
+        }
+
+        /// <summary>
+        /// Filters out Types that are part of a group (e.g. Object, Template etc). The FilterText is the TypeGroup
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="filterText"></param>
+        /// <returns></returns>
+        private static bool IsMatch(TypeModel item, string filterText)
+        {
+            if (string.IsNullOrEmpty(filterText))
+            {
+                return true;
+            }
+
+            var name = item.TypeGroup;
+            if (string.IsNullOrEmpty(name))
+            {
+                return false;
+            }
+
+            if (filterText.Length == 1)
+            {
+                return name.StartsWith(filterText, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return name.IndexOf(filterText, 0, StringComparison.OrdinalIgnoreCase) >= 0;
         }
         #endregion
     }

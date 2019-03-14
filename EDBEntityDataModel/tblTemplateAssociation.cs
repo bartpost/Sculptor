@@ -14,6 +14,7 @@ namespace Sculptor.EDBEntityDataModel
     
     public partial class tblTemplateAssociation
     {
+        public System.Guid ID { get; set; }
         public int Project_ID { get; set; }
         public System.Guid Template_ID { get; set; }
         public System.Guid Association_ID { get; set; }

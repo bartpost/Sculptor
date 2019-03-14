@@ -1,55 +1,44 @@
 ﻿using Sculptor.EDBEntityDataModel;
 using Sculptor.ViewModels;
+using Sculptor.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
+using System.Xml.Serialization;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.TreeListView;
+using Telerik.Windows.Data;
+using TD = Telerik.Windows.Data;
 
 namespace Sculptor
 {
     public class TemplateViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private ObservableCollectionWithItemChanged<TemplateModel> templates;
-        private ObservableCollectionWithItemChanged<TemplateModel> backgroundTemplates = new ObservableCollectionWithItemChanged<TemplateModel>();
-        private ObservableCollection<TemplateTypeModel> templateTypes = new ObservableCollection<TemplateTypeModel>();
-        private TemplateModel selectedItem;
-        private ObservableCollectionWithItemChanged<TemplateModel> selectedItems;
-        private ObservableCollectionWithItemChanged<TemplateModel> copiedItems;
-        private bool isChanged;
-        private ICommand refreshCommand;
-        private ICommand saveCommand;
-        private ICommand addSiblingCommand;
-        private ICommand addChildCommand;
-        private ICommand deleteCommand;
-        private ICommand changeTypeCommand;
-        private ICommand cutCommand;
-        private ICommand copyCommand;
-        private ICommand pasteCommand;
-
         #region Constructor
         public TemplateViewModel()
         {
             // Load the templates in background
-            var backgroundWorker = new BackgroundWorker();
-            backgroundWorker.DoWork += this.OnLoadInBackground;
-            backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
-            backgroundWorker.RunWorkerAsync();
+            //var backgroundWorker = new BackgroundWorker();
+            //backgroundWorker.DoWork += this.OnLoadInBackground;
+            //backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
+            //backgroundWorker.RunWorkerAsync();
+            Load(null);
         }
         #endregion
 
         #region Properties
 
-        public ObservableCollectionWithItemChanged<TemplateModel> Templates
+        private TD.ObservableItemCollection<TemplateModel> templates = new TD.ObservableItemCollection<TemplateModel>();
+        public TD.ObservableItemCollection<TemplateModel> Templates
         {
-            get
-            {
-                return templates;
-            }
+            get { return templates; }
             set
             {
                 templates = value;
@@ -57,62 +46,50 @@ namespace Sculptor
             }
         }
 
-        public ObservableCollectionWithItemChanged<TemplateModel> BackgroundTemplates
-        {
-            get
-            {
-                return backgroundTemplates;
-            }
-            set
-            {
-                backgroundTemplates = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public ObservableCollectionWithItemChanged<TemplateModel> SelectedItems
+        private TD.ObservableItemCollection<TemplateModel> selectedItems;
+        public TD.ObservableItemCollection<TemplateModel> SelectedItems
         {
             get
             {
                 if (selectedItems == null)
                 {
-                    selectedItems = new ObservableCollectionWithItemChanged<TemplateModel>();
+                    selectedItems = new TD.ObservableItemCollection<TemplateModel>();
                 }
                 return selectedItems;
             }
         }
 
-        public ObservableCollectionWithItemChanged<TemplateModel> CopiedItems
+        private TD.ObservableItemCollection<TemplateModel> copiedItems;
+        public TD.ObservableItemCollection<TemplateModel> CopiedItems
         {
             get
             {
                 if (copiedItems == null)
                 {
-                    copiedItems = new ObservableCollectionWithItemChanged<TemplateModel>();
+                    copiedItems = new TD.ObservableItemCollection<TemplateModel>();
                 }
                 return copiedItems;
             }
         }
 
-        public ObservableCollection<TemplateTypeModel> TemplateTypes
+        private CollectionViewSource filteredTemplates;
+        public CollectionViewSource FilteredTemplates
         {
-            get
+            get { return filteredTemplates; }
+            set
             {
-                if (templateTypes == null)
+                if (value != filteredTemplates)
                 {
-                    templateTypes = new ObservableCollection<TemplateTypeModel>();
+                    filteredTemplates = value;
+                    OnPropertyChanged();
                 }
-                return templateTypes;
             }
-
         }
 
+        private TemplateModel selectedItem;
         public TemplateModel SelectedItem
         {
-            get
-            {
-                return this.selectedItem;
-            }
+            get { return this.selectedItem; }
             set
             {
                 if (value != this.selectedItem)
@@ -131,12 +108,10 @@ namespace Sculptor
             }
         }
 
+        private bool isChanged;
         public bool IsChanged
         {
-            get
-            {
-                return this.isChanged;
-            }
+            get { return this.isChanged; }
             set
             {
                 if (value != this.isChanged)
@@ -147,133 +122,157 @@ namespace Sculptor
             }
         }
 
+        private bool isLoaded = false;
+        public bool IsLoaded
+        {
+            get { return this.isLoaded; }
+            set
+            {
+                if (value != this.isLoaded)
+                {
+                    this.isLoaded = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool isBusy;
+        public bool IsBusy
+        {
+            get { return this.isBusy; }
+            set
+            {
+                if (value != this.isBusy)
+                {
+                    this.isBusy = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         #endregion
 
         #region Commands
 
+        private ICommand refreshCommand;
         public ICommand RefreshCommand
         {
             get
             {
                 if (refreshCommand == null)
-                {
-                    refreshCommand = new RelayCommand(
-                        p => this.CanRefresh(),
-                        p => this.Refresh());
-                }
+                     refreshCommand = new RelayCommand(p => true, p => this.Refresh());
                 return refreshCommand;
             }
         }
 
+        private ICommand saveCommand;
         public ICommand SaveCommand
         {
             get
             {
                 if (saveCommand == null)
-                {
-                    saveCommand = new RelayCommand(
-                        p => this.CanSave(),
-                        p => this.Save());
-                }
+                    saveCommand = new RelayCommand(p => true, p => this.Save());
                 return saveCommand;
             }
         }
 
+        private ICommand addSiblingCommand;
         public ICommand AddSiblingCommand
         {
             get
             {
                 if (addSiblingCommand == null)
-                {
-                    addSiblingCommand = new RelayCommand(
-                        p => this.CanAddSibling(),
-                        p => this.AddSibling());
-                }
-                return addSiblingCommand;
+                    addSiblingCommand = new RelayCommand(p => true, p => this.AddSibling());
+                 return addSiblingCommand;
             }
         }
 
+        private ICommand addChildCommand;
         public ICommand AddChildCommand
         {
             get
             {
                 if (addChildCommand == null)
-                {
-                    addChildCommand = new RelayCommand(
-                        p => this.CanAddChild(),
-                        p => this.AddChild());
-                }
+                    addChildCommand = new RelayCommand(p => true, p => this.AddChild());
+
                 return addChildCommand;
             }
         }
 
+        private ICommand deleteCommand;
         public ICommand DeleteCommand
         {
             get
             {
                 if (deleteCommand == null)
-                {
-                    deleteCommand = new RelayCommand(
-                        p => this.CanDelete(),
-                        p => this.Delete());
-                }
+                    deleteCommand = new RelayCommand(p => true, p => this.Delete());
                 return deleteCommand;
             }
         }
 
+        private ICommand changeTypeCommand;
         public ICommand ChangeTypeCommand
         {
             get
             {
                 if (changeTypeCommand == null)
-                {
-                    changeTypeCommand = new RelayCommand(
-                        p => this.CanChangeType(),
-                        p => this.ChangeType(p));
-                }
+                    changeTypeCommand = new RelayCommand(p => true, p => this.ChangeType(p));
                 return changeTypeCommand;
             }
         }
 
+        private ICommand cutCommand;
         public ICommand CutCommand
         {
             get
             {
                 if (cutCommand == null)
-                {
-                    cutCommand = new RelayCommand(
-                        p => this.CanCut(),
-                        p => this.Cut());
-                }
+                    cutCommand = new RelayCommand(p => this.CanCut(), p => this.Cut());
                 return cutCommand;
             }
         }
 
+        private ICommand copyCommand;
         public ICommand CopyCommand
         {
             get
             {
                 if (copyCommand == null)
-                {
-                    copyCommand = new RelayCommand(
-                        p => this.CanCopy(),
-                        p => this.Copy());
-                }
+                    copyCommand = new RelayCommand(p => this.CanCopy(), p => this.Copy());
                 return copyCommand;
             }
         }
 
+        private ICommand pasteCommand;
         public ICommand PasteCommand
         {
             get
             {
                 if (pasteCommand == null)
-                {
-                    pasteCommand = new RelayCommand(
-                        p => this.CanPaste(),
-                        p => this.Paste());
-                }
+                    pasteCommand = new RelayCommand(p => this.CanPaste(), p => this.Paste());
                 return pasteCommand;
+            }
+        }
+
+        private ICommand loadTreeStateCommand;
+        public ICommand LoadTreeStateCommand
+        {
+            get
+            {
+                if (loadTreeStateCommand == null)
+                    loadTreeStateCommand = new RelayCommand(p => true, p => this.LoadTreeState());
+                return loadTreeStateCommand;
+            }
+        }
+
+        private ICommand saveTreeStateCommand;
+        public ICommand SaveTreeStateCommand
+        {
+            get
+            {
+                if (saveTreeStateCommand == null)
+                    saveTreeStateCommand = new RelayCommand(p => true, p => this.SaveTreeState());
+                return saveTreeStateCommand;
             }
         }
         #endregion
@@ -287,19 +286,31 @@ namespace Sculptor
 
         private void OnLoadInBackground(object sender, DoWorkEventArgs e)
         {
+            IsBusy = true;
+            Templates.SuspendNotifications();
+
+            // Load Object Types;
             TypeViewModelLocator.GetTypeVM();
+            // Load Objects
             Load(null);
         }
 
         private void OnLoadInBackgroundCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            var backgroundWorker = sender as BackgroundWorker;
+            // CollectionView to filter the TreeListView
+            // Note: Data is manipulated in the Templates collection
+            FilteredTemplates = new CollectionViewSource { Source = Templates };
+            FilteredTemplates.Filter += TemplateFilter;
+
+            Templates.ResumeNotifications();
+            //LoadTreeState();
+            IsLoaded = true;
+            this.IsBusy = false;
 
             //Dispose events
+            var backgroundWorker = sender as BackgroundWorker;
             backgroundWorker.DoWork -= this.OnLoadInBackground;
             backgroundWorker.RunWorkerCompleted -= this.OnLoadInBackgroundCompleted;
-
-            Templates = BackgroundTemplates;
         }
         #endregion
 
@@ -310,9 +321,9 @@ namespace Sculptor
         /// <param name="Project_ID"></param>
         /// <param name="Parent_ID"></param>
         /// <returns>Observable collection of VMObjects</returns>
-        private ObservableCollectionWithItemChanged<TemplateModel> Load(Guid? Parent_ID)
+        private TD.ObservableItemCollection<TemplateModel> Load(Guid? Parent_ID)
         {
-            ObservableCollectionWithItemChanged<TemplateModel> childTemplates = new ObservableCollectionWithItemChanged<TemplateModel>();
+            TD.ObservableItemCollection<TemplateModel> childTemplates = new TD.ObservableItemCollection<TemplateModel>();
 
             using (EDBEntities eDB = new EDBEntities())
             {
@@ -334,21 +345,16 @@ namespace Sculptor
 
                     templateItem.ChildTemplates = Load(Rec.ID);
 
-                    //        // If the parent ID is null, this is a root object and needs to be added to the VM class
-                    //        // Else it is a child object which needs to be added to the childobjectlist
+                    //        // If the parent ID is null, this is a root template and needs to be added to the VM class
+                    //        // Else it is a child object which needs to be added to the ChildTemplate list
                     if (Rec.Parent_ID == null)
-                        BackgroundTemplates.Add(templateItem);
+                        Templates.Add(templateItem);
                     else
                         childTemplates.Add(templateItem);
 
                 }
             }
-                return childTemplates;
-        }
-
-        private bool CanAddSibling()
-        {
-            return true;
+            return childTemplates;
         }
 
         /// <summary>
@@ -366,7 +372,7 @@ namespace Sculptor
                 IsNew = true,
                 IsDeleted = false,
                 TemplateType_ID = TypeViewModelLocator.GetTypeVM().GetTypeGroupID("Template"),
-                ChildTemplates = new ObservableCollectionWithItemChanged<TemplateModel>()
+                ChildTemplates = new TD.ObservableItemCollection<TemplateModel>()
             };
 
 
@@ -389,11 +395,6 @@ namespace Sculptor
 
         }
 
-        private bool CanAddChild()
-        {
-            return true;
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -409,7 +410,7 @@ namespace Sculptor
                 IsNew = true,
                 IsDeleted = false,
                 TemplateType_ID = TypeViewModelLocator.GetTypeVM().GetTypeGroupID("Template"),
-                ChildTemplates = new ObservableCollectionWithItemChanged<TemplateModel>()
+                ChildTemplates = new TD.ObservableItemCollection<TemplateModel>()
             };
             if (SelectedItem != null)
             {
@@ -418,31 +419,13 @@ namespace Sculptor
             }
         }
 
-        private bool CanDelete()
-        {
-            return true;
-        }
-
         /// <summary>
         /// 
         /// </summary>
         private void Delete()
         {
-            SelectedItem.IsChanged = false;
-            SelectedItem.IsNew = false;
-            SelectedItem.IsDeleted = true;
-            if (SelectedItem.ChildTemplates != null)
-                foreach (var childItem in SelectedItem.ChildTemplates)
-                {
-                    childItem.IsChanged = false;
-                    childItem.IsNew = false;
-                    childItem.IsDeleted = true;
-                }
-        }
-
-        private bool CanSave()
-        {
-            return true;
+            // ToDo: Deleting items in the collection only works using the Del key for now. 
+            // Implement delete method to also provide option using context menu
         }
 
         /// <summary>
@@ -451,15 +434,34 @@ namespace Sculptor
         public void Save()
         {
             EDBEntities eDB = new EDBEntities();
+
+            // To determine which items have been deleted in the collection, get all objects of the project stored in the database table first
+            var tblTemplates = eDB.tblTemplates.Where(p => p.Project_ID == Globals.Project_ID);
+
+            // Check if each template of the table exists in the templates collection
+            // if not, delete the template in the table
+            foreach (var templateRec in tblTemplates)
+            {
+                var templateItem = GetTemplate(templateRec.ID);
+                if (templateItem == null) // template not found in collection
+                    eDB.tblTemplates.Remove(templateRec);
+            }
+
+            // Add and update templates recursively
             SaveLevel(Templates, eDB);
             try
             { 
                 eDB.SaveChanges();
             }
             catch (Exception ex)
-            { 
-                RadWindow.Alert("Fault while saving templates: " + ex.Message);
+            {
+                RadWindow.Alert(new DialogParameters()
+                {
+                    Header = "Error",
+                    Content = "Fault while saving templates:\n" + ex.Message
+                });
             }
+            SaveTreeState();
         }
 
         /// <summary>
@@ -467,42 +469,47 @@ namespace Sculptor
         /// </summary>
         private void SaveLevel(ObservableCollection<TemplateModel> treeLevel, EDBEntities eDB)
         {
-            if (treeLevel != null)
+            try
             {
-                foreach (var templateItem in treeLevel)
+                if (treeLevel != null)
                 {
+                    foreach (var templateItem in treeLevel)
+                    {
 
-                    if (templateItem.IsNew)
-                    {
-                        tblTemplate NewRec = new tblTemplate();
-                        var Rec = eDB.tblTemplates.Add(NewRec);
-                        Rec.ID = templateItem.ID;
-                        Rec.Parent_ID = templateItem.Parent_ID;
-                        Rec.TemplateName = templateItem.TemplateName;
-                        Rec.Description = templateItem.Description;
-                        Rec.TemplateType_ID = templateItem.TemplateType_ID;
-                        Rec.Project_ID = templateItem.Project_ID;
-                        templateItem.IsNew = false;
+                        if (templateItem.IsNew)
+                        {
+                            tblTemplate NewRec = new tblTemplate();
+                            var Rec = eDB.tblTemplates.Add(NewRec);
+                            Rec.ID = templateItem.ID;
+                            Rec.Parent_ID = templateItem.Parent_ID;
+                            Rec.TemplateName = templateItem.TemplateName;
+                            Rec.Description = templateItem.Description;
+                            Rec.TemplateType_ID = templateItem.TemplateType_ID;
+                            Rec.Project_ID = templateItem.Project_ID;
+                            templateItem.IsNew = false;
+                        }
+                        if (templateItem.IsChanged)
+                        {
+                            tblTemplate Rec = eDB.tblTemplates.Where(o => o.ID == templateItem.ID).FirstOrDefault();
+                            Rec.Parent_ID = templateItem.Parent_ID;
+                            Rec.TemplateName = templateItem.TemplateName;
+                            Rec.Description = templateItem.Description;
+                            Rec.TemplateType_ID = templateItem.TemplateType_ID;
+                            Rec.Project_ID = templateItem.Project_ID;
+                            templateItem.IsChanged = false;
+                        }
+                        // Recursive call
+                        if (templateItem.ChildTemplates != null) SaveLevel(templateItem.ChildTemplates, eDB);
                     }
-                    if (templateItem.IsChanged)
-                    {
-                        tblTemplate Rec = eDB.tblTemplates.Where(o => o.ID == templateItem.ID).FirstOrDefault();
-                        Rec.Parent_ID = templateItem.Parent_ID;
-                        Rec.TemplateName = templateItem.TemplateName;
-                        Rec.Description = templateItem.Description;
-                        Rec.TemplateType_ID = templateItem.TemplateType_ID;
-                        Rec.Project_ID = templateItem.Project_ID;
-                        templateItem.IsChanged = false;
-                    }
-                    if (templateItem.IsDeleted)
-                    {
-                        tblTemplate Rec = eDB.tblTemplates.Where(o => o.ID == templateItem.ID).FirstOrDefault();
-                        if (Rec != null)
-                            eDB.tblTemplates.Remove(Rec);
-                    }
-                    // Recursive call
-                    if (templateItem.ChildTemplates != null) SaveLevel(templateItem.ChildTemplates, eDB);
                 }
+            }
+            catch (Exception ex)
+            {
+                RadWindow.Alert(new DialogParameters()
+                {
+                    Header = "Error",
+                    Content = "Fault while adding/updating to database:\n" + ex.Message
+                });
             }
         }
 
@@ -518,6 +525,7 @@ namespace Sculptor
         {
             Templates.Clear();
             Load(null);
+            LoadTreeState();
         }
 
 
@@ -562,7 +570,7 @@ namespace Sculptor
                 copiedTemplateItem.Description = templateItem.Description;
                 copiedTemplateItem.IsChanged = false;
                 copiedTemplateItem.IsNew = true;
-                copiedTemplateItem.ChildTemplates = new ObservableCollectionWithItemChanged<TemplateModel>();
+                copiedTemplateItem.ChildTemplates = new TD.ObservableItemCollection<TemplateModel>();
 
                 if (SelectedItem == null)
                 {
@@ -595,7 +603,7 @@ namespace Sculptor
                 {
                     // Setup a private collection with the selected items only. This is because the SelectedItems that are part of the view model collection
                     // will change as soon as we start removing and adding objects
-                    ObservableCollectionWithItemChanged<TemplateModel> selectedItems = new ObservableCollectionWithItemChanged<TemplateModel>();
+                    TD.ObservableItemCollection<TemplateModel> selectedItems = new TD.ObservableItemCollection<TemplateModel>();
                     foreach (TemplateModel item in SelectedItems)
                     {
                         selectedItems.Add(item);
@@ -664,7 +672,7 @@ namespace Sculptor
         /// <param name="treeLevel"></param>
         /// <param name="searchItem"></param>
         /// <returns></returns>
-        private Boolean FindObject(ObservableCollection<TemplateModel> treeLevel, string searchItem)
+        private Boolean FindObject(TD.ObservableItemCollection<TemplateModel> treeLevel, string searchItem)
         {
             if (treeLevel == null) treeLevel = Templates;
             foreach (var templateItem in treeLevel)
@@ -683,7 +691,7 @@ namespace Sculptor
         /// <param name="searchItemID"></param>
         /// <param name="treeLevel"></param>
         /// <returns></returns>
-        public TemplateModel GetTemplate(Guid? searchItemID, ObservableCollectionWithItemChanged<TemplateModel> treeLevel = null)
+        public TemplateModel GetTemplate(Guid? searchItemID, TD.ObservableItemCollection<TemplateModel> treeLevel = null)
         {
             // Select the root level if the treeLevel = null
             if (treeLevel == null) treeLevel = Templates;
@@ -692,7 +700,7 @@ namespace Sculptor
                 // return the item if found on this level
                 if (templateItem.ID == searchItemID) return templateItem;
 
-                if (templateItem.ChildTemplates != null)
+                if (templateItem.ChildTemplates != null && templateItem.ChildTemplates.Count != 0)
                 {
                     // Recursively call the method to find the item in the ChildProperties
                     TemplateModel childTemplateItem = GetTemplate(searchItemID, templateItem.ChildTemplates);
@@ -709,10 +717,89 @@ namespace Sculptor
 
         private void ChangeType(object p)
         {
-            TypeViewModelLocator.GetTypeVM().IsTemplateTypePopupOpen = true;
+            // ToDo: Bad practice to call a view from the viewmodel. Fix using IOC
+            var typeSelectionPopup = new TypeSelectionPopup();
+            typeSelectionPopup.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            TypeViewModel typeViewModel = TypeViewModelLocator.GetTypeVM();
+            // Close the type selection box
+            typeViewModel.CloseTrigger = false;
+            typeViewModel.TypeGroup = "Template";
+            // Filter the type collection on the type group
+            typeViewModel.FilterText = typeViewModel.TypeGroup;
+            // To have one popup for all type groups (object, template, property etc) the popup is embedded in a dialog
+            typeSelectionPopup.ShowDialog();
         }
 
-    }
-    #endregion
+        public void TemplateFilter(object sender, FilterEventArgs e)
+        {
+            if (e.Item != null)
+                e.Accepted = (e.Item as TemplateModel).IsDeleted == false;
+        }
 
+
+        private void LoadTreeState()
+        {
+            TD.ObservableItemCollection<TemplateModel> isExpandedCollection;
+
+            XmlSerializer x = new XmlSerializer(typeof(TD.ObservableItemCollection<TemplateModel>));
+            //ToDo: put filename in configuration
+            var xmlFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Sculptor\\" + Globals.ContractNo + "_TemplateExpandedState.xml");
+            if (File.Exists(xmlFileName))
+            {
+                try
+                {
+                    using (var stream = new FileStream(xmlFileName, FileMode.Open))
+                    {
+                        isExpandedCollection = x.Deserialize(stream) as TD.ObservableItemCollection<TemplateModel>;
+                        LoadTreeStateRecursive(isExpandedCollection);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    RadWindow.Alert(new DialogParameters()
+                    {
+                        Header = "Error",
+                        Content = "Error while opening expansion state\n" + ex.Message
+                    });
+                }
+            }
+        }
+
+        private void LoadTreeStateRecursive(TD.ObservableItemCollection<TemplateModel> isExpandedCollectionLevel)
+        {
+            foreach (var item in isExpandedCollectionLevel)
+            {
+                var templateItem = GetTemplate(item.ID);
+                if (templateItem != null)
+                    templateItem.IsExpanded = item.IsExpanded;
+
+                if (templateItem.ChildTemplates.Count != 0)
+                    LoadTreeStateRecursive(item.ChildTemplates);
+            }
+
+        }
+
+        private void SaveTreeState()
+        {
+            XmlSerializer x = new XmlSerializer(typeof(TD.ObservableItemCollection<TemplateModel>));
+            //ToDo: put filename in configuration
+            var xmlFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Sculptor\\" + Globals.ContractNo + "_TemplateExpandedState.xml");
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(xmlFileName))
+                {
+                    x.Serialize(sw, Templates);
+                }
+            }
+            catch (Exception ex)
+            {
+                RadWindow.Alert(new DialogParameters()
+                {
+                    Header = "Error",
+                    Content = "Error while saving expansion state\n" + ex.Message
+                });
+            }
+        }
+        #endregion
+    }
 }

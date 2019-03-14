@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Data;
 
 namespace Sculptor
 {

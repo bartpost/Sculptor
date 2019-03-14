@@ -2,30 +2,29 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Data;
+using TD = Telerik.Windows.Data;
 
 namespace Sculptor
 {
     public class ObjectAssociationModel : ViewModelBase, INotifyPropertyChanged
     {
-        private int project_id;
-        private Guid object_id;
-        private Guid association_id;
-        private Nullable<Guid> associationParent_id;
-        private string name;
-        private string description;
-        private String value;
-        private bool isNew;
-        private bool isChanged;
-        private bool isDeleted;
-        private string associationType;
-        private int associationType_ID;
-        private ObservableCollectionWithItemChanged<ObjectAssociationModel> childAssociations;
-
-
+        #region Properties
         public ObjectAssociationModel()
         {
         }
 
+        private Guid id;
+        public Guid ID
+        {
+            get { return this.id; }
+            set
+            {
+                this.id = value;
+            }
+        }
+
+        private int project_id;
         public int Project_ID
         {
             get
@@ -38,6 +37,7 @@ namespace Sculptor
             }
         }
 
+        private Guid object_id;
         public Guid Object_ID
         {
             get
@@ -49,11 +49,11 @@ namespace Sculptor
                 if (object_id != value)
                 {
                     object_id = value;
-                    OnPropertyChanged();
                 }
             }
         }
 
+        private Guid association_id;
         public Guid Association_ID
         {
             get
@@ -65,11 +65,11 @@ namespace Sculptor
                 if (association_id != value)
                 {
                     association_id = value;
-                    OnPropertyChanged();
                 }
             }
         }
 
+        private Nullable<Guid> associationParent_id;
         public Nullable<Guid> AssociationParent_ID
         {
             get
@@ -81,12 +81,12 @@ namespace Sculptor
                 if (associationParent_id != value)
                 {
                     associationParent_id = value;
-                    OnPropertyChanged();
                 }
             }
         }
 
-        public ObservableCollectionWithItemChanged<ObjectAssociationModel> ChildAssociations
+        private TD.ObservableItemCollection<ObjectAssociationModel> childAssociations;
+        public TD.ObservableItemCollection<ObjectAssociationModel> ChildAssociations
         {
             get
             {
@@ -95,11 +95,12 @@ namespace Sculptor
             set
             {
                 this.childAssociations = value;
-                OnPropertyChanged();
+                //OnPropertyChanged();
             }
         }
 
         // Name can be the name of the class, the property or the class property
+        private string name;
         public string Name
         {
             get
@@ -109,10 +110,11 @@ namespace Sculptor
             set
             {
                 this.name = value;
-                OnPropertyChanged();
+                //OnPropertyChanged();
             }
         }
 
+        private string description;
         public string Description
         {
             get
@@ -122,10 +124,11 @@ namespace Sculptor
             set
             {
                 this.description = value;
-                OnPropertyChanged();
+                //OnPropertyChanged();
             }
         }
 
+        private String value;
         public string Value
         {
             get
@@ -142,6 +145,7 @@ namespace Sculptor
             }
         }
 
+        private string associationType;
         public string AssociationType
         {
             get
@@ -151,10 +155,11 @@ namespace Sculptor
             set
             {
                 this.associationType = value;
-                OnPropertyChanged();
+                //OnPropertyChanged();
             }
         }
 
+        private int associationType_ID;
         public int AssociationType_ID
         {
             get
@@ -164,10 +169,11 @@ namespace Sculptor
             set
             {
                 this.associationType_ID = value;
-                OnPropertyChanged();
+                //OnPropertyChanged();
             }
         }
 
+        private bool isNew;
         public bool IsNew
         {
             get
@@ -183,6 +189,7 @@ namespace Sculptor
             }
         }
 
+        private bool isChanged;
         public bool IsChanged
         {
             get
@@ -198,6 +205,7 @@ namespace Sculptor
             }
         }
 
+        private bool isDeleted;
         public bool IsDeleted
         {
             get
@@ -213,12 +221,15 @@ namespace Sculptor
                 }
             }
         }
+        #endregion
 
+        #region Events
         public new event PropertyChangedEventHandler PropertyChanged;
         private new void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             if (!isNew && !IsDeleted) isChanged = true;
         }
+        #endregion
     }
 }

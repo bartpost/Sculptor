@@ -6,32 +6,27 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
 using System;
+using TD = Telerik.Windows.Data;
 
 namespace Sculptor
 {
     public class AttributeViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private ObservableCollectionWithItemChanged<AttributeModel> attributes = new ObservableCollectionWithItemChanged<AttributeModel>();
-        private ObservableCollectionWithItemChanged<AttributeModel> backgroundAttributes = new ObservableCollectionWithItemChanged<AttributeModel>();
-        private AttributeModel selectedItem;
-        private ObservableCollectionWithItemChanged<AttributeModel> selectedItems;
-        private bool isChanged;
-        private bool isBusy;
-        private ICommand refreshCommand;
-        private ICommand saveCommand;
-        private ICommand addCommand;
-        private ICommand deleteCommand;
-
         #region Constructor
         public AttributeViewModel()
         {
-            // Load the root objects
+            //Load the objects in the background
+            //var backgroundWorker = new BackgroundWorker();
+            //backgroundWorker.DoWork += this.OnLoadInBackground;
+            //backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
+            //backgroundWorker.RunWorkerAsync();
             Load();
         }
         #endregion
 
         #region Properties
-        public ObservableCollectionWithItemChanged<AttributeModel> Attributes
+        private TD.ObservableItemCollection<AttributeModel> attributes = new TD.ObservableItemCollection<AttributeModel>();
+        public TD.ObservableItemCollection<AttributeModel> Attributes
         {
             get
             { 
@@ -44,19 +39,7 @@ namespace Sculptor
             }
         }
 
-        public ObservableCollectionWithItemChanged<AttributeModel> BackgroundAttributes
-        {
-            get
-            {
-                return backgroundAttributes;
-            }
-            set
-            {
-                backgroundAttributes = value;
-                OnPropertyChanged();
-            }
-        }
-
+        private AttributeModel selectedItem;
         public AttributeModel SelectedItem
         {
             get
@@ -73,18 +56,20 @@ namespace Sculptor
             }
         }
 
-        public ObservableCollectionWithItemChanged<AttributeModel> SelectedItems
+        private TD.ObservableItemCollection<AttributeModel> selectedItems;
+        public TD.ObservableItemCollection<AttributeModel> SelectedItems
         {
             get
             {
                 if (selectedItems == null)
                 {
-                    selectedItems = new ObservableCollectionWithItemChanged<AttributeModel>();
+                    selectedItems = new TD.ObservableItemCollection<AttributeModel>();
                 }
                 return selectedItems;
             }
         }
 
+        private bool isChanged;
         public bool IsChanged
         {
             get
@@ -100,6 +85,23 @@ namespace Sculptor
             }
         }
 
+        private bool isLoaded;
+        public bool IsLoaded
+        {
+            get
+            {
+                return this.IsLoaded;
+            }
+            set
+            {
+                if (value != this.IsLoaded)
+                {
+                    this.IsLoaded = value;
+                }
+            }
+        }
+
+        private bool isBusy;
         public bool IsBusy
         {
             get
@@ -111,6 +113,7 @@ namespace Sculptor
                 if (value != this.isBusy)
                 {
                     this.isBusy = value;
+                    OnPropertyChanged();
                 }
             }
         }
@@ -118,58 +121,47 @@ namespace Sculptor
 
         #region Commands
 
+        private ICommand refreshCommand;
         public ICommand RefreshCommand
         {
             get
             {
                 if (refreshCommand == null)
-                {
-                    refreshCommand = new RelayCommand(
-                        p => this.CanRefresh(),
-                        p => this.Refresh());
-                }
+                    refreshCommand = new RelayCommand(p => this.CanRefresh(), p => this.Refresh());
                 return refreshCommand;
             }
         }
 
+        private ICommand saveCommand;
         public ICommand SaveCommand
         {
             get
             {
                 if (saveCommand == null)
-                {
-                    saveCommand = new RelayCommand(
-                        p => this.CanSave(),
-                        p => this.Save());
-                }
-                return saveCommand;
+                    saveCommand = new RelayCommand(p => this.CanSave(), p => this.Save());
+                 return saveCommand;
             }
         }
 
+        private ICommand addCommand;
         public ICommand AddCommand
         {
             get
             {
                 if (addCommand == null)
-                {
-                    addCommand = new RelayCommand(
-                        p => this.CanAdd(),
-                        p => this.Add());
-                }
+                     addCommand = new RelayCommand(p => this.CanAdd(), p => this.Add());
                 return addCommand;
             }
         }
 
+        private ICommand deleteCommand;
         public ICommand DeleteCommand
         {
             get
             {
                 if (deleteCommand == null)
-                {
-                    deleteCommand = new RelayCommand(
-                        p => this.CanDelete(),
-                        p => this.Delete());
-                }
+
+                    deleteCommand = new RelayCommand(p => this.CanDelete(), p => this.Delete());
                 return deleteCommand;
             }
         }
@@ -186,6 +178,7 @@ namespace Sculptor
         private void OnLoadInBackground(object sender, DoWorkEventArgs e)
         {
             this.IsBusy = true;
+            //Attributes.SuspendNotifications();
             Load();
         }
 
@@ -197,9 +190,8 @@ namespace Sculptor
             backgroundWorker.DoWork -= this.OnLoadInBackground;
             backgroundWorker.RunWorkerCompleted -= OnLoadInBackgroundCompleted;
 
+            //Attributes.ResumeNotifications();
             this.IsBusy = false;
-
-            Attributes = BackgroundAttributes;
         }
         #endregion
         
@@ -253,10 +245,8 @@ namespace Sculptor
 
         private void Delete()
         {
-            SelectedItem.IsDeleted = true;
-            SelectedItem.IsChanged = false;
-            SelectedItem.IsNew = false;
-            IsChanged = true;
+            foreach (var item in SelectedItems)
+                Attributes.Remove(item);
         }
 
         private bool CanSave()
@@ -284,38 +274,45 @@ namespace Sculptor
         /// <summary>
         /// Saves all changes to the ViewModel
         /// </summary>
-        private void SaveLevel(ObservableCollectionWithItemChanged<AttributeModel> treeLevel, EDBEntities eDB)
+        private void SaveLevel(TD.ObservableItemCollection<AttributeModel> treeLevel, EDBEntities eDB)
         {
-            if (treeLevel != null)
+            try
             {
-                foreach (var attributeItem in treeLevel)
+                if (treeLevel != null)
                 {
+                    foreach (var attributeItem in treeLevel)
+                    {
 
-                    if (attributeItem.IsNew)
-                    {
-                        tblAttribute NewRec = new tblAttribute();
-                        var Rec = eDB.tblAttributes.Add(NewRec);
-                        Rec.ID = attributeItem.ID;
-                        Rec.Attribute = attributeItem.Attribute;
-                        Rec.Description = attributeItem.Description;
-                        Rec.Project_ID = Globals.Project_ID;
-                        attributeItem.IsNew = false;
-                    }
-                    if (attributeItem.IsChanged)
-                    {
-                        tblAttribute Rec = eDB.tblAttributes.Where(o => o.ID == attributeItem.ID).FirstOrDefault();
-                        Rec.Attribute = attributeItem.Attribute;
-                        Rec.Description = attributeItem.Description;
-                        Rec.Project_ID = attributeItem.Project_ID;
-                        attributeItem.IsChanged = false;
-                    }
-                    if (attributeItem.IsDeleted)
-                    {
-                        tblAttribute Rec = eDB.tblAttributes.Where(o => o.Attribute == attributeItem.Attribute).FirstOrDefault();
-                        if (Rec != null)
-                            eDB.tblAttributes.Remove(Rec);
+                        if (attributeItem.IsNew)
+                        {
+                            tblAttribute NewRec = new tblAttribute();
+                            var Rec = eDB.tblAttributes.Add(NewRec);
+                            Rec.ID = attributeItem.ID;
+                            Rec.Attribute = attributeItem.Attribute;
+                            Rec.Description = attributeItem.Description;
+                            Rec.Project_ID = Globals.Project_ID;
+                            attributeItem.IsNew = false;
+                        }
+                        if (attributeItem.IsChanged)
+                        {
+                            tblAttribute Rec = eDB.tblAttributes.Where(o => o.ID == attributeItem.ID).FirstOrDefault();
+                            Rec.Attribute = attributeItem.Attribute;
+                            Rec.Description = attributeItem.Description;
+                            Rec.Project_ID = attributeItem.Project_ID;
+                            attributeItem.IsChanged = false;
+                        }
+                        if (attributeItem.IsDeleted)
+                        {
+                            tblAttribute Rec = eDB.tblAttributes.Where(o => o.Attribute == attributeItem.Attribute).FirstOrDefault();
+                            if (Rec != null)
+                                eDB.tblAttributes.Remove(Rec);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                RadWindow.Alert("Fault while saving to database: " + ex.Message);
             }
         }
 
@@ -328,6 +325,7 @@ namespace Sculptor
         {
             Attributes.Clear();
             Load();
+            PropertyViewModelLocator.GetPropertyVM().LoadCBAttributes();
         }
         #endregion
     }

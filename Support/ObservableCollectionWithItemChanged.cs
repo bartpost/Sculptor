@@ -12,7 +12,7 @@ namespace Sculptor
     /// In this case however, the collection needs to know when an item of the collection has changed. This class takes care of this.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ObservableCollectionWithItemChanged<T> : ObservableCollection<T> where T : INotifyPropertyChanged
+    public class ObservableItemCollection<T> : ObservableCollection<T> where T : INotifyPropertyChanged
     {
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {

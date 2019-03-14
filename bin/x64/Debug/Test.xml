@@ -1,0 +1,752 @@
+<?xml version="1.0"?>
+<ArrayOfPropertyModel xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <PropertyModel>
+    <ID>71e520e8-4af2-4121-84e1-106f31f8a5df</ID>
+    <Parent_ID xsi:nil="true" />
+    <Project_ID>2</Project_ID>
+    <PropertyName>Hard Properties</PropertyName>
+    <Description>Hard Wired Signals</Description>
+    <PropertyType_ID>30</PropertyType_ID>
+    <ChildProperties>
+      <PropertyModel>
+        <ID>cccbf1be-f48a-4bba-8672-4ca686ff79ee</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>AnalogueInput</PropertyName>
+        <Description>Analogue Input</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HPV</Aspect>
+        <Attribute1>AI</Attribute1>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>b826f3ce-ab1a-4a3b-8f97-f8fea3d2c62f</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>ButtonStart</PropertyName>
+        <Description>Button Start</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HO</Aspect>
+        <Attribute1>STT</Attribute1>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>749c8ab2-0842-4297-8b50-f520d6ec1726</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>ButtonStop</PropertyName>
+        <Description>Button Stop</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HO</Aspect>
+        <Attribute1>STP</Attribute1>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>92bc5925-713f-413e-8864-fd0a67116f93</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>FeedbackClosed</PropertyName>
+        <Description>Feedback Closed</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HF</Aspect>
+        <Attribute1>FB</Attribute1>
+        <Attribute2>CL</Attribute2>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>cf804b1a-2b60-4c16-821c-78d2ef2262cb</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>FeedbackOpen</PropertyName>
+        <Description>Feedback Open</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HF</Aspect>
+        <Attribute1>FB</Attribute1>
+        <Attribute2>OP</Attribute2>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>5cdd2c1b-c40e-4a77-9776-0a8b925e30aa</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>FeedbackRunning</PropertyName>
+        <Description>Feedback Running</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HF</Aspect>
+        <Attribute1>FB</Attribute1>
+        <Attribute2>RNG</Attribute2>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>84cbf3c3-8ae0-4c48-b768-ee8f386aede1</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>Overload</PropertyName>
+        <Description>Overload</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HP</Aspect>
+        <Attribute1>OL</Attribute1>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>d369c3f2-9a4b-4de0-9e79-3fcaabd0b874</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>SwicthpositionManual</PropertyName>
+        <Description>Switch Position Manual</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HO</Aspect>
+        <Attribute1>SWP</Attribute1>
+        <Attribute2>MAN</Attribute2>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>338de535-06c8-4edc-b3f1-00c624dd0bb7</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>SwitchPositionAuto</PropertyName>
+        <Description>Switch Position Auto</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HO</Aspect>
+        <Attribute1>SWP</Attribute1>
+        <Attribute2>AUT</Attribute2>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>2f8aeb4b-e953-4593-8383-5fbbb471d354</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>SwitchPositionOff</PropertyName>
+        <Description>Switch Position Off</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HO</Aspect>
+        <Attribute1>SWP</Attribute1>
+        <Attribute2>OFF</Attribute2>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>74bb4b04-7b20-4884-84bf-8fc13cdc8a3e</ID>
+        <Parent_ID>71e520e8-4af2-4121-84e1-106f31f8a5df</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>Tripped</PropertyName>
+        <Description>Tripped</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>HP</Aspect>
+        <Attribute1>TRP</Attribute1>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+    </ChildProperties>
+    <IsExpanded>true</IsExpanded>
+    <IsNew>false</IsNew>
+    <IsChanged>true</IsChanged>
+    <IsDeleted>false</IsDeleted>
+  </PropertyModel>
+  <PropertyModel>
+    <ID>58548757-efb1-40d9-af61-b0a302ec529e</ID>
+    <Parent_ID xsi:nil="true" />
+    <Project_ID>2</Project_ID>
+    <PropertyName>Information Properties</PropertyName>
+    <Description>New Property Description</Description>
+    <PropertyType_ID>30</PropertyType_ID>
+    <ChildProperties>
+      <PropertyModel>
+        <ID>aa485dae-70b4-4af4-999a-7b759ee58cb1</ID>
+        <Parent_ID>58548757-efb1-40d9-af61-b0a302ec529e</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>FriendlyObjectName</PropertyName>
+        <Description>Friendly Object Name </Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <Aspect>INF</Aspect>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>6c63d2ab-7cd9-4419-a76d-bc24249bdab7</ID>
+        <Parent_ID>58548757-efb1-40d9-af61-b0a302ec529e</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>IsMotorValve</PropertyName>
+        <Description>Is Motorised Valve</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>a95debc9-0f58-440f-aae4-b8709bd38973</ID>
+        <Parent_ID>58548757-efb1-40d9-af61-b0a302ec529e</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>Range</PropertyName>
+        <Description>Range</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>fce14ea0-cd8b-4155-a40c-078730ce5f04</ID>
+        <Parent_ID>58548757-efb1-40d9-af61-b0a302ec529e</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>Scaling</PropertyName>
+        <Description> Scaling Group</Description>
+        <PropertyType_ID>30</PropertyType_ID>
+        <Value />
+        <Aspect>GEN</Aspect>
+        <ChildProperties>
+          <PropertyModel>
+            <ID>d19bedaf-d027-49c2-8314-a8cad1670f21</ID>
+            <Parent_ID>fce14ea0-cd8b-4155-a40c-078730ce5f04</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>EU</PropertyName>
+            <Description>Engineering Unit</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <Value>NTU</Value>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>5efea22b-aa50-4560-8762-484c75f24a37</ID>
+            <Parent_ID>fce14ea0-cd8b-4155-a40c-078730ce5f04</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>EUMax</PropertyName>
+            <Description>Maximum Engineering Unit</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>951a0897-5160-4b40-a853-a6fb2ee00c7c</ID>
+            <Parent_ID>fce14ea0-cd8b-4155-a40c-078730ce5f04</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>EUMin</PropertyName>
+            <Description>Minimal Engineering Unit</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>4fa61092-a99c-4a80-bf58-0c2504889e1b</ID>
+            <Parent_ID>fce14ea0-cd8b-4155-a40c-078730ce5f04</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>RawMax</PropertyName>
+            <Description>Raw Maximum Value</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>d38994f7-49f3-478c-8d8f-0a8879294c3e</ID>
+            <Parent_ID>fce14ea0-cd8b-4155-a40c-078730ce5f04</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>RawMin</PropertyName>
+            <Description>Raw Minimal Value</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+        </ChildProperties>
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+    </ChildProperties>
+    <IsExpanded>true</IsExpanded>
+    <IsNew>false</IsNew>
+    <IsChanged>true</IsChanged>
+    <IsDeleted>false</IsDeleted>
+  </PropertyModel>
+  <PropertyModel>
+    <ID>95f1a9e7-2fba-4e02-bbb2-1771a04e87d1</ID>
+    <Parent_ID xsi:nil="true" />
+    <Project_ID>2</Project_ID>
+    <PropertyName>Limits</PropertyName>
+    <Description>Limit Group</Description>
+    <PropertyType_ID>30</PropertyType_ID>
+    <ChildProperties>
+      <PropertyModel>
+        <ID>335d2757-868f-4312-b6f5-af362b5ff78b</ID>
+        <Parent_ID>95f1a9e7-2fba-4e02-bbb2-1771a04e87d1</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>LimitH</PropertyName>
+        <Description>Limit From SCADA High</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>57c7c2f9-6214-4831-8a77-599e7feb060b</ID>
+        <Parent_ID>95f1a9e7-2fba-4e02-bbb2-1771a04e87d1</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>LimitHH</PropertyName>
+        <Description>Limit From SCADA HighHigh</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>80241b61-6234-4047-8fb4-ca15c45bbf0d</ID>
+        <Parent_ID>95f1a9e7-2fba-4e02-bbb2-1771a04e87d1</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>LimitL</PropertyName>
+        <Description>Limit From SCADA Low</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>af15a57d-231b-411e-ad57-38ef9b9eea78</ID>
+        <Parent_ID>95f1a9e7-2fba-4e02-bbb2-1771a04e87d1</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>LimitLL</PropertyName>
+        <Description>Limit From SCADA LowLow</Description>
+        <PropertyType_ID>31</PropertyType_ID>
+        <ChildProperties />
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+    </ChildProperties>
+    <IsExpanded>true</IsExpanded>
+    <IsNew>false</IsNew>
+    <IsChanged>true</IsChanged>
+    <IsDeleted>false</IsDeleted>
+  </PropertyModel>
+  <PropertyModel>
+    <ID>f59af1a0-e691-4be3-a592-21a9a954200a</ID>
+    <Parent_ID xsi:nil="true" />
+    <Project_ID>2</Project_ID>
+    <PropertyName>MotorDOLStructures</PropertyName>
+    <Description>Communication Structures for DOL Controlled Motors</Description>
+    <PropertyType_ID>30</PropertyType_ID>
+    <ChildProperties />
+    <IsExpanded>true</IsExpanded>
+    <IsNew>false</IsNew>
+    <IsChanged>true</IsChanged>
+    <IsDeleted>false</IsDeleted>
+  </PropertyModel>
+  <PropertyModel>
+    <ID>c63bd4e6-e74d-4dc4-81a8-93b70dd03eef</ID>
+    <Parent_ID xsi:nil="true" />
+    <Project_ID>2</Project_ID>
+    <PropertyName>MotorVSDStructures</PropertyName>
+    <Description>Communication Structures for VSD Controlled Motors</Description>
+    <PropertyType_ID>30</PropertyType_ID>
+    <ChildProperties />
+    <IsExpanded>true</IsExpanded>
+    <IsNew>false</IsNew>
+    <IsChanged>true</IsChanged>
+    <IsDeleted>false</IsDeleted>
+  </PropertyModel>
+  <PropertyModel>
+    <ID>9d9f4f6c-615b-4e53-9a79-725e54f0b8ba</ID>
+    <Parent_ID xsi:nil="true" />
+    <Project_ID>2</Project_ID>
+    <PropertyName>OCValveStructures</PropertyName>
+    <Description>Communication Structures for Open/Close Valves</Description>
+    <PropertyType_ID>30</PropertyType_ID>
+    <ChildProperties />
+    <IsExpanded>true</IsExpanded>
+    <IsNew>false</IsNew>
+    <IsChanged>true</IsChanged>
+    <IsDeleted>false</IsDeleted>
+  </PropertyModel>
+  <PropertyModel>
+    <ID>9ec62b54-6835-49f8-a606-b71436ff2d8f</ID>
+    <Parent_ID xsi:nil="true" />
+    <Project_ID>2</Project_ID>
+    <PropertyName>ProcessValueStructures</PropertyName>
+    <Description>Communication Structures for Process Value (Transmitters)</Description>
+    <PropertyType_ID>30</PropertyType_ID>
+    <ChildProperties>
+      <PropertyModel>
+        <ID>364ffa2f-ca27-46c6-b109-8b24eec79d63</ID>
+        <Parent_ID>9ec62b54-6835-49f8-a606-b71436ff2d8f</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>PVCommandStructure</PropertyName>
+        <Description>Process Value Command Structure</Description>
+        <PropertyType_ID>30</PropertyType_ID>
+        <Aspect>XCM</Aspect>
+        <ChildProperties>
+          <PropertyModel>
+            <ID>a76434d5-59f0-4806-af46-f087750a6eab</ID>
+            <Parent_ID>364ffa2f-ca27-46c6-b109-8b24eec79d63</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>Reset</PropertyName>
+            <Description>Reset Command</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+        </ChildProperties>
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>7ed40243-89d0-46ce-91eb-1a9971d3b4df</ID>
+        <Parent_ID>9ec62b54-6835-49f8-a606-b71436ff2d8f</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>PVConfigurationStructure</PropertyName>
+        <Description>Process Value Configuration Structure</Description>
+        <PropertyType_ID>30</PropertyType_ID>
+        <Aspect>XCF</Aspect>
+        <ChildProperties>
+          <PropertyModel>
+            <ID>0c4e1a4f-7279-4d4e-b9de-a7f83ae9bf33</ID>
+            <Parent_ID>7ed40243-89d0-46ce-91eb-1a9971d3b4df</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>AlarmDelay</PropertyName>
+            <Description>Alarm Delay</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>35081718-4656-4ce6-ac64-3d49204f79a9</ID>
+            <Parent_ID>7ed40243-89d0-46ce-91eb-1a9971d3b4df</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>AlarmHHLimit</PropertyName>
+            <Description>Alarm HighHigh Limit</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>03e7339b-c7ad-4066-98cf-98fe960e0491</ID>
+            <Parent_ID>7ed40243-89d0-46ce-91eb-1a9971d3b4df</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>AlarmHLimit</PropertyName>
+            <Description>Alarm High Limit</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>fe2bd80f-25b1-4362-9995-1c58e2505e15</ID>
+            <Parent_ID>7ed40243-89d0-46ce-91eb-1a9971d3b4df</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>AlarmLLimit</PropertyName>
+            <Description>Alarm LowLimit</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>b3fdcc03-d408-4606-8c29-e76dc1768cd5</ID>
+            <Parent_ID>7ed40243-89d0-46ce-91eb-1a9971d3b4df</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>AlarmLLLimit</PropertyName>
+            <Description>Alarm LowLow Limit</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+        </ChildProperties>
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>53604bc0-a3fb-4ce0-bca9-1fc3a04e7d12</ID>
+        <Parent_ID>9ec62b54-6835-49f8-a606-b71436ff2d8f</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>PVProcessValueStructure</PropertyName>
+        <Description>Process Value Structure</Description>
+        <PropertyType_ID>30</PropertyType_ID>
+        <Aspect>XPV</Aspect>
+        <ChildProperties>
+          <PropertyModel>
+            <ID>e1c066b4-43be-4b58-a76c-6fe8b099c68e</ID>
+            <Parent_ID>53604bc0-a3fb-4ce0-bca9-1fc3a04e7d12</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>ProcessValue</PropertyName>
+            <Description>Scaled Process Value</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+        </ChildProperties>
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+      <PropertyModel>
+        <ID>a0206f37-218c-4a15-a976-af6c0a069556</ID>
+        <Parent_ID>9ec62b54-6835-49f8-a606-b71436ff2d8f</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>PVStatusStructure</PropertyName>
+        <Description>Process Value Status Structure</Description>
+        <PropertyType_ID>30</PropertyType_ID>
+        <Aspect>XST</Aspect>
+        <ChildProperties>
+          <PropertyModel>
+            <ID>c128e4cc-bfa0-4f54-9817-632d53447aa9</ID>
+            <Parent_ID>a0206f37-218c-4a15-a976-af6c0a069556</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>Alarm</PropertyName>
+            <Description>Alarm</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>ca7d54bb-49a3-40f0-b5d3-fe5ac09eaa8a</ID>
+            <Parent_ID>a0206f37-218c-4a15-a976-af6c0a069556</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>AlarmH</PropertyName>
+            <Description>Alarm High</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>14e16c6e-954d-4049-9230-6b4c512871dc</ID>
+            <Parent_ID>a0206f37-218c-4a15-a976-af6c0a069556</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>AlarmHH</PropertyName>
+            <Description>Alarm HighHigh</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>375e4429-0b9e-4d1a-a2ef-9d04a2e51f8f</ID>
+            <Parent_ID>a0206f37-218c-4a15-a976-af6c0a069556</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>AlarmL</PropertyName>
+            <Description>Alarm Low</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>d1e4160f-4448-4336-98c1-b5ce958c8d1e</ID>
+            <Parent_ID>a0206f37-218c-4a15-a976-af6c0a069556</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>AlarmLL</PropertyName>
+            <Description>Alarm LowLow</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>0391428a-9b94-4c83-9972-82bfd4f7976a</ID>
+            <Parent_ID>a0206f37-218c-4a15-a976-af6c0a069556</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>AnalogueSignalFailure</PropertyName>
+            <Description>Analogue Signal Failure</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+        </ChildProperties>
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+    </ChildProperties>
+    <IsExpanded>true</IsExpanded>
+    <IsNew>false</IsNew>
+    <IsChanged>true</IsChanged>
+    <IsDeleted>false</IsDeleted>
+  </PropertyModel>
+  <PropertyModel>
+    <ID>760acbaf-c16b-450c-9242-e4a6582733f1</ID>
+    <Parent_ID xsi:nil="true" />
+    <Project_ID>2</Project_ID>
+    <PropertyName>Soft Properties</PropertyName>
+    <Description>Internal PLC Signals</Description>
+    <PropertyType_ID>30</PropertyType_ID>
+    <ChildProperties>
+      <PropertyModel>
+        <ID>adec64b1-f90e-4413-8417-d08b85310c6b</ID>
+        <Parent_ID>760acbaf-c16b-450c-9242-e4a6582733f1</Parent_ID>
+        <Project_ID>2</Project_ID>
+        <PropertyName>SoftAlarms</PropertyName>
+        <Description>Soft Alarm Group</Description>
+        <PropertyType_ID>30</PropertyType_ID>
+        <ChildProperties>
+          <PropertyModel>
+            <ID>c4486628-6cc6-4edc-9d9a-adf78bcccd2c</ID>
+            <Parent_ID>adec64b1-f90e-4413-8417-d08b85310c6b</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>SoftAlarmH</PropertyName>
+            <Description>Software Alarm High</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>d52d2259-26ba-4e88-a0ce-7a8b06b48ada</ID>
+            <Parent_ID>adec64b1-f90e-4413-8417-d08b85310c6b</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>SoftAlarmHH</PropertyName>
+            <Description>Software Alarm HighHigh</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>5b18f7c3-d3b8-424a-adc2-ee3ebbd2b878</ID>
+            <Parent_ID>adec64b1-f90e-4413-8417-d08b85310c6b</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>SoftAlarmL</PropertyName>
+            <Description>Software Alarm Low</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+          <PropertyModel>
+            <ID>1869e8e7-7482-48e9-ba74-d0235136b030</ID>
+            <Parent_ID>adec64b1-f90e-4413-8417-d08b85310c6b</Parent_ID>
+            <Project_ID>2</Project_ID>
+            <PropertyName>SoftAlarmLL</PropertyName>
+            <Description>Software Alarm LowLow</Description>
+            <PropertyType_ID>31</PropertyType_ID>
+            <ChildProperties />
+            <IsExpanded>true</IsExpanded>
+            <IsNew>false</IsNew>
+            <IsChanged>true</IsChanged>
+            <IsDeleted>false</IsDeleted>
+          </PropertyModel>
+        </ChildProperties>
+        <IsExpanded>true</IsExpanded>
+        <IsNew>false</IsNew>
+        <IsChanged>true</IsChanged>
+        <IsDeleted>false</IsDeleted>
+      </PropertyModel>
+    </ChildProperties>
+    <IsExpanded>true</IsExpanded>
+    <IsNew>false</IsNew>
+    <IsChanged>true</IsChanged>
+    <IsDeleted>false</IsDeleted>
+  </PropertyModel>
+</ArrayOfPropertyModel>

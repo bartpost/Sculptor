@@ -1,33 +1,26 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
 using Telerik.Windows.Controls;
+using TD = Telerik.Windows.Data;
 
 namespace Sculptor
 {
+    [Serializable()]
     public class PropertyModel : ViewModelBase, INotifyPropertyChanged
     {
-        private Guid id;
-        private Nullable<Guid> parent_id;
-        private int project_id;
-        private string propertyName;
-        private string description;
-        private int propertyType_ID;
-        private string value;
-        private string aspect;
-        private string attribute1;
-        private string attribute2;
-        private string attribute3;
-        private bool isNew;
-        private bool isChanged;
-        private bool isDeleted;
-        private ObservableCollectionWithItemChanged<PropertyModel> childProperties;
-
-        #region Properties
+        #region Constructor
         public PropertyModel()
         {
         }
+        #endregion
 
+        #region Properties
+
+
+        private Guid id;
+        [XmlElement("ID")]
         public Guid ID
         {
             get
@@ -40,6 +33,8 @@ namespace Sculptor
             }
         }
 
+        private Nullable<Guid> parent_id;
+        [XmlIgnore]
         public Nullable<Guid> Parent_ID
         {
             get
@@ -53,6 +48,8 @@ namespace Sculptor
             }
         }
 
+        private int project_id;
+        [XmlIgnore]
         public int Project_ID
         {
             get
@@ -66,6 +63,8 @@ namespace Sculptor
             }
         }
 
+        private string propertyName;
+        [XmlIgnore]
         public string PropertyName
         {
             get
@@ -82,6 +81,8 @@ namespace Sculptor
             }
         }
 
+        private string description;
+        [XmlIgnore]
         public string Description
         {
             get
@@ -98,6 +99,8 @@ namespace Sculptor
             }
         }
 
+        private int propertyType_ID;
+        [XmlIgnore]
         public int PropertyType_ID
         {
             get
@@ -114,6 +117,8 @@ namespace Sculptor
             }
         }
 
+        private string value;
+        [XmlIgnore]
         public string Value
         {
             get
@@ -130,6 +135,8 @@ namespace Sculptor
             }
         }
 
+        private string aspect;
+        [XmlIgnore]
         public string Aspect
         {
             get
@@ -146,6 +153,8 @@ namespace Sculptor
             }
         }
 
+        private string attribute1;
+        [XmlIgnore]
         public string Attribute1
         {
             get
@@ -162,6 +171,8 @@ namespace Sculptor
             }
         }
 
+        private string attribute2;
+        [XmlIgnore]
         public string Attribute2
         {
             get
@@ -178,6 +189,8 @@ namespace Sculptor
             }
         }
 
+        private string attribute3;
+        [XmlIgnore]
         public string Attribute3
         {
             get
@@ -194,7 +207,8 @@ namespace Sculptor
             }
         }
 
-        public ObservableCollectionWithItemChanged<PropertyModel> ChildProperties
+        private TD.ObservableItemCollection<PropertyModel> childProperties;
+        public TD.ObservableItemCollection<PropertyModel> ChildProperties
         {
             get
             {
@@ -207,6 +221,26 @@ namespace Sculptor
             }
         }
 
+        private bool isExpanded;
+        [XmlElement("IsExpanded")]
+        public bool IsExpanded
+        {
+            get
+            {
+                return this.isExpanded;
+            }
+            set
+            {
+                if (value != this.isExpanded)
+                {
+                    this.isExpanded = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool isNew;
+        [XmlIgnore]
         public bool IsNew
         {
             get
@@ -222,6 +256,8 @@ namespace Sculptor
             }
         }
 
+        private bool isChanged;
+        [XmlIgnore]
         public bool IsChanged
         {
             get
@@ -237,6 +273,8 @@ namespace Sculptor
             }
         }
 
+        private bool isDeleted;
+        [XmlIgnore]
         public bool IsDeleted
         {
             get

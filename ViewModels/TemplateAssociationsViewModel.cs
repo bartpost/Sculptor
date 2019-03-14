@@ -11,15 +11,16 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.TreeListView;
+using TD = Telerik.Windows.Data;
 
 namespace Sculptor
 {
-    public class TemplateAssociationViewModel : ViewModelBase, INotifyPropertyChanged
+    public class TemplateAssociationViewModel : ViewModelBase
     {
-        private ObservableCollectionWithItemChanged<TemplateAssociationModel> templateAssociations = new ObservableCollectionWithItemChanged<TemplateAssociationModel>();
-        private ObservableCollectionWithItemChanged<TemplateAssociationModel> backgroundTemplateAssociations = new ObservableCollectionWithItemChanged<TemplateAssociationModel>();
+        private TD.ObservableItemCollection<TemplateAssociationModel> templateAssociations = new TD.ObservableItemCollection<TemplateAssociationModel>();
+        private TD.ObservableItemCollection<TemplateAssociationModel> backgroundTemplateAssociations = new TD.ObservableItemCollection<TemplateAssociationModel>();
         private TemplateAssociationModel selectedItem;
-        private ObservableCollectionWithItemChanged<TemplateAssociationModel> selectedItems;
+        private TD.ObservableItemCollection<TemplateAssociationModel> selectedItems;
         private CollectionViewSource filteredTemplateAssociations;
         private bool isChanged;
         private ICommand refreshCommand;
@@ -30,17 +31,20 @@ namespace Sculptor
         public TemplateAssociationViewModel()
         {
             //Load the properties in the background
-            var backgroundWorker = new BackgroundWorker();
-            backgroundWorker.DoWork += this.OnLoadInBackground;
-            backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
-            backgroundWorker.RunWorkerAsync();
+            //var backgroundWorker = new BackgroundWorker();
+            //backgroundWorker.DoWork += this.OnLoadInBackground;
+            //backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
+            //backgroundWorker.RunWorkerAsync();
+            Load(null);
+            FilteredTemplateAssociations = new CollectionViewSource { Source = TemplateAssociations };
+            FilteredTemplateAssociations.Filter += TemplateFilter;
         }
 
         #endregion
 
         #region Properties
 
-        public ObservableCollectionWithItemChanged<TemplateAssociationModel> TemplateAssociations
+        public TD.ObservableItemCollection<TemplateAssociationModel> TemplateAssociations
         {
             get
             {
@@ -53,7 +57,7 @@ namespace Sculptor
             }
         }
 
-        public ObservableCollectionWithItemChanged<TemplateAssociationModel> BackgroundTemplateAssociations
+        public TD.ObservableItemCollection<TemplateAssociationModel> BackgroundTemplateAssociations
         {
             get
             {
@@ -82,13 +86,13 @@ namespace Sculptor
             }
         }
 
-        public ObservableCollectionWithItemChanged<TemplateAssociationModel> SelectedItems
+        public TD.ObservableItemCollection<TemplateAssociationModel> SelectedItems
         {
             get
             {
                 if (selectedItems == null)
                 {
-                    selectedItems = new ObservableCollectionWithItemChanged<TemplateAssociationModel>();
+                    selectedItems = new TD.ObservableItemCollection<TemplateAssociationModel>();
                 }
                 return selectedItems;
             }
@@ -134,11 +138,7 @@ namespace Sculptor
             get
             {
                 if (saveCommand == null)
-                {
-                    saveCommand = new RelayCommand(
-                        p => this.CanSave(),
-                        p => this.Save());
-                }
+                    saveCommand = new RelayCommand( p => true, p => this.Save());
                 return saveCommand;
             }
         }
@@ -148,11 +148,7 @@ namespace Sculptor
             get
             {
                 if (refreshCommand == null)
-                {
-                    refreshCommand = new RelayCommand(
-                        p => this.CanRefresh(),
-                        p => this.Refresh());
-                }
+                    refreshCommand = new RelayCommand( p => true, p => this.Refresh());
                 return refreshCommand;
             }
         }
@@ -162,11 +158,7 @@ namespace Sculptor
             get
             {
                 if (deleteCommand == null)
-                {
-                    deleteCommand = new RelayCommand(
-                        p => this.CanDelete(),
-                        p => this.Delete());
-                }
+                    deleteCommand = new RelayCommand( p => true, p => this.Delete());
                 return deleteCommand;
             }
         }
@@ -198,10 +190,7 @@ namespace Sculptor
             // Create a collection that holds the Associations of the selected template and add the filter event handler
             // Note: the FilteredTemplateAssociations collection is updated every time a new template is selected in the template tree 
             // (triggered in the setter of the SelectedItem property)
-            FilteredTemplateAssociations = new CollectionViewSource
-            {
-                Source = TemplateAssociations
-            };
+            FilteredTemplateAssociations = new CollectionViewSource { Source = TemplateAssociations };
             FilteredTemplateAssociations.Filter += TemplateFilter;
         }
         #endregion
@@ -211,7 +200,6 @@ namespace Sculptor
         private void Load(Guid? associationParent_ID)
         {
             // Check if the classes and properties have ben loaded. Necessary because of the various background workers
-            while (!PropertyViewModelLocator.IsLoaded());
 
             try
             {
@@ -221,6 +209,7 @@ namespace Sculptor
                     {
                         TemplateAssociationModel templateAssociationItem = new TemplateAssociationModel
                         {
+                            ID = Rec.ID,
                             Project_ID = Rec.Project_ID,
                             Template_ID = Rec.Template_ID,
                             Association_ID = Rec.Association_ID,
@@ -229,7 +218,7 @@ namespace Sculptor
                             IsChanged = false,
                             IsNew = false,
                             IsDeleted = false,
-                            ChildAssociations = new ObservableCollectionWithItemChanged<TemplateAssociationModel>()
+                            ChildAssociations = new TD.ObservableItemCollection<TemplateAssociationModel>()
                         };
                         switch (templateAssociationItem.AssociationType)
                         {
@@ -239,17 +228,20 @@ namespace Sculptor
                                 {
                                     templateAssociationItem.Name = propertyItem.PropertyName;
                                     templateAssociationItem.Description = propertyItem.Description;
+                                    templateAssociationItem.AssociationType_ID = propertyItem.PropertyType_ID;
                                     foreach (var childItem in propertyItem.ChildProperties)
                                     {
                                         TemplateAssociationModel item = new TemplateAssociationModel
                                         {
+                                            ID = Rec.ID,
                                             Project_ID = childItem.Project_ID,
                                             Template_ID = templateAssociationItem.Template_ID,
                                             Association_ID = childItem.ID,
                                             Name = childItem.PropertyName,
                                             Description = childItem.Description,
                                             AssociationType = "Property",
-                                            ChildAssociations = new ObservableCollectionWithItemChanged<TemplateAssociationModel>()
+                                            AssociationType_ID = childItem.PropertyType_ID,
+                                            ChildAssociations = new TD.ObservableItemCollection<TemplateAssociationModel>()
                                         };
                                         templateAssociationItem.ChildAssociations.Add(item);
                                     }
@@ -259,11 +251,11 @@ namespace Sculptor
                                     throw new System.InvalidOperationException(String.Format("Association without source\nProperty ID: {0}\nFix in database", templateAssociationItem.Association_ID));
                                 }
                                 break;
-                            case "ClassProperty":
+                            case "TemplateProperty":
                                 break;
                         }
 
-                        BackgroundTemplateAssociations.Add(templateAssociationItem);
+                        TemplateAssociations.Add(templateAssociationItem);
                     }
                 }
             }
@@ -273,38 +265,13 @@ namespace Sculptor
             }
         }
 
-        private bool CanDelete()
-        {
-            return true;
-        }
-
         /// <summary>
         /// 
         /// </summary>
         private void Delete()
         {
-            // TODO: make this a recursive function so we can step through multiple levels
-            if (SelectedItem != null)
-            {
-                foreach (var childItem in SelectedItem.ChildAssociations)
-                {
-                    childItem.IsChanged = false;
-                    childItem.IsNew = false;
-                    childItem.IsDeleted = true;
-                }
-
-                SelectedItem.IsChanged = false;
-                SelectedItem.IsNew = false;
-                SelectedItem.IsDeleted = true;
-
-                // Because the FilteredTemplateAssociations collection doesn't refresh on PropertyChanged, we have to refresh the collection
-                FilteredTemplateAssociations.View.Refresh();
-            }
-        }
-
-        private bool CanSave()
-        {
-            return true;
+            // ToDo: Deleting items in the collection only works using the Del key for now. 
+            // Implement delete method to also provide option using context menu
         }
 
         /// <summary>
@@ -312,15 +279,33 @@ namespace Sculptor
         /// </summary>
         public void Save()
         {
+            EDBEntities eDB = new EDBEntities();
+
+            // To determine which items have been deleted in the collection, get all associations of the project stored in the database table first
+            var tblTemplateAssociations = eDB.tblTemplateAssociations.Where(p => p.Project_ID == Globals.Project_ID);
+
+            // Check if each association of the table exists in the associations collection
+            // if not, delete the association in the table
+            foreach (var templateAssociationRec in tblTemplateAssociations)
+            {
+                var templateAssociationItem = GetTemplateAssociation(templateAssociationRec.Template_ID, templateAssociationRec.Association_ID);
+                if (templateAssociationItem == null) // association not found in collection
+                    eDB.tblTemplateAssociations.Remove(templateAssociationRec);
+            }
+
+            // Add and update associations recursively
+            SaveLevel(TemplateAssociations, eDB);
             try
             {
-                EDBEntities eDB = new EDBEntities();
-                SaveLevel(TemplateAssociations, eDB);
                 eDB.SaveChanges();
             }
             catch (Exception ex)
-            { 
-                RadWindow.Alert("Fault while saving template associations: " + ex.Message);
+            {
+                RadWindow.Alert(new DialogParameters()
+                {
+                    Header = "Error",
+                    Content = "Fault while saving template associations:\n" + ex.Message
+                });
             }
             IsChanged = false;
         }
@@ -330,58 +315,39 @@ namespace Sculptor
         /// </summary>
         private void SaveLevel(ObservableCollection<TemplateAssociationModel> treeLevel, EDBEntities eDB)
         {
-            if (treeLevel != null)
+            try
             {
-                foreach (var templateAssociationItem in treeLevel)
+                if (treeLevel != null)
                 {
+                    foreach (var templateAssociationItem in treeLevel)
+                    {
 
-                    if (templateAssociationItem.IsNew)
-                    {
-                        tblTemplateAssociation NewRec = new tblTemplateAssociation();
-                        var Rec = eDB.tblTemplateAssociations.Add(NewRec);
-                        Rec.Template_ID = templateAssociationItem.Template_ID;
-                        Rec.Association_ID = templateAssociationItem.Association_ID;
-                        Rec.Project_ID = Globals.Project_ID;
-                        Rec.AssociationType = templateAssociationItem.AssociationType;
-                        templateAssociationItem.IsNew = false;
-                        //switch (templateAssociationItem.AssociationType)
-                        //{
-                        //    case "Template":
-                        //        TemplateViewModel classVM = TemplateViewModelLocator.GetTemplateVM();
-                        //        TemplateModel classItem = classVM.GetTemplate(templateAssociationItem.Association_ID);
-
-                        //        break;
-                        //}
+                        if (templateAssociationItem.IsNew)
+                        {
+                            tblTemplateAssociation NewRec = new tblTemplateAssociation();
+                            var Rec = eDB.tblTemplateAssociations.Add(NewRec);
+                            Rec.ID = templateAssociationItem.ID;
+                            Rec.Template_ID = templateAssociationItem.Template_ID;
+                            Rec.Association_ID = templateAssociationItem.Association_ID;
+                            Rec.Project_ID = Globals.Project_ID;
+                            Rec.AssociationType = templateAssociationItem.AssociationType;
+                            Rec.Value = templateAssociationItem.Value;
+                            templateAssociationItem.IsNew = false;
+                        }
+                        if (templateAssociationItem.IsChanged)
+                        {
+                            tblTemplateAssociation Rec = eDB.tblTemplateAssociations.Where(o => o.ID == templateAssociationItem.ID).FirstOrDefault();
+                            Rec.Value = templateAssociationItem.Value; 
+                        }
+                        // Recursive call
+                        //if (propertyItem.ChildProperties != null) SaveLevel(propertyItem.ChildProperties, eDB);
                     }
-                    if (templateAssociationItem.IsChanged)
-                    {
-                        //tblObjectAssociation Rec = eDB.tblObjectAssociations.Where(o => o.ID == objectAssociationItem.Object_ID).FirstOrDefault();
-                        //Rec.Parent_ID = propertyItem.Parent_ID;
-                        //Rec.PropertyName = propertyItem.PropertyName;
-                        //Rec.Description = propertyItem.Description;
-                        //Rec.Project_ID = propertyItem.Project_ID;
-                        //Rec.PropertyType_ID = propertyItem.PropertyType_ID;
-                        //Rec.Aspect = propertyItem.Aspect;
-                        //Rec.Attribute1 = propertyItem.Attribute1;
-                        //Rec.Attribute2 = propertyItem.Attribute2;
-                        //Rec.Attribute3 = propertyItem.Attribute3;
-                        //propertyItem.IsChanged = false;
-                    }
-                    if (templateAssociationItem.IsDeleted)
-                    {
-                        tblTemplateAssociation Rec = eDB.tblTemplateAssociations.Where(o => (o.Template_ID == templateAssociationItem.Template_ID && o.Association_ID == templateAssociationItem.Association_ID)).FirstOrDefault();
-                        if (Rec != null)
-                            eDB.tblTemplateAssociations.Remove(Rec);
-                    }
-                    // Recursive call
-                    //if (propertyItem.ChildProperties != null) SaveLevel(propertyItem.ChildProperties, eDB);
                 }
             }
-        }
-
-        private bool CanRefresh()
-        {
-            return true;
+            catch (Exception ex)
+            {
+                RadWindow.Alert("Fault while saving to database: " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -390,39 +356,37 @@ namespace Sculptor
         public void Refresh()
         {
             TemplateAssociations.Clear();
-            FilteredTemplateAssociations.View.Refresh();
             Load(null);
+            FilteredTemplateAssociations.View.Refresh();
         }
 
         public void AssociateWithTemplate(TreeListViewRow destination)
         {
-            //if (destination != null)
-            //{
             try
             {
                 foreach (var templateItem in TemplateViewModelLocator.GetTemplateVM().SelectedItems)
                 {
                     switch (Globals.DraggedItem.Type)
                     {
-
                         case "Property":
                             foreach (var propertyItem in PropertyViewModelLocator.GetPropertyVM().SelectedItems)
                             {
                                 TemplateAssociationModel templateAssociationItem = new TemplateAssociationModel
                                 {
+                                    ID = Guid.NewGuid(),
                                     IsNew = true,
                                     IsChanged = false,
                                     IsDeleted = false,
                                     Project_ID = Globals.Project_ID,
                                     Template_ID = templateItem.ID,
                                     AssociationType = Globals.DraggedItem.Type,
-                                    Value = "",
-                                    ChildAssociations = new ObservableCollectionWithItemChanged<TemplateAssociationModel>(),
+                                    ChildAssociations = new TD.ObservableItemCollection<TemplateAssociationModel>(),
                                 };
-
                                 templateAssociationItem.Association_ID = propertyItem.ID;
                                 templateAssociationItem.Name = propertyItem.PropertyName;
                                 templateAssociationItem.Description = propertyItem.Description;
+                                templateAssociationItem.AssociationType_ID = propertyItem.PropertyType_ID;
+                                templateAssociationItem.Value = propertyItem.Value;
 
                                 foreach (var childItem in propertyItem.ChildProperties)
                                 {
@@ -432,13 +396,15 @@ namespace Sculptor
                                         IsChanged = false,
                                         IsDeleted = false,
                                         AssociationType = "Property",
+                                        ID = Guid.NewGuid(),
                                         Project_ID = Globals.Project_ID,
                                         Template_ID = templateItem.ID,
                                         Association_ID = childItem.ID,
                                         Name = childItem.PropertyName,
                                         Description = childItem.Description,
-                                        Value = "",
-                                        ChildAssociations = new ObservableCollectionWithItemChanged<TemplateAssociationModel>()
+                                        AssociationType_ID = childItem.PropertyType_ID,
+                                        Value = childItem.Value,
+                                        ChildAssociations = new TD.ObservableItemCollection<TemplateAssociationModel>()
                                     };
                                     templateAssociationItem.ChildAssociations.Add(templateAssociationChildItem);
                                 }
@@ -465,6 +431,16 @@ namespace Sculptor
                              (e.Item as TemplateAssociationModel).IsDeleted == false;
 
         }
+
+        private TemplateAssociationModel GetTemplateAssociation(Guid? template_ID, Guid? association_ID)
+        {
+            foreach (var templateAssociationItem in TemplateAssociations)
+            {
+                if (templateAssociationItem.Template_ID == template_ID && templateAssociationItem.Association_ID == association_ID) return templateAssociationItem;
+            }
+            return null;
+        }
+
     }
     #endregion
 

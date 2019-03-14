@@ -3,63 +3,77 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Sculptor.Views"
+        xmlns:local="clr-namespace:Sculptor"
         xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
         mc:Ignorable="d"
+        xmlns:telerikGrid="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Controls.GridView"
         Title="Edit Types" Height="450" Width="800"
         Loaded="Dialog_Loaded">
 
     <StackPanel>
         <telerik:RadTreeListView Name="TypeListView"
-
-                                AutoGenerateColumns="False"
-								MinHeight="370"
-								CanUserFreezeColumns="False"
-								RowIndicatorVisibility="Collapsed"
-								ColumnWidth="*" 
-                                IsDragTooltipEnabled="True"
-                                HorizontalAlignment="Stretch"
-								VerticalAlignment="Stretch" 
-                                RowHeight="22"
-                                Margin="5,5,5,5">
+                                 ItemsSource="{Binding Types}"
+                                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                 AutoGenerateColumns="False"
+					             CanUserFreezeColumns="False"
+					             RowIndicatorVisibility="Collapsed"
+					             ColumnWidth="*" 
+                                 IsDragTooltipEnabled="True"
+                                 HorizontalAlignment="Stretch"
+					             VerticalAlignment="Stretch" 
+                                 RowHeight="22"
+                                 MaxHeight="397"
+                                 Margin="5,5,5,5">
             <telerik:RadTreeListView.Columns>
+                <telerik:GridViewComboBoxColumn DataMemberBinding="{Binding TypeGroup}" 
+                                                ItemsSource="{Binding TypeGroups}"
+                                                Header="Group" 
+                                                Width="Auto"
+                                                EditTriggers="CellClick"
+                                                IsLightweightModeEnabled="true"
+                                                IsComboBoxEditable="False"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Type}" 
-                                                        Header="Object Type" 
-                                                        Width="Auto"/>
+                                            Header="Object Type" 
+                                            Width="Auto"/>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding Description}" 
-                                                        Header="Description" 
-                                                        Width="Auto"/>
+                                            Header="Description" 
+                                            Width="Auto"/>
                 <telerik:GridViewDataColumn Header="Image" 
-                                        Width="Auto"
-                                        IsReadOnly="False">
+                                            Width="Auto"
+                                            IsReadOnly="False">
                     <telerik:GridViewDataColumn.CellTemplate>
                         <DataTemplate>
-                                <Button Name="ObjectTypeButton"
+                            <Button Name="ObjectTypeButton"
                                         Command="{Binding Path=DataContext.GetImageFromFileCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Window}}"
                                         CommandParameter="{Binding ID}">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <Image Name="objectTypeImage"
-                                                       Source="{Binding Image}" 
-                                                       RenderOptions.BitmapScalingMode="Fant"
-                                                       Stretch="Fill"
-                                                       Width="16"
-                                                       Height="16"/>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                </Button>
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Image Name="objectTypeImage"
+                                                   Source="{Binding Image}" 
+                                                   RenderOptions.BitmapScalingMode="Fant"
+                                                   Stretch="Fill"
+                                                   Width="16"
+                                                   Height="16"/>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
                         </DataTemplate>
                     </telerik:GridViewDataColumn.CellTemplate>
                 </telerik:GridViewDataColumn>
                 <telerik:GridViewDataColumn DataMemberBinding="{Binding ShowOrder}" 
-                                                        Header="Order" 
-                                                        Width="Auto"/>
+                                            Header="Order" 
+                                            Width="Auto"/>
             </telerik:RadTreeListView.Columns>
+
+            <telerik:RadContextMenu.ContextMenu>
+                <telerik:RadContextMenu x:Name="TypeContextMenu">
+                    <telerik:RadMenuItem Header="New Item" Command="{Binding AddTypeCommand}" />
+                    <telerik:RadMenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
+                    <telerik:RadMenuItem IsSeparator="True"/>
+                    <telerik:RadMenuItem Header="Save" Command="{Binding SaveCommand}"/>
+                </telerik:RadContextMenu>
+            </telerik:RadContextMenu.ContextMenu>
         </telerik:RadTreeListView>
-        <StackPanel Orientation="Horizontal">
-            <Button Content="Add New" Height="30" Margin="5,0,5,5" Command="{Binding AddTypeCommand}"/>
-            <Button Content="Save" Height="30" Margin="5,0,5,5" Command="{Binding SaveCommand}"/>
-        </StackPanel>
     </StackPanel>
 
 </Window>

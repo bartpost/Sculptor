@@ -26,12 +26,9 @@ namespace Sculptor.EDBEntityDataModel
         }
     
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
-        public virtual DbSet<tblAspect> tblAspects { get; set; }
         public virtual DbSet<tblAttribute> tblAttributes { get; set; }
         public virtual DbSet<tblNativeDataType> tblNativeDataTypes { get; set; }
-        public virtual DbSet<tblObjectAssociation> tblObjectAssociations { get; set; }
         public virtual DbSet<tblObjectRequirement> tblObjectRequirements { get; set; }
-        public virtual DbSet<tblObject> tblObjects { get; set; }
         public virtual DbSet<tblObjectType> tblObjectTypes { get; set; }
         public virtual DbSet<tblProject> tblProjects { get; set; }
         public virtual DbSet<tblProperty> tblProperties { get; set; }
@@ -39,6 +36,11 @@ namespace Sculptor.EDBEntityDataModel
         public virtual DbSet<tblTemplateRequirement> tblTemplateRequirements { get; set; }
         public virtual DbSet<tblTemplate> tblTemplates { get; set; }
         public virtual DbSet<tblType> tblTypes { get; set; }
+        public virtual DbSet<tblRequirementType> tblRequirementTypes { get; set; }
+        public virtual DbSet<tblAspect> tblAspects { get; set; }
         public virtual DbSet<tblTemplateAssociation> tblTemplateAssociations { get; set; }
+        public virtual DbSet<tblObjectAssociation> tblObjectAssociations { get; set; }
+        public virtual DbSet<tblObject> tblObjects { get; set; }
+        public virtual DbSet<tblControlObject> tblControlObjects { get; set; }
     }
 }

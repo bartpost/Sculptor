@@ -7,17 +7,15 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     mc:Ignorable="d" 
     d:DesignHeight="600" d:DesignWidth="1200"
-    Loaded="UserControl_Loaded"
-     
     xmlns:local="clr-namespace:Sculptor">
 
     <UserControl.Resources>
         <!--Converter that returns an image dependent on the object type-->
         <local:Type_IDToImage x:Key="type_IDToImage" />
 
-        <Style x:Key="ItemContainerStyle" TargetType="{x:Type telerik:GridViewRow}">
+        <!--<Style x:Key="ItemContainerStyle" TargetType="{x:Type telerik:GridViewRow}">
             <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
-        </Style>
+        </Style>-->
 
     </UserControl.Resources>
 
@@ -36,9 +34,10 @@
                 <telerik:RadTabItem Height="25" MinWidth="80" Header="Templates" >
                     <telerik:RadTreeListView x:Name ="TemplateTreeListView" 
                                              ItemsSource="{Binding Templates}"
-                                             Grid.Column="0"
                                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                             SelectionMode="Extended"     
+                                             IsExpandedBinding="{Binding IsExpanded, Mode=TwoWay}"
+                                             SelectionMode="Extended"   
+                                             CanUserDeleteRows="true"
                                              AutoGenerateColumns="False"
 								             MinHeight="300"
 								             CanUserFreezeColumns="False"
@@ -65,29 +64,31 @@
 
                             <!-- First column -->
                             <telerik:GridViewDataColumn DataMemberBinding="{Binding TemplateName}" 
-                                                            Header="Name" 
-                                                            Width="Auto">
+                                                        Header="Name" 
+                                                        Width="Auto">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Name="objectTypeImage"
-                                                   Source="..\Resources\Images\Template32.png" 
-                                                   Margin="0,0,10,0"
-                                                   RenderOptions.BitmapScalingMode="Fant"
-                                                   Stretch="Fill"
-                                                   Width="16"
-                                                   Height="16" >
-                                            </Image>
+                                            <Button Name="templateTypeButton"
+                                                    Command="{Binding Path=DataContext.ChangeTypeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}"
+                                                    CommandParameter="Template">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Image Name="templateTypeImage"
+                                                       Source="{Binding TemplateType_ID, Converter={StaticResource type_IDToImage}}" 
+                                                       Margin="0,0,10,0"
+                                                       RenderOptions.BitmapScalingMode="Fant"
+                                                       Stretch="Fill"
+                                                       Width="16"
+                                                       Height="16"/>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
                                             <TextBlock Text="{Binding TemplateName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Description}"/>
-
                                         </StackPanel>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
                             </telerik:GridViewDataColumn>
-
-                            <telerik:GridViewDataColumn DataMemberBinding="{Binding IsExpanded}"  
-                                                            Header="IsExpanded" 
-                                                            Width="Auto" IsVisible="True" />
 
                             <!-- Second column -->
                             <telerik:GridViewDataColumn DataMemberBinding="{Binding Description}"
@@ -103,7 +104,7 @@
                         </telerik:RadTreeListView.Columns>
 
                         <telerik:RadContextMenu.ContextMenu>
-                            <telerik:RadContextMenu x:Name="ObjectTreeContextMenu" >
+                            <telerik:RadContextMenu x:Name="TemplateTreeContextMenu" >
                                 <telerik:RadMenuItem Header="Copy" Command="{Binding CopyCommand}" InputGestureText="Ctrl+C"/>
                                 <telerik:RadMenuItem Header="Paste" Command="{Binding PasteCommand}" InputGestureText="Ctrl+V"/>
                                 <telerik:RadMenuItem IsSeparator="True"/>
@@ -113,6 +114,9 @@
                                 <telerik:RadMenuItem IsSeparator="True"/>
                                 <telerik:RadMenuItem Header="Refresh" Command="{Binding RefreshCommand}" InputGestureText="F5"/>
                                 <telerik:RadMenuItem Header="Save" Command="{Binding SaveCommand}" InputGestureText="Ctrl+S "/>
+                                <telerik:RadMenuItem IsSeparator="True"/>
+                                <telerik:RadMenuItem Header="Load tree state" Command="{Binding LoadTreeStateCommand}"/>
+                                <telerik:RadMenuItem Header="Save tree state" Command="{Binding SaveTreeStateCommand}"/>
                             </telerik:RadContextMenu>
                         </telerik:RadContextMenu.ContextMenu>
 
@@ -123,12 +127,14 @@
             <!-- Associations / Requirements -->
             <telerik:RadTabControl Grid.Column="1" >
 
-                <!--Associations-->
+                <!--Template Associations-->
                 <telerik:RadTabItem Height="25" MinWidth="80" Margin="10,0,0,0" Header="Associations" >
                     <telerik:RadTreeListView Name="TemplateAssociationTreeListView"
                                              ItemsSource="{Binding FilteredTemplateAssociations.View}"
                                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                             SelectionMode="Single"                                         
+                                             IsExpandedBinding="{Binding IsExpanded, Mode=TwoWay}"
+                                             SelectionMode="Single"    
+                                             CanUserDeleteRows="true"
                                              AutoGenerateColumns="False"
 								             MinHeight="300"
 								             CanUserFreezeColumns="False"
@@ -154,31 +160,13 @@
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-
-                                            <Image Name="AssociationTypeImage"
-                                                   Margin="0,0,10,0"
-                                                   RenderOptions.BitmapScalingMode="Fant"
-                                                   Stretch="Fill"
-                                                   Width="16"
-                                                   Height="16">
-                                                <Image.Style>
-                                                    <Style TargetType="{x:Type Image}">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding AssociationType}" Value="Template">
-                                                                <Setter Property="Source" Value="..\Resources\Images\Class32.png"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding AssociationType}" Value="Property">
-                                                                <Setter Property="Source" Value="..\Resources\Images\Property32.png"/>
-                                                            </DataTrigger>
-                                                            <DataTrigger Binding="{Binding AssociationType}" Value="ClassProperty">
-                                                                <Setter Property="Source" Value="..\Resources\Images\Property32.png"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Image.Style>
-                                            </Image>
-                                            <TextBlock Text="{Binding Name}"/>
-
+                                            <Image Source="{Binding AssociationType_ID, Converter={StaticResource type_IDToImage}}" 
+                                                    Margin="0,0,10,0"
+                                                    RenderOptions.BitmapScalingMode="Fant"
+                                                    Stretch="Fill"
+                                                    Width="16"
+                                                    Height="16"/>
+                                            <TextBlock Text="{Binding Name, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Description}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
@@ -203,9 +191,6 @@
 
                         <telerik:RadContextMenu.ContextMenu>
                             <telerik:RadContextMenu x:Name="TemplateAssociationTreeContextMenu" >
-                                <telerik:RadMenuItem Header="Copy" Command="{Binding CopyCommand}" InputGestureText="Ctrl + C"/>
-                                <telerik:RadMenuItem Header="Paste" Command="{Binding PasteCommand}"/>
-                                <telerik:RadMenuItem IsSeparator="True"/>
                                 <telerik:RadMenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
                                 <telerik:RadMenuItem IsSeparator="True"/>
                                 <telerik:RadMenuItem Header="Refresh" Command="{Binding RefreshCommand}"/>
@@ -216,12 +201,13 @@
                     </telerik:RadTreeListView>
                 </telerik:RadTabItem>
 
-                <!--Requirements-->
+                <!-- template Requirements-->
                 <telerik:RadTabItem MinWidth="80" Header="Requirements">
                     <telerik:RadTreeListView Name="TemplateRequirementTreeListView"
                                              ItemsSource="{Binding FilteredTemplateRequirements.View}"
                                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                             SelectionMode="Single"   
+                                             SelectionMode="Extended"   
+                                             CanUserDeleteRows="true"
                                              AutoGenerateColumns="False"
 								             MinHeight="300"
 								             CanUserFreezeColumns="False"
@@ -251,15 +237,13 @@
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Name="requirementTypeImage"
+                                            <Image Source="{Binding RequirementType_ID, Converter={StaticResource type_IDToImage}}" 
                                                     Margin="0,0,10,0"
                                                     RenderOptions.BitmapScalingMode="Fant"
                                                     Stretch="Fill"
                                                     Width="16"
-                                                    Height="16"
-                                                    Source="{Binding RequirementType_ID, Converter={StaticResource type_IDToImage}}">
-                                            </Image>
-                                            <TextBlock Text="{Binding ArticleNo}"/>
+                                                    Height="16"/>
+                                            <TextBlock Text="{Binding ArticleNo, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding ArticleHeader}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
@@ -366,7 +350,9 @@
                     <telerik:RadTreeListView Name="PropertyTreeListView"
                                              ItemsSource="{Binding Properties}"
                                              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                             SelectionMode="Extended"                                         
+                                             IsExpandedBinding="{Binding IsExpanded, Mode=TwoWay}"
+                                             SelectionMode="Extended"   
+                                             CanUserDeleteRows="true"
                                              AutoGenerateColumns="False"
 								             MinHeight="300"
 								             CanUserFreezeColumns="False"
@@ -390,14 +376,20 @@
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Name="objectTypeImage"
-                                                       Source="D:\Tools\VS\Sculptor\Sculptor\Resources\Images\Property32.png" 
+                                            <Button Command="{Binding Path=DataContext.ChangeTypeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=telerik:RadTreeListView}}"
+                                                    CommandParameter="Requirement">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Image Source="{Binding PropertyType_ID, Converter={StaticResource type_IDToImage}}" 
                                                        Margin="0,0,10,0"
                                                        RenderOptions.BitmapScalingMode="Fant"
                                                        Stretch="Fill"
                                                        Width="16"
                                                        Height="16"/>
-                                            <TextBlock Text="{Binding PropertyName}"/>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            <TextBlock Text="{Binding PropertyName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Description}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
@@ -426,6 +418,9 @@
                                 <telerik:RadMenuItem IsSeparator="True"/>
                                 <telerik:RadMenuItem Header="Refresh" Command="{Binding RefreshCommand}"/>
                                 <telerik:RadMenuItem Header="Save" Command="{Binding SaveCommand}"/>
+                                <telerik:RadMenuItem IsSeparator="True"/>
+                                <telerik:RadMenuItem Header="Load tree state" Command="{Binding LoadTreeStateCommand}"/>
+                                <telerik:RadMenuItem Header="Save tree state" Command="{Binding SaveTreeStateCommand}"/>
                             </telerik:RadContextMenu>
                         </telerik:RadContextMenu.ContextMenu>
 
@@ -463,15 +458,20 @@
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Name="requirementTypeImage"
-                                                Source="{Binding RequirementType_ID, Converter={StaticResource requirementType_IDToImage}}" 
-                                                Margin="0,0,10,0"
-                                                RenderOptions.BitmapScalingMode="Fant"
-                                                Stretch="Fill"
-                                                Width="16"
-                                                Height="16"/>
-                                            <TextBlock Text="{Binding ArticleNo}"/>
-
+                                            <Button Command="{Binding Path=DataContext.ChangeTypeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=telerik:RadTreeListView}}"
+                                                    CommandParameter="Requirement">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Image Source="{Binding RequirementType_ID, Converter={StaticResource type_IDToImage}}" 
+                                                       Margin="0,0,10,0"
+                                                       RenderOptions.BitmapScalingMode="Fant"
+                                                       Stretch="Fill"
+                                                       Width="16"
+                                                       Height="16"/>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                            <TextBlock Text="{Binding ArticleNo, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding ArticleHeader}"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </telerik:GridViewDataColumn.CellTemplate>
@@ -496,13 +496,16 @@
 
                         <telerik:RadContextMenu.ContextMenu>
                             <telerik:RadContextMenu x:Name="RequirementsContextMenu" >
-                                <telerik:RadMenuItem Header="Show" Command="{Binding ShowCommand}"/>
+                                <telerik:RadMenuItem Header="Show" Command="{Binding ShowArticleCommand}"/>
                                 <telerik:RadMenuItem Header="New Sibling" Command="{Binding AddSiblingCommand}" />
                                 <telerik:RadMenuItem Header="New Child" Command="{Binding AddChildCommand}" />
                                 <telerik:RadMenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
                                 <telerik:RadMenuItem IsSeparator="True"/>
                                 <telerik:RadMenuItem Header="Refresh" Command="{Binding RefreshCommand}"/>
                                 <telerik:RadMenuItem Header="Save" Command="{Binding SaveCommand}"/>
+                                <telerik:RadMenuItem IsSeparator="True"/>
+                                <telerik:RadMenuItem Header="Load tree state" Command="{Binding LoadTreeStateCommand}"/>
+                                <telerik:RadMenuItem Header="Save tree state" Command="{Binding SaveTreeStateCommand}"/>
                             </telerik:RadContextMenu>
                         </telerik:RadContextMenu.ContextMenu>
 
@@ -522,51 +525,6 @@
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Width="0"/>
             <GridSplitter Grid.Column="2" HorizontalAlignment="Left" Width="0"/>
-
-            <Popup x:Name="TemplateTypePopup" Placement="MousePoint"  IsOpen="{Binding IsTemplateTypePopupOpen}" FocusManager.IsFocusScope="True">
-                <StackPanel>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="400">
-                        <telerik:RadListBox Name="templateTypeListBox" ItemsSource="{Binding TemplateTypes}" MaxHeight="200">
-                            <telerik:EventToCommandBehavior.EventBindings>
-                                <telerik:EventBinding Command="{Binding ChangeTypeCommand}" 
-                                                      CommandParameter="{Binding ElementName=templateTypeListBox, Path=SelectedItem}"
-                                                      EventName="MouseLeftButtonDown" 
-                                                      RaiseOnHandledEvents="True" 
-                                                      />
-                            </telerik:EventToCommandBehavior.EventBindings>
-                            <telerik:RadListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <Image Source="{Binding Image}" 
-                                               Grid.Row="0"
-                                               Margin="0,0,10,0"
-                                               RenderOptions.BitmapScalingMode="Fant"
-                                               Stretch="Fill"
-                                               Width="16"
-                                               Height="16"/>
-                                        <TextBlock Grid.Row="1" Text="{Binding Type}"/>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </telerik:RadListBox.ItemTemplate>
-                        </telerik:RadListBox>
-                    </ScrollViewer>
-                    <Border Background="White" BorderBrush="Gray" BorderThickness="1" Margin="0,-1,0,0">
-                        <StackPanel>
-                            <Button Content="Edit Object Types" 
-                                BorderThickness="0"
-                                Margin="1,1,1,1"
-                                Height="30"
-                                Command="{Binding EditTypeCommand}" CommandParameter="Template" />
-                            <!-- Cancel if command doesn't have a parameter -->
-                            <Button Content="Cancel" 
-                                BorderThickness="0"
-                                Margin="1,1,1,1"
-                                Height="30"
-                                Command="{Binding CancelTypeCommand}" CommandParameter="Template"/>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
-            </Popup>
 
         </Grid>
     </telerik:RadBusyIndicator>

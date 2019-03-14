@@ -4,44 +4,35 @@ using System.Linq;
 using Telerik.Windows.Controls;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 using System.Windows.Controls;
-using System.Windows;
 
 namespace Sculptor
 {
-    public class MainViewModel
+    public class MainViewModel : ViewModelBase
     {
-        private ObservableCollectionWithItemChanged<ProjectModel> projects = new ObservableCollectionWithItemChanged<ProjectModel>();
-        private ObservableCollectionWithItemChanged<ProjectModel> selectedItems;
-        private bool projectSelected;
-        private bool isBackStageOpen=true;
-        private UserControl userControlFrame;
         private UserControl objectViewControl;
-        private bool isBusy;
-        private string mainTitle = "No project selected ....";
 
         #region Properties
 
-        public ObservableCollectionWithItemChanged<ProjectModel> Projects
+        private ObservableItemCollection<ProjectModel> projects = new ObservableItemCollection<ProjectModel>();
+        public ObservableItemCollection<ProjectModel> Projects
         {
-            get
-            {
-                return projects;
-            }
+            get { return projects; }
             set
             {
                 projects = value;
                 //OnPropertyChanged();
             }
         }
-        public ObservableCollectionWithItemChanged<ProjectModel> SelectedItems
+
+        private ObservableItemCollection<ProjectModel> selectedItems;
+        public ObservableItemCollection<ProjectModel> SelectedItems
         {
             get
             {
                 if (selectedItems == null)
                 {
-                    selectedItems = new ObservableCollectionWithItemChanged<ProjectModel>();
+                    selectedItems = new ObservableItemCollection<ProjectModel>();
                 }
                 return selectedItems;
             }
@@ -51,12 +42,9 @@ namespace Sculptor
         public DelegateCommand CloseProjectCommand { get; set; }
         public DelegateCommand OpenObjectViewCommand { get; set; }
 
+        private bool projectSelected;
         public bool ProjectSelected {
-            get
-            {
-                return projectSelected;
-            }
-
+            get { return projectSelected; }
             set
             {
                 projectSelected = value;
@@ -64,13 +52,10 @@ namespace Sculptor
             }
         }
 
+        private bool isBackStageOpen = true;
         public bool IsBackStageOpen
         {
-            get
-            {
-                return isBackStageOpen;
-            }
-
+            get { return isBackStageOpen; }
             set
             {
                 isBackStageOpen = value;
@@ -78,11 +63,9 @@ namespace Sculptor
             }
         }
 
+        private string mainTitle = "No project selected ....";
         public string MainTitle {
-            get
-            {
-                return mainTitle;
-            }
+            get { return mainTitle; }
             set
             {
                 if (mainTitle != value)
@@ -93,11 +76,11 @@ namespace Sculptor
             }
         }
 
-
         // Using a DependencyProperty as the backing store for MainTitle.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty MyTitleProperty =
-            DependencyProperty.Register("MainTitle", typeof(string), typeof(MainWindow), new UIPropertyMetadata(null));
+        //public static readonly DependencyProperty MyTitleProperty =
+        //    DependencyProperty.Register("MainTitle", typeof(string), typeof(MainWindow), new UIPropertyMetadata(null));
 
+        private UserControl userControlFrame;
         public UserControl UserControlFrame
         {
             get { return userControlFrame; }
@@ -108,12 +91,10 @@ namespace Sculptor
             }
         }
 
+        private bool isBusy;
         public bool IsBusy
         {
-            get
-            {
-                return isBusy;
-            }
+            get { return isBusy; }
             set
             {
                 if (isBusy != value)
@@ -218,6 +199,7 @@ namespace Sculptor
             Globals.ProjectSelected = true;
             ProjectSelected = true;
             Globals.ProjectName = selectedProject.ProjectName;
+            Globals.ContractNo = selectedProject.ContractNo;
             selectedProject.LastOpened = DateTime.Now;
 
             // Store the current DateTime in the selected project record so it can be used to sort the project list
@@ -228,7 +210,17 @@ namespace Sculptor
             eDB.SaveChanges();
 
             IsBackStageOpen = false;
-            MainTitle = Globals.ProjectName;
+            MainTitle = Globals.ContractNo + Globals.ProjectName;
+            TypeViewModelLocator.GetTypeVM();
+            ObjectViewModelLocator.GetObjectVM();
+            TemplateViewModelLocator.GetTemplateVM();
+            PropertyViewModelLocator.GetPropertyVM();
+            AspectViewModelLocator.GetAspectVM();
+            AttributeViewModelLocator.GetAttributeVM();
+            ObjectAssociationViewModelLocator.GetObjectAssociationVM();
+            ObjectRequirementViewModelLocator.GetObjectRequirementVM();
+            TemplateAssociationViewModelLocator.GetTemplateAssociationVM();
+            TemplateRequirementViewModelLocator.GetTemplateRequirementVM();
         }
 
         /// <summary>
@@ -248,7 +240,11 @@ namespace Sculptor
             ProjectSelected = false;
             Globals.ProjectName = "";
 
-            if (ObjectViewModelLocator.IsLoaded()) (ObjectViewModelLocator.GetObjectVM()).Close();
+            if (ObjectViewModelLocator.IsLoaded()) 
+            {
+                ObjectViewModelLocator.GetObjectVM().Objects.Clear();
+                ObjectViewModelLocator.DisposeObjectVM();
+            }
             //if (ClassViewModelLocator.IsLoaded()) (ClassViewModelLocator.GetClassVM()).Close();
             //if (PropertyViewModelLocator.IsLoaded()) (PropertyViewModelLocator.GetPropertyVM()).Close();
             //if (propertyUserControl != null)

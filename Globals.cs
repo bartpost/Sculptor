@@ -22,7 +22,6 @@ namespace Sculptor
     static class Globals
     {
         private static string projectName;
-
         public static string ProjectName
         {
             get
@@ -34,6 +33,22 @@ namespace Sculptor
                 if (value != projectName)
                 {
                     projectName = value;
+                }
+            }
+        }
+
+        private static string contractNo;
+        public static string ContractNo
+        {
+            get
+            {
+                return contractNo;
+            }
+            set
+            {
+                if (value != contractNo)
+                {
+                    contractNo = value;
                 }
             }
         }

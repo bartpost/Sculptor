@@ -5,76 +5,61 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Telerik.Windows.Controls;
+using TD = Telerik.Windows.Data;
 
 namespace Sculptor.DataModels
 {
+    [Serializable()]
     public class RequirementModel : ViewModelBase, INotifyPropertyChanged
     {
-        private Guid id;
-        private Nullable<Guid> parent_id;
-        private int project_ID;
-        private string articleNo;
-        private string articleHeader;
-        private string content;
-        private int requirementType_ID;
-        private DateTime created;
-        private string createdBy;
-        private DateTime lastChanged;
-        private string lastChangedBy;
-        private string version;
-        private ObservableCollectionWithItemChanged<RequirementModel> childRequirements;
-        private bool isNew;
-        private bool isChanged;
-        private bool isDeleted;
-
+        #region Constructor
         public RequirementModel()
         {
 
         }
+        #endregion
 
+        # region Properties
+        private Guid id;
+        [XmlElement("ID")]
         public Guid ID
         {
-            get
-            {
-                return this.id;
-            }
+            get { return this.id; }
             set
             {
                 this.id = value;
             }
         }
 
+        private Nullable<Guid> parent_id;
+        [XmlIgnore]
         public Nullable<Guid> Parent_ID
         {
-            get
-            {
-                return this.parent_id;
-            }
+            get { return this.parent_id; }
             set
             {
                 this.parent_id = value;
             }
         }
 
+        private int project_ID;
+        [XmlIgnore]
         public int Project_ID
         {
-            get
-            {
-                return this.project_ID;
-            }
+            get { return this.project_ID; }
             set
             {
                 this.project_ID = value;
             }
         }
 
+        private string articleNo;
+        [XmlIgnore]
         public string ArticleNo
         {
-            get
-            {
-                return this.articleNo;
-            }
+            get { return this.articleNo; }
             set
             {
                 if (value != this.articleNo)
@@ -85,12 +70,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private string articleHeader;
+        [XmlIgnore]
         public string ArticleHeader
         {
-            get
-            {
-                return this.articleHeader;
-            }
+            get { return this.articleHeader; }
             set
             {
                 if (value != this.articleHeader)
@@ -101,12 +85,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private string content;
+        [XmlIgnore]
         public string Content
         {
-            get
-            {
-                return this.content;
-            }
+            get { return this.content; }
             set
             {
                 if (value != this.content)
@@ -117,12 +100,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private int requirementType_ID;
+        [XmlIgnore]
         public int RequirementType_ID
         {
-            get
-            {
-                return this.requirementType_ID;
-            }
+            get { return this.requirementType_ID; }
             set
             {
                 if (value != this.requirementType_ID)
@@ -133,12 +115,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private DateTime created;
+        [XmlIgnore]
         public DateTime Created
         {
-            get
-            {
-                return this.created;
-            }
+            get{ return this.created; }
             set
             {
                 if (value != this.created)
@@ -149,12 +130,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private string createdBy;
+        [XmlIgnore]
         public string CreatedBy
         {
-            get
-            {
-                return this.createdBy;
-            }
+            get { return this.createdBy; }
             set
             {
                 if (value != this.createdBy)
@@ -165,12 +145,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private DateTime lastChanged;
+        [XmlIgnore]
         public DateTime LastChanged
         {
-            get
-            {
-                return this.lastChanged;
-            }
+            get { return this.lastChanged; }
             set
             {
                 if (value != this.lastChanged)
@@ -181,12 +160,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private string lastChangedBy;
+        [XmlIgnore]
         public string LastChangedBy
         {
-            get
-            {
-                return this.lastChangedBy;
-            }
+            get { return this.lastChangedBy; }
             set
             {
                 if (value != this.lastChangedBy)
@@ -197,12 +175,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private string version;
+        [XmlIgnore]
         public string Version
         {
-            get
-            {
-                return this.version;
-            }
+            get { return this.version; }
             set
             {
                 if (value != this.version)
@@ -213,12 +190,10 @@ namespace Sculptor.DataModels
             }
         }
 
-        public ObservableCollectionWithItemChanged<RequirementModel> ChildRequirements
+        private TD.ObservableItemCollection<RequirementModel> childRequirements;
+        public TD.ObservableItemCollection<RequirementModel> ChildRequirements
         {
-            get
-            {
-                return this.childRequirements;
-            }
+            get { return this.childRequirements; }
             set
             {
                 this.childRequirements = value;
@@ -226,12 +201,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private bool isNew;
+        [XmlIgnore]
         public bool IsNew
         {
-            get
-            {
-                return this.isNew;
-            }
+            get { return this.isNew; }
             set
             {
                 if (value != this.isNew)
@@ -241,12 +215,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private bool isChanged;
+        [XmlIgnore]
         public bool IsChanged
         {
-            get
-            {
-                return this.isChanged;
-            }
+            get { return this.isChanged; }
             set
             {
                 if (value != this.isChanged)
@@ -256,12 +229,11 @@ namespace Sculptor.DataModels
             }
         }
 
+        private bool isDeleted;
+        [XmlIgnore]
         public bool IsDeleted
         {
-            get
-            {
-                return this.isDeleted;
-            }
+            get { return this.isDeleted; }
             set
             {
                 if (value != this.isDeleted)
@@ -272,6 +244,23 @@ namespace Sculptor.DataModels
             }
         }
 
+        private bool isExpanded;
+        [XmlElement("IsExpanded")]
+        public bool IsExpanded
+        {
+            get { return this.isExpanded; }
+            set
+            {
+                if (value != this.isExpanded)
+                {
+                    this.isExpanded = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
+        #region Events
         public new event PropertyChangedEventHandler PropertyChanged;
         private new void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -281,6 +270,7 @@ namespace Sculptor.DataModels
                 isChanged = true;
             }
         }
+        #endregion
     }
 
 

@@ -1,30 +1,25 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
+using System.Xml.Serialization;
 using Telerik.Windows.Controls;
 
 namespace Sculptor.DataModels
 {
+    [Serializable()]
     public class ObjectModel : ViewModelBase, INotifyPropertyChanged, IDataErrorInfo
     {
-        private Guid id;
-        private Nullable<Guid> parent_id;
-        private int project_id;
-        private string objectname;
-        private string description;
-        private int objecttype_ID;
-        private bool isExpanded;
-        private bool isNew;
-        private bool isChanged;
-        private bool isDeleted;
-        private ObservableCollectionWithItemChanged<ObjectModel> childobjects;
+
+        #region Constructor
         public ObjectModel()
         {
-        }
 
+        }
+        #endregion
+        
         #region Properties
+        private Guid id;
+        [XmlElement("ID")]
         public Guid ID
         {
             get
@@ -37,6 +32,8 @@ namespace Sculptor.DataModels
             }
         }
 
+        private Nullable<Guid> parent_id;
+        [XmlIgnore]
         public Nullable<Guid> Parent_ID
         {
             get
@@ -50,6 +47,8 @@ namespace Sculptor.DataModels
             }
         }
 
+        private int project_id;
+        [XmlIgnore]
         public int Project_ID
         {
             get
@@ -59,10 +58,11 @@ namespace Sculptor.DataModels
             set
             {
                 this.project_id = value;
-                OnPropertyChanged();
             }
         }
 
+        private string objectname;
+        [XmlIgnore]
         public string ObjectName
         {
             get
@@ -79,6 +79,8 @@ namespace Sculptor.DataModels
             }
         }
 
+        private string description;
+        [XmlIgnore]
         public string Description
         {
             get
@@ -95,6 +97,8 @@ namespace Sculptor.DataModels
             }
         }
 
+        private int objecttype_ID;
+        [XmlIgnore]
         public int ObjectType_ID
         {
             get
@@ -111,7 +115,8 @@ namespace Sculptor.DataModels
             }
         }
 
-        public ObservableCollectionWithItemChanged<ObjectModel> ChildObjects
+        private Telerik.Windows.Data.ObservableItemCollection<ObjectModel> childobjects;
+        public Telerik.Windows.Data.ObservableItemCollection<ObjectModel> ChildObjects
         {
             get
             {
@@ -124,6 +129,8 @@ namespace Sculptor.DataModels
             }
         }
 
+        private bool isExpanded;
+        [XmlElement("IsExpanded")]
         public bool IsExpanded
         {
             get
@@ -140,6 +147,8 @@ namespace Sculptor.DataModels
             }
         }
 
+        private bool isNew;
+        [XmlIgnore]
         public bool IsNew
         {
             get
@@ -155,6 +164,8 @@ namespace Sculptor.DataModels
             }
         }
 
+        private bool isChanged;
+        [XmlIgnore]
         public bool IsChanged
         {
             get
@@ -170,6 +181,8 @@ namespace Sculptor.DataModels
             }
         }
 
+        private bool isDeleted;
+        [XmlIgnore]
         public bool IsDeleted
         {
             get

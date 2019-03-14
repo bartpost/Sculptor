@@ -32,6 +32,7 @@
                     <telerik:RadTreeListView x:Name ="RequirementTreeListView" 
                                             ItemsSource="{Binding Requirements}"
                                             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                            IsExpandedBinding="{Binding IsExpanded, Mode=TwoWay}"
                                             SelectionMode="Extended"                                         
                                             AutoGenerateColumns="False"
 								            MinHeight="300"
@@ -53,22 +54,21 @@
 
                             <!-- First column -->
                             <telerik:GridViewDataColumn DataMemberBinding="{Binding ArticleNo}" 
-                                                    Header="Reference" 
-                                                    Width="Auto">
+                                                        Header="Reference" 
+                                                        Width="Auto">
                                 <telerik:GridViewDataColumn.CellTemplate>
                                     <DataTemplate>
                                         <!-- Stackpanel with Image and text. The Image is wrapped in a button to select RequirementType -->
                                         <StackPanel Orientation="Horizontal">
-                                            <Button Command="{Binding Path=DataContext.ChangeTypeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=telerik:RadTreeListView}}"
-                                                    CommandParameter="Requirement">
+                                            <Button Command="{Binding Path=DataContext.ChangeTypeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=UserControl}}">
                                                 <Button.Template>
                                                     <ControlTemplate TargetType="Button">
                                                         <Image Source="{Binding RequirementType_ID, Converter={StaticResource type_IDToImage}}" 
-                                                       Margin="0,0,10,0"
-                                                       RenderOptions.BitmapScalingMode="Fant"
-                                                       Stretch="Fill"
-                                                       Width="16"
-                                                       Height="16"/>
+                                                               Margin="0,0,10,0"
+                                                               RenderOptions.BitmapScalingMode="Fant"
+                                                               Stretch="Fill"
+                                                               Width="16"
+                                                               Height="16"/>
                                                     </ControlTemplate>
                                                 </Button.Template>
                                             </Button>
@@ -107,6 +107,9 @@
                                 <telerik:RadMenuItem IsSeparator="True"/>
                                 <telerik:RadMenuItem Header="Refresh" Command="{Binding RefreshCommand}"/>
                                 <telerik:RadMenuItem Header="Save" Command="{Binding SaveCommand}"/>
+                                <telerik:RadMenuItem IsSeparator="True"/>
+                                <telerik:RadMenuItem Header="Load tree state" Command="{Binding LoadTreeStateCommand}"/>
+                                <telerik:RadMenuItem Header="Save tree state" Command="{Binding SaveTreeStateCommand}"/>
                             </telerik:RadContextMenu>
                         </telerik:RadContextMenu.ContextMenu>
 
