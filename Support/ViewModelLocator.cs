@@ -201,6 +201,23 @@ namespace Sculptor
         }
     }
 
+    public static class ControlObjectAssociationViewModelLocator
+    {
+        private static ControlObjectAssociationViewModel controlObjectAssociationVM = null;
+        public static ControlObjectAssociationViewModel GetControlObjectAssociationVM()
+        {
+            if (controlObjectAssociationVM == null)
+                controlObjectAssociationVM = new ControlObjectAssociationViewModel();
+
+            return controlObjectAssociationVM;
+        }
+
+        public static bool IsLoaded()
+        {
+            return controlObjectAssociationVM != null;
+        }
+    }
+
     public static class ObjectRequirementViewModelLocator
     {
         private static ObjectRequirementViewModel objectRequirementVM = null;

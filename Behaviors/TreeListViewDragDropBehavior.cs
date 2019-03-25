@@ -138,12 +138,24 @@ namespace Sculptor
                         Globals.DraggedItem.Type = "Object";
                         Globals.DraggedItem.ObjectModelSource = draggedItem as ObjectModel;
                         break;
+                    case "ControlObjectTreeListView":
+                        Globals.DraggedItem.Type = "ControlObject";
+                        Globals.DraggedItem.ControlObjectModelSource = draggedItem as ControlObjectModel;
+                        break;
                     case "TemplateTreeListView":
                         Globals.DraggedItem.Type = "Template";
                         Globals.DraggedItem.TemplateModelSource = draggedItem as TemplateModel;
                         break;
                     case "PropertyTreeListView":
                         Globals.DraggedItem.Type = "Property";
+                        Globals.DraggedItem.PropertyModelSource = draggedItem as PropertyModel;
+                        break;
+                    case "HardIOTreeListView":
+                        Globals.DraggedItem.Type = "HardIO";
+                        Globals.DraggedItem.HardIOModelSource = draggedItem as HardIOModel;
+                        break;
+                    case "ControlPropertyTreeListView":
+                        Globals.DraggedItem.Type = "ControlProperty";
                         Globals.DraggedItem.PropertyModelSource = draggedItem as PropertyModel;
                         break;
                     case "RequirementTreeListView":
@@ -189,6 +201,9 @@ namespace Sculptor
                     case "ObjectTreeListView":
                         ObjectViewModelLocator.GetObjectVM().MoveSelection(destination);
                         break;
+                    case "ControlObjectTreeListView":
+                        ControlObjectViewModelLocator.GetControlObjectVM().MoveSelection(destination);
+                        break;
                     case "TemplateTreeListView":
                         TemplateViewModelLocator.GetTemplateVM().MoveSelection(destination);
                         break;
@@ -204,6 +219,11 @@ namespace Sculptor
                         ObjectRequirementViewModel objectRequirementViewModel = ObjectRequirementViewModelLocator.GetObjectRequirementVM();
                         objectRequirementViewModel.AssociateWithObject(destination);
                         objectRequirementViewModel.FilteredObjectRequirements.View.Refresh();
+                        break;
+                    case "ControlObjectAssociationTreeListView":
+                        ControlObjectAssociationViewModel controlObjectAssociationViewModel = ControlObjectAssociationViewModelLocator.GetControlObjectAssociationVM();
+                        controlObjectAssociationViewModel.AssociateWithControlObject(destination);
+                        controlObjectAssociationViewModel.FilteredControlObjectAssociations.View.Refresh();
                         break;
                     case "TemplateAssociationTreeListView":
                         TemplateAssociationViewModel templateAssociationViewModel = TemplateAssociationViewModelLocator.GetTemplateAssociationVM();

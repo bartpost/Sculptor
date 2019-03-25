@@ -197,6 +197,7 @@
     <Compile Include="DataModels\AspectModel.cs" />
     <Compile Include="DataModels\AttributeModel.cs" />
     <Compile Include="DataModels\ControlObjectModel.cs" />
+    <Compile Include="DataModels\ControlObjectAssociationModel.cs" />
     <Compile Include="DataModels\TemplateRequirementModel.cs" />
     <Compile Include="DataModels\TemplateAssociationModel.cs" />
     <Compile Include="DataModels\ObjectModel.cs" />
@@ -226,6 +227,9 @@
       <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EDBEntityDataModel\tblControlObject.cs">
+      <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EDBEntityDataModel\tblControlObjectAssociation.cs">
       <DependentUpon>EDBEntityDataModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EDBEntityDataModel\tblObjectAssociation.cs">
@@ -283,6 +287,7 @@
     <Compile Include="ViewModels\HardIOViewModel.cs" />
     <Compile Include="ViewModels\AttributeViewModel.cs" />
     <Compile Include="ViewModels\ControlObjectViewModel.cs" />
+    <Compile Include="ViewModels\ControlObjectAssociationsViewModel.cs" />
     <Compile Include="ViewModels\TestViewModel.cs" />
     <Compile Include="ViewModels\TypeViewModel.cs" />
     <Compile Include="ViewModels\TemplateRequirementViewModel.cs" />
@@ -449,6 +454,8 @@
       <DependentUpon>EDBEntityDataModel.edmx</DependentUpon>
       <LastGenOutput>EDBEntityDataModel.cs</LastGenOutput>
     </Content>
+    <Resource Include="Resources\Images\GroupIO.png" />
+    <Resource Include="Resources\Images\IOProperty.png" />
     <Resource Include="Resources\Images\ControlObjects.png" />
     <Resource Include="Resources\Images\template.png" />
     <Resource Include="Resources\Images\GroupProperty32.png" />

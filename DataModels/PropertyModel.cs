@@ -207,6 +207,24 @@ namespace Sculptor
             }
         }
 
+        private string typeGroup;
+        [XmlIgnore]
+        public string TypeGroup
+        {
+            get
+            {
+                return this.typeGroup;
+            }
+            set
+            {
+                if (value != this.typeGroup)
+                {
+                    this.typeGroup = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private TD.ObservableItemCollection<PropertyModel> childProperties;
         public TD.ObservableItemCollection<PropertyModel> ChildProperties
         {

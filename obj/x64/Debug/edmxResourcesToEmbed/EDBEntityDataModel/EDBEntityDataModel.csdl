@@ -18,6 +18,7 @@
     <EntitySet Name="tblObjectAssociations" EntityType="EDBModel.tblObjectAssociation" />
     <EntitySet Name="tblObjects" EntityType="EDBModel.tblObject" />
     <EntitySet Name="tblControlObjects" EntityType="EDBModel.tblControlObject" />
+    <EntitySet Name="tblControlObjectAssociations" EntityType="EDBModel.tblControlObjectAssociation" />
   </EntityContainer>
   <EntityType Name="sysdiagram">
     <Key>
@@ -235,5 +236,18 @@
     <Property Name="Status_ID" Type="Int32" />
     <Property Name="ShortDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="IsExpanded" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tblControlObjectAssociation">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="ControlObject_ID" />
+      <PropertyRef Name="Project_ID" />
+    </Key>
+    <Property Name="ID" Type="Guid" Nullable="false" />
+    <Property Name="ControlObject_ID" Type="Guid" Nullable="false" />
+    <Property Name="ControlProperty_ID" Type="Guid" />
+    <Property Name="Association_ID" Type="Guid" />
+    <Property Name="AssociationType" Type="String" MaxLength="16" FixedLength="false" Unicode="false" />
+    <Property Name="Project_ID" Type="Int32" Nullable="false" />
   </EntityType>
 </Schema>

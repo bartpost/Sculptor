@@ -318,7 +318,9 @@ namespace Sculptor.ViewModels
                 }
 
                 TypeGroups.Add("Object");
+                TypeGroups.Add("ControlObject");
                 TypeGroups.Add("Property");
+                TypeGroups.Add("ControlProperty");
                 TypeGroups.Add("Template");
                 TypeGroups.Add("Requirement");
             }
@@ -458,6 +460,10 @@ namespace Sculptor.ViewModels
                             item.TemplateType_ID = type.ID;
                         break;
                     case "Property":
+                        foreach (var item in PropertyViewModelLocator.GetPropertyVM().SelectedItems)
+                            item.PropertyType_ID = type.ID;
+                        break;
+                    case "ControlProperty":
                         foreach (var item in PropertyViewModelLocator.GetPropertyVM().SelectedItems)
                             item.PropertyType_ID = type.ID;
                         break;

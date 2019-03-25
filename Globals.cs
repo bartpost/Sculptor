@@ -4,16 +4,19 @@ using System.Runtime.CompilerServices;
 
 namespace Sculptor
 {
-    public enum TreeType { Object, Class, Property, Requirement, ObjectAssociation }
+    public enum TreeType { Object, ControlObject, Class, Property, Requirement, ObjectAssociation, ControlObjectAssociation }
 
     public class DragModel
     {
         public string Type;
         public ObjectModel ObjectModelSource;
+        public ControlObjectModel ControlObjectModelSource;
         public TemplateModel TemplateModelSource;
         public PropertyModel PropertyModelSource;
+        public HardIOModel HardIOModelSource;
         public RequirementModel RequirementModelSource;
         public ObjectAssociationModel ObjectAssociationModelSource;
+        public ControlObjectAssociationModel ControlObjectAssociationModelSource;
         public ObjectRequirementModel ObjectRequirementModelSource;
         public AspectModel AspectModelSource;
         public AttributeModel AttributeModelSource;

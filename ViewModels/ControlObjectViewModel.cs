@@ -9,7 +9,6 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.TreeListView;
-using System.Windows;
 using System.IO;
 using System.Xml.Serialization;
 using TD = Telerik.Windows.Data;
@@ -17,7 +16,7 @@ using System.Windows.Data;
 
 namespace Sculptor.ViewModels
 {
-    public class ControlObjectViewModel : ViewModelBase, INotifyPropertyChanged
+    public class ControlObjectViewModel : ViewModelBase, INotifyPropertyChanged, IRequestFocus
     {
         #region Constructor
         public ControlObjectViewModel()
@@ -376,7 +375,7 @@ namespace Sculptor.ViewModels
             // Otherwise get the parent object and add the new object as a child
             else
             {
-                ControlObjectModel parentItem = GetController(SelectedItem.Parent_ID);
+                ControlObjectModel parentItem = GetControlObject(SelectedItem.Parent_ID);
                 controllerItem.Parent_ID = SelectedItem.Parent_ID;
                 controllerItem.ControlObjectType_ID = SelectedItem.ControlObjectType_ID;
                 parentItem.ChildControlObjects.Insert(parentItem.ChildControlObjects.IndexOf(SelectedItem) + 1, controllerItem);
@@ -424,7 +423,7 @@ namespace Sculptor.ViewModels
             // if not, delete the object in the table
             foreach (var ControllerRec in tblControlObjects)
             {
-                var controllerItem = GetController(ControllerRec.ID);
+                var controllerItem = GetControlObject(ControllerRec.ID);
                 if (controllerItem == null) // object not found in collection
                     eDB.tblControlObjects.Remove(ControllerRec);
             }
@@ -608,7 +607,7 @@ namespace Sculptor.ViewModels
                     foreach (ControlObjectModel item in selectedItems)
                     {
                         // find the original parent of the object that's moved
-                        ControlObjectModel parentSourceItem = GetController(item.Parent_ID);
+                        ControlObjectModel parentSourceItem = GetControlObject(item.Parent_ID);
 
                         // If the parent is in the root level
                         if (parentSourceItem == null)
@@ -642,7 +641,7 @@ namespace Sculptor.ViewModels
                                 // otherwise the Parent_ID of the item will be the same as that of the destination item
                                 item.Parent_ID = destinationItem.Parent_ID;
                                 // find the Parent of the destination item
-                                parentSourceItem = GetController(destinationItem.Parent_ID);
+                                parentSourceItem = GetControlObject(destinationItem.Parent_ID);
                                 // Insert the item before or after the destination item in the ChildObject collection of the parent of the destination
                                 if (relativeDropPosition == TreeListViewDropPosition.Before)
                                     parentSourceItem.ChildControlObjects.Insert(parentSourceItem.ChildControlObjects.IndexOf(destinationItem), item);
@@ -688,19 +687,19 @@ namespace Sculptor.ViewModels
         /// <param name="searchItemID"></param>
         /// <param name="treeLevel"></param>
         /// <returns></returns>
-        private ControlObjectModel GetController(Guid? searchItemID, TD.ObservableItemCollection<ControlObjectModel> treeLevel = null)
+        private ControlObjectModel GetControlObject(Guid? searchItemID, TD.ObservableItemCollection<ControlObjectModel> treeLevel = null)
         {
             // Select the root level if the treeLevel = null
             if (treeLevel == null) treeLevel = ControlObjects;
-            foreach (var controllerItem in treeLevel)
+            foreach (var controlObjectItem in treeLevel)
             {
                 // return the item if found on this level
-                if (controllerItem.ID == searchItemID) return controllerItem;
+                if (controlObjectItem.ID == searchItemID) return controlObjectItem;
 
-                if (controllerItem.ChildControlObjects != null)
+                if (controlObjectItem.ChildControlObjects != null)
                 {
                     // Recursively call the method to find the item in the ChildControlObjects
-                    ControlObjectModel childcontrollerItem = GetController(searchItemID, controllerItem.ChildControlObjects);
+                    ControlObjectModel childcontrollerItem = GetControlObject(searchItemID, controlObjectItem.ChildControlObjects);
                     if (childcontrollerItem != null) return childcontrollerItem;
                 }
             }
@@ -753,7 +752,7 @@ namespace Sculptor.ViewModels
         {
             foreach (var item in isExpandedCollectionLevel)
             {
-                var controllerItem = GetController(item.ID);
+                var controllerItem = GetControlObject(item.ID);
                 if (controllerItem != null)
                     controllerItem.IsExpanded = item.IsExpanded;
 

@@ -23,14 +23,11 @@ namespace Sculptor
         #region Constructor
         public PropertyViewModel()
         {
-            // Load the properties in the background
-            //var backgroundWorker = new BackgroundWorker();
-            //backgroundWorker.DoWork += this.OnLoadInBackground;
-            //backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
-            //backgroundWorker.RunWorkerAsync();
             LoadCBAspects();
             LoadCBAttributes();
             Load(null);
+            FilteredProperties = new CollectionViewSource { Source = Properties };
+            FilteredProperties.Filter += PropertyFilter;
         }
         #endregion
 
@@ -243,82 +240,50 @@ namespace Sculptor
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        private void OnLoadInBackground(object sender, DoWorkEventArgs e)
-        {
-            this.IsBusy = false;
-            IsLoaded = false;
-            Properties.SuspendNotifications();
-
-            // Load Object Types;
-            TypeViewModelLocator.GetTypeVM();
-            // Load Objects
-            LoadCBAspects();
-            LoadCBAttributes();
-            Load(null);
-
-            FilteredProperties = new CollectionViewSource { Source = Properties };
-            FilteredProperties.Filter += PropertyFilter;
-
-        }
-
-        private void OnLoadInBackgroundCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            // CollectionView to filter the TreeListView
-            // Note: Data is manipulated in the Objects collection
-            FilteredProperties = new CollectionViewSource { Source = Properties };
-            FilteredProperties.Filter += PropertyFilter;
-
-            Properties.ResumeNotifications();
-            //LoadTreeState();
-            IsLoaded = true;
-            this.IsBusy = false;
-
-            //Dispose events
-            var backgroundWorker = sender as BackgroundWorker;
-            backgroundWorker.DoWork -= this.OnLoadInBackground;
-            backgroundWorker.RunWorkerCompleted -= OnLoadInBackgroundCompleted;
-        }
         #endregion
 
         #region Methods
         /// <summary>
         /// Loads the records from the DbSet into the ViewModel. This function designed for recursive use
         /// </summary>
-        /// <param name="Project_ID"></param>
         /// <param name="Parent_ID"></param>
-        /// <returns>Observable collection of VMObjects</returns>
+        /// <returns>Observable collection of Properties</returns>
         private TD.ObservableItemCollection<PropertyModel> Load(Guid? Parent_ID)
         {
             TD.ObservableItemCollection<PropertyModel> childProperties = new TD.ObservableItemCollection<PropertyModel>();
             
             using (EDBEntities eDB = new EDBEntities())
             {
-                foreach (tblProperty Rec in (from o in eDB.tblProperties where (o.Project_ID == Globals.Project_ID && o.Parent_ID == Parent_ID) orderby o.PropertyName select o))
+                foreach (var Rec in (from p in eDB.tblProperties
+                                             join t in eDB.tblTypes on p.PropertyType_ID equals t.ID
+                                             where (p.Project_ID == Globals.Project_ID && p.Parent_ID == Parent_ID)
+                                             orderby p.PropertyName
+                                             select new { Prop = p, PropType = t }))
                 {
                     PropertyModel propertyItem = new PropertyModel
                     {
-                        ID = Rec.ID,
-                        Parent_ID = Rec.Parent_ID,
-                        Project_ID = Rec.Project_ID,
-                        PropertyName = Rec.PropertyName,
-                        Description = Rec.Description,
-                        PropertyType_ID = (int)Rec.PropertyType_ID,
-                        Aspect = Rec.Aspect,
-                        Attribute1 = Rec.Attribute1,
-                        Attribute2 = Rec.Attribute2,
-                        Attribute3 = Rec.Attribute3,
-                        Value = Rec.Value,
+                        ID = Rec.Prop.ID,
+                        Parent_ID = Rec.Prop.Parent_ID,
+                        Project_ID = Rec.Prop.Project_ID,
+                        PropertyName = Rec.Prop.PropertyName,
+                        Description = Rec.Prop.Description,
+                        PropertyType_ID = (int)Rec.Prop.PropertyType_ID,
+                        Aspect = Rec.Prop.Aspect,
+                        Attribute1 = Rec.Prop.Attribute1,
+                        Attribute2 = Rec.Prop.Attribute2,
+                        Attribute3 = Rec.Prop.Attribute3,
+                        TypeGroup = Rec.PropType.TypeGroup,
+                        Value = Rec.Prop.Value,
                         IsChanged = false,
                         IsNew = false,
                         IsDeleted = false
                     };
 
-                    propertyItem.ChildProperties = Load(Rec.ID);
+                    propertyItem.ChildProperties = Load(Rec.Prop.ID);
 
                     // If the parent ID is null, this is a root object and needs to be added to the VM class
                     // Else it is a child object which needs to be added to the childobjectlist
-                    if (Rec.Parent_ID == null)
+                    if (Rec.Prop.Parent_ID == null)
                         Properties.Add(propertyItem);
                     else
                         childProperties.Add(propertyItem);
@@ -746,7 +711,7 @@ namespace Sculptor
         {
             // ToDo: Bad practice to call a view from the viewmodel. Fix using IOC
             var typeSelectionPopup = new TypeSelectionPopup();
-            typeSelectionPopup.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            //typeSelectionPopup.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             TypeViewModel typeViewModel = TypeViewModelLocator.GetTypeVM();
             // Close the type selection box
             typeViewModel.CloseTrigger = false;
@@ -819,6 +784,11 @@ namespace Sculptor
                     Content = "Error while saving expansion state\n" + ex.Message
                 });
             }
+        }
+
+        public void ObjectFilter(object sender, FilterEventArgs e)
+        {
+            e.Accepted = (e.Item as PropertyModel).TypeGroup == "ControlProperty";
         }
     }
     #endregion

@@ -1,52 +1,30 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Xml.Serialization;
 using Telerik.Windows.Controls;
+using Telerik.Windows.Data;
+using TD = Telerik.Windows.Data;
 
-namespace Sculptor.DataModels
+namespace Sculptor
 {
-    public class ControlObjectModel : ViewModelBase, INotifyPropertyChanged
+    public class ControlObjectAssociationModel : ViewModelBase, INotifyPropertyChanged
     {
-        #region Constructor
-        public ControlObjectModel()
-        {
-
-        }
-        #endregion
-
         #region Properties
+        public ControlObjectAssociationModel()
+        {
+        }
+
         private Guid id;
-        [XmlElement("ID")]
         public Guid ID
         {
-            get
-            {
-                return this.id;
-            }
+            get { return this.id; }
             set
             {
                 this.id = value;
             }
         }
 
-        private Nullable<Guid> parent_id;
-        [XmlIgnore]
-        public Nullable<Guid> Parent_ID
-        {
-            get
-            {
-                return this.parent_id;
-            }
-            set
-            {
-                this.parent_id = value;
-                OnPropertyChanged();
-            }
-        }
-
         private int project_id;
-        [XmlIgnore]
         public int Project_ID
         {
             get
@@ -59,26 +37,69 @@ namespace Sculptor.DataModels
             }
         }
 
-        private string objectname;
-        [XmlIgnore]
-        public string ObjectName
+        private Guid controlObject_id;
+        public Guid ControlObject_ID
         {
             get
             {
-                return this.objectname;
+                return this.controlObject_id;
             }
             set
             {
-                if (value != this.objectname)
+                if (controlObject_id != value)
                 {
-                    this.objectname = value;
-                    OnPropertyChanged();
+                    controlObject_id = value;
                 }
             }
         }
 
+        private Guid controlProperty_id;
+        public Guid ControlProperty_ID
+        {
+            get
+            {
+                return this.controlProperty_id;
+            }
+            set
+            {
+                if (controlProperty_id != value)
+                {
+                    controlProperty_id = value;
+                }
+            }
+        }
+
+        private Guid? association_id;
+        public Guid? Association_ID
+        {
+            get
+            {
+                return this.association_id;
+            }
+            set
+            {
+                if (association_id != value)
+                {
+                    association_id = value;
+                }
+            }
+        }
+
+        private string name;
+        public string Name
+        {
+            get
+            {
+                return this.name;
+            }
+            set
+            {
+                this.name = value;
+                //OnPropertyChanged();
+            }
+        }
+
         private string description;
-        [XmlIgnore]
         public string Description
         {
             get
@@ -87,66 +108,43 @@ namespace Sculptor.DataModels
             }
             set
             {
-                if (value != this.description)
+                this.description = value;
+                //OnPropertyChanged();
+            }
+        }
+
+        private String value;
+        public string Value
+        {
+            get
+            {
+                return this.value;
+            }
+            set
+            {
+                if (value != this.value)
                 {
-                    this.description = value;
+                    this.value = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private int controlObjectType_ID;
-        [XmlIgnore]
-        public int ControlObjectType_ID
+        private string associationType;
+        public string AssociationType
         {
             get
             {
-                return this.controlObjectType_ID;
+                return this.associationType;
             }
             set
             {
-                if (value != this.controlObjectType_ID)
-                {
-                    this.controlObjectType_ID = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private Telerik.Windows.Data.ObservableItemCollection<ControlObjectModel> childControlObjects;
-        public Telerik.Windows.Data.ObservableItemCollection<ControlObjectModel> ChildControlObjects
-        {
-            get
-            {
-                return this.childControlObjects;
-            }
-            set
-            {
-                this.childControlObjects = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool isExpanded;
-        [XmlElement("IsExpanded")]
-        public bool IsExpanded
-        {
-            get
-            {
-                return this.isExpanded;
-            }
-            set
-            {
-                if (value != this.isExpanded)
-                {
-                    this.isExpanded = value;
-                    OnPropertyChanged();
-                }
+                this.associationType = value;
+                //OnPropertyChanged();
             }
         }
 
         private bool isNew;
-        [XmlIgnore]
         public bool IsNew
         {
             get
@@ -163,7 +161,6 @@ namespace Sculptor.DataModels
         }
 
         private bool isChanged;
-        [XmlIgnore]
         public bool IsChanged
         {
             get
@@ -180,7 +177,6 @@ namespace Sculptor.DataModels
         }
 
         private bool isDeleted;
-        [XmlIgnore]
         public bool IsDeleted
         {
             get
@@ -196,26 +192,15 @@ namespace Sculptor.DataModels
                 }
             }
         }
-
-        public string Error => throw new NotImplementedException();
-
-        public string this[string columnName] => throw new NotImplementedException();
         #endregion
 
-        #region Commands
-
-        #endregion
-
-        #region events
+        #region Events
         public new event PropertyChangedEventHandler PropertyChanged;
         private new void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             if (!isNew && !IsDeleted) isChanged = true;
         }
-        #endregion
-
-        #region Methods
         #endregion
     }
 }

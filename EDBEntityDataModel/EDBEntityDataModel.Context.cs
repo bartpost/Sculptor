@@ -42,5 +42,6 @@ namespace Sculptor.EDBEntityDataModel
         public virtual DbSet<tblObjectAssociation> tblObjectAssociations { get; set; }
         public virtual DbSet<tblObject> tblObjects { get; set; }
         public virtual DbSet<tblControlObject> tblControlObjects { get; set; }
+        public virtual DbSet<tblControlObjectAssociation> tblControlObjectAssociations { get; set; }
     }
 }

@@ -233,5 +233,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tblControlObjectAssociations">
+      <EntityTypeMapping TypeName="EDBModel.tblControlObjectAssociation">
+        <MappingFragment StoreEntitySet="tblControlObjectAssociations">
+          <ScalarProperty Name="Project_ID" ColumnName="Project_ID" />
+          <ScalarProperty Name="AssociationType" ColumnName="AssociationType" />
+          <ScalarProperty Name="Association_ID" ColumnName="Association_ID" />
+          <ScalarProperty Name="ControlProperty_ID" ColumnName="ControlProperty_ID" />
+          <ScalarProperty Name="ControlObject_ID" ColumnName="ControlObject_ID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

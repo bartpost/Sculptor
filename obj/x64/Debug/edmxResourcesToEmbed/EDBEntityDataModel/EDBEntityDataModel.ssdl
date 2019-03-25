@@ -35,6 +35,21 @@
     <Property Name="Description" Type="varchar" MaxLength="128" />
     <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'EDB.dbo.tblControlObjectAssociations' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="tblControlObjectAssociations">
+    <Key>
+      <PropertyRef Name="ID" />
+      <PropertyRef Name="ControlObject_ID" />
+      <PropertyRef Name="Project_ID" />
+    </Key>
+    <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="ControlObject_ID" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="ControlProperty_ID" Type="uniqueidentifier" />
+    <Property Name="Association_ID" Type="uniqueidentifier" />
+    <Property Name="AssociationType" Type="varchar" MaxLength="16" />
+    <Property Name="Project_ID" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="tblControlObjects">
     <Key>
       <PropertyRef Name="ID" />
@@ -235,5 +250,15 @@
     <EntitySet Name="tblTemplateRequirements" EntityType="Self.tblTemplateRequirements" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblTemplates" EntityType="Self.tblTemplates" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="tblTypes" EntityType="Self.tblTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblControlObjectAssociations" EntityType="Self.tblControlObjectAssociations" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [tblControlObjectAssociations].[ID] AS [ID], 
+    [tblControlObjectAssociations].[ControlObject_ID] AS [ControlObject_ID], 
+    [tblControlObjectAssociations].[ControlProperty_ID] AS [ControlProperty_ID], 
+    [tblControlObjectAssociations].[Association_ID] AS [Association_ID], 
+    [tblControlObjectAssociations].[AssociationType] AS [AssociationType], 
+    [tblControlObjectAssociations].[Project_ID] AS [Project_ID]
+    FROM [dbo].[tblControlObjectAssociations] AS [tblControlObjectAssociations]</DefiningQuery>
+    </EntitySet>
   </EntityContainer>
 </Schema>

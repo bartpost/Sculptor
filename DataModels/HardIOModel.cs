@@ -15,6 +15,10 @@ namespace Sculptor
         #endregion
 
         #region Properties
+
+
+
+
         private string objectName;
         public string ObjectName
         {
@@ -62,6 +66,8 @@ namespace Sculptor
                 }
             }
         }
+
+
 
         #endregion
 

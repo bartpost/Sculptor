@@ -21,11 +21,6 @@ namespace Sculptor
         #region Constructor
         public ObjectAssociationViewModel()
         {
-            //Load the properties in the background
-            //var backgroundWorker = new BackgroundWorker();
-            //backgroundWorker.DoWork += this.OnLoadInBackground;
-            //backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
-            //backgroundWorker.RunWorkerAsync();
             Load(null);
             FilteredObjectAssociations = new CollectionViewSource { Source = ObjectAssociations };
             FilteredObjectAssociations.Filter += ObjectFilter;

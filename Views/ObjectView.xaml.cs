@@ -1,13 +1,5 @@
-﻿using Sculptor;
-using Sculptor.Interfaces;
-using Sculptor.ViewModels;
-using System.Threading;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using Telerik.Windows.Controls;
-using Telerik.Windows.Controls.GridView;
-using Telerik.Windows.Data;
-using Telerik.Windows.Persistence.Storage;
 
 namespace Sculptor
 {

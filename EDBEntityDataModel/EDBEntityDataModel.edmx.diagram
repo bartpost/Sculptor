@@ -21,6 +21,7 @@
         <EntityTypeShape EntityType="EDBModel.tblObjectAssociation" Width="1.5" PointX="12.5" PointY="3.5" />
         <EntityTypeShape EntityType="EDBModel.tblObject" Width="1.5" PointX="0.5" PointY="0.5" />
         <EntityTypeShape EntityType="EDBModel.tblControlObject" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="EDBModel.tblControlObjectAssociation" Width="2.875" PointX="2.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -147,20 +147,147 @@
         <telerik:RadTabControl Grid.Column="1">
             <!-- Associations  -->
             <telerik:RadTabItem Height="25" MinWidth="80" Header="Associations" >
+                <telerik:RadTreeListView Name="ControlObjectAssociationTreeListView"
+                                            ItemsSource="{Binding HardIO}"
+                                            SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                            IsBusy="{Binding IsBusy}"
+                                            SelectionMode="Extended"
+                                            CanUserDeleteRows="true"
+                                            AutoGenerateColumns="False"
+								            MinHeight="300"
+								            CanUserFreezeColumns="False"
+								            RowIndicatorVisibility="Collapsed"
+                                            IsDragDropEnabled="True"
+                                            IsDragTooltipEnabled="True"
+                                            local:TreeListViewDragDropBehavior.IsEnabled="True"
+                                            HorizontalAlignment="Stretch"
+								            VerticalAlignment="Stretch" 
+                                            RowHeight="22"
+                                            Margin="5,0,0,0">
 
- 
+                    <!--Define child templates of the tree-->
+                    <!--<telerik:RadTreeListView.ChildTableDefinitions>
+                        <telerik:TreeListViewTableDefinition ItemsSource="{Binding ChildTemplates}" />
+                    </telerik:RadTreeListView.ChildTableDefinitions>-->
+
+                    <i:Interaction.Behaviors>
+                        <local:TreeListViewSelectBehavior SelectedItems="{Binding SelectedItems}" />
+                    </i:Interaction.Behaviors>
+
+                    <telerik:RadTreeListView.Columns>
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding ObjectName}" 
+                                                    Header="Object Name" 
+                                                    Width="Auto">
+                        </telerik:GridViewDataColumn>
+
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding Description}" 
+                                                    Header="Description" 
+                                                    Width="*"/>
+
+                        <telerik:GridViewDataColumn Header="Property Name"
+                                                    DataMemberBinding="{Binding PropertyName}"
+                                                    IsVisible="True"
+                                                    Width="Auto"/>
+                    </telerik:RadTreeListView.Columns>
+                </telerik:RadTreeListView>
             </telerik:RadTabItem>
         </telerik:RadTabControl>
 
-        <!-- HardIO etc  -->
+        <!-- Control properties / HardIO  -->
         <telerik:RadTabControl Grid.Column="2" >
+
+            <!--Control Properties -->
+            <telerik:RadTabItem MinWidth="80" Header="Control Properties" >
+                <telerik:RadTreeListView Name="ControlPropertyTreeListView"
+                                         ItemsSource="{Binding Properties}"
+                                         SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                                         IsExpandedBinding="{Binding IsExpanded, Mode=TwoWay}"
+                                         IsBusy="{Binding IsBusy}"
+                                         SelectionMode="Extended"  
+                                         CanUserDeleteRows="true"
+                                         AutoGenerateColumns="False"
+								         MinHeight="300"
+								         CanUserFreezeColumns="False"
+								         RowIndicatorVisibility="Collapsed"
+                                         IsDragDropEnabled="True"
+                                         IsDragTooltipEnabled="True"
+                                         local:TreeListViewDragDropBehavior.IsEnabled="True"
+                                         HorizontalAlignment="Stretch"
+								         VerticalAlignment="Stretch" 
+                                         RowHeight="22"
+                                         Margin="5,0,0,0"
+                                         IsFilteringAllowed="False">
+
+                    <i:Interaction.Behaviors>
+                        <local:TreeListViewSelectBehavior SelectedItems="{Binding SelectedItems}" />
+                    </i:Interaction.Behaviors>
+
+                    <telerik:RadTreeListView.Columns>
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding PropertyName}" 
+                                                    Header="Name" 
+                                                    Width="Auto">
+                            <telerik:GridViewDataColumn.CellTemplate>
+                                <DataTemplate>
+                                    <!--Stackpanel with Image and text. The Image is wrapped in a button to select PropertyType-->
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Name="propertyTypeButton"
+                                                Command="{Binding Path=DataContext.ChangeTypeCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=telerik:RadTreeListView}}"
+                                                CommandParameter="Property">
+                                            <Button.Template>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Image Name="propertyTypeImage"
+                                                    Source="{Binding PropertyType_ID, Converter={StaticResource type_IDToImage}}" 
+                                                    Margin="0,0,10,0"
+                                                    RenderOptions.BitmapScalingMode="Fant"
+                                                    Stretch="Fill"
+                                                    Width="16"
+                                                    Height="16"/>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                        <TextBlock Text="{Binding PropertyName, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged}" ToolTip="{Binding Description}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </telerik:GridViewDataColumn.CellTemplate>
+                        </telerik:GridViewDataColumn>
+
+                        <telerik:GridViewDataColumn DataMemberBinding="{Binding Description}" 
+                                                    Header="Description" 
+                                                    Width="*"/>
+
+                        <telerik:GridViewDataColumn Header="IsDeleted"
+                                                    DataMemberBinding="{Binding IsDeleted}"
+                                                    IsVisible="False"/>
+                    </telerik:RadTreeListView.Columns>
+
+                    <!--Define child properties of the tree-->
+                    <telerik:RadTreeListView.ChildTableDefinitions>
+                        <telerik:TreeListViewTableDefinition ItemsSource="{Binding ChildProperties}" />
+                    </telerik:RadTreeListView.ChildTableDefinitions>
+
+                    <!--Context menu-->
+                    <telerik:RadContextMenu.ContextMenu>
+                        <telerik:RadContextMenu x:Name="PropertyTreeContextMenu" >
+                            <telerik:RadMenuItem Header="New Sibling" Command="{Binding AddSiblingCommand}" />
+                            <telerik:RadMenuItem Header="New Child" Command="{Binding AddChildCommand}" />
+                            <telerik:RadMenuItem Header="Delete" Command="{Binding DeleteCommand}"/>
+                            <telerik:RadMenuItem IsSeparator="True"/>
+                            <telerik:RadMenuItem Header="Refresh" Command="{Binding RefreshCommand}"/>
+                            <telerik:RadMenuItem Header="Save" Command="{Binding SaveCommand}"/>
+                            <telerik:RadMenuItem IsSeparator="True"/>
+                            <telerik:RadMenuItem Header="Load tree state" Command="{Binding LoadTreeStateCommand}"/>
+                            <telerik:RadMenuItem Header="Save tree state" Command="{Binding SaveTreeStateCommand}"/>
+                        </telerik:RadContextMenu>
+                    </telerik:RadContextMenu.ContextMenu>
+
+                </telerik:RadTreeListView>
+            </telerik:RadTabItem>
 
             <!--Templates-->
             <telerik:RadTabItem Height="25" MinWidth="80" Header="HardIO" Margin="10,0,0,0">
                 <telerik:RadTreeListView Name="HardIOTreeListView"
                                             ItemsSource="{Binding HardIO}"
                                             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
-                                            IsExpandedBinding="{Binding IsExpanded, Mode=TwoWay}"
                                             IsBusy="{Binding IsBusy}"
                                             SelectionMode="Extended"
                                             CanUserDeleteRows="true"

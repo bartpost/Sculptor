@@ -22,11 +22,6 @@ namespace Sculptor.ViewModels
         #region Constructor
         public ObjectViewModel()
         {
-            // Load the objects in the background
-            //var backgroundWorker = new BackgroundWorker();
-            //backgroundWorker.DoWork += this.OnLoadInBackground;
-            //backgroundWorker.RunWorkerCompleted += OnLoadInBackgroundCompleted;
-            //backgroundWorker.RunWorkerAsync();
             Objects.SuspendNotifications();
             Load(null);
             LoadTreeState();
