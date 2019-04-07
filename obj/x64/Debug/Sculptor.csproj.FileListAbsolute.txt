@@ -189,3 +189,9 @@ D:\Tools\VS\Sculptor\Sculptor\bin\x64\Debug\Telerik.Windows.Themes.Office2016.dl
 D:\Tools\VS\Sculptor\Sculptor\obj\x64\Debug\Sculptor.csprojAssemblyReference.cache
 D:\Tools\VS\Sculptor\Sculptor\obj\x64\Debug\Views\ControlObjectView.g.cs
 D:\Tools\VS\Sculptor\Sculptor\obj\x64\Debug\Views\ControlObjectView.baml
+D:\Tools\VS\Sculptor\Sculptor\bin\x64\Debug\Telerik.Documents.SpreadsheetStreaming.dll
+D:\Tools\VS\Sculptor\Sculptor\bin\x64\Debug\Telerik.Windows.Documents.Spreadsheet.dll
+D:\Tools\VS\Sculptor\Sculptor\bin\x64\Debug\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll
+D:\Tools\VS\Sculptor\Sculptor\bin\x64\Debug\Telerik.Documents.SpreadsheetStreaming.xml
+D:\Tools\VS\Sculptor\Sculptor\bin\x64\Debug\Telerik.Windows.Documents.Spreadsheet.xml
+D:\Tools\VS\Sculptor\Sculptor\bin\x64\Debug\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.xml

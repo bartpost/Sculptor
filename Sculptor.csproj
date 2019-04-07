@@ -116,6 +116,10 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Telerik.Documents.SpreadsheetStreaming, Version=2019.1.114.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R1 2019\Binaries.NoXaml\WPF45\Telerik.Documents.SpreadsheetStreaming.dll</HintPath>
+    </Reference>
     <Reference Include="Telerik.Windows.Controls, Version=2019.1.116.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Controls.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -172,6 +176,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.Documents.Proofing.Dictionaries.En-US.dll</HintPath>
     </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet, Version=2019.1.114.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R1 2019\Binaries.NoXaml\WPF45\Telerik.Windows.Documents.Spreadsheet.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml, Version=2019.1.114.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R1 2019\Binaries.NoXaml\WPF45\Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="Telerik.Windows.PersistenceFramework, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Telerik UI for WPF R3 2018\Binaries\WPF45\Telerik.Windows.PersistenceFramework.dll</HintPath>
@@ -179,6 +191,10 @@
     <Reference Include="Telerik.Windows.Themes.Office2016, Version=2018.3.1016.45, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Telerik UI for WPF R1 2019\Binaries.NoXaml\WPF45\Telerik.Windows.Themes.Office2016.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Windows.Zip, Version=2019.1.114.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Telerik UI for WPF R1 2019\Binaries.NoXaml\WPF45\Telerik.Windows.Zip.dll</HintPath>
     </Reference>
     <Reference Include="UIAutomationProvider" />
     <Reference Include="UIAutomationTypes" />

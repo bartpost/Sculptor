@@ -157,6 +157,8 @@
                             <telerik:RadMenuItem IsSeparator="True"/>
                             <telerik:RadMenuItem Header="Load tree state" Command="{Binding LoadTreeStateCommand}"/>
                             <telerik:RadMenuItem Header="Save tree state" Command="{Binding SaveTreeStateCommand}"/>
+                            <telerik:RadMenuItem IsSeparator="True"/>
+                            <telerik:RadMenuItem Header="Export tree" Command="{Binding ExportTreeCommand}"/>
                         </telerik:RadContextMenu>
                     </telerik:RadContextMenu.ContextMenu>
                     

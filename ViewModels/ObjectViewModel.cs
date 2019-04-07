@@ -14,6 +14,9 @@ using System.IO;
 using System.Xml.Serialization;
 using TD = Telerik.Windows.Data;
 using System.Windows.Data;
+using Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml.Xlsx;
+using Telerik.Windows.Documents.Spreadsheet.FormatProviders;
+using Telerik.Windows.Documents.Spreadsheet.Model;
 
 namespace Sculptor.ViewModels
 {
@@ -283,6 +286,17 @@ namespace Sculptor.ViewModels
                 if (saveTreeStateCommand == null)
                     saveTreeStateCommand = new RelayCommand(p => true, p => this.SaveTreeState());
                 return saveTreeStateCommand;
+            }
+        }
+
+        private ICommand exportTreeCommand;
+        public ICommand ExportTreeCommand
+        {
+            get
+            {
+                if (exportTreeCommand == null)
+                    exportTreeCommand = new RelayCommand(p => true, p => this.ExportTree());
+                return exportTreeCommand;
             }
         }
 
@@ -814,6 +828,40 @@ namespace Sculptor.ViewModels
                     Header = "Error",
                     Content = "Error while saving expansion state\n" + ex.Message
                 });
+            }
+        }
+
+        public int RowIndex = 0;
+        private void ExportTree()
+        {
+
+            string fileName = "D:\\SampleFile.xlsx";
+            //if (!File.Exists(fileName))
+            //{
+            //    throw new FileNotFoundException(String.Format("File {0} was not found!", fileName));
+            //}
+
+            Workbook workbook = new Workbook();
+            IWorkbookFormatProvider formatProvider = new XlsxFormatProvider();
+
+            Worksheet worksheet = workbook.Worksheets.Add();
+            ExportLevel(Objects, worksheet);
+
+            using (Stream xlsx = new FileStream(fileName, FileMode.Create))
+            {
+                formatProvider.Export(workbook, xlsx);
+            }
+        }
+
+        private void ExportLevel(TD.ObservableItemCollection<ObjectModel> treeLevel, Worksheet wrksht, int Level = 0)
+        {
+            foreach (var item in treeLevel)
+            {
+                wrksht.Cells[RowIndex, 0].SetValueAsText(item.ObjectName);
+                wrksht.Cells[RowIndex, 1].SetValue(item.Description);
+                wrksht.Cells[RowIndex, 2].SetValue(Level);
+                RowIndex++;
+                if (item.ChildObjects != null) ExportLevel(item.ChildObjects, wrksht, Level+1);
             }
         }
 
